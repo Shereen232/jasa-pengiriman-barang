@@ -10,7 +10,7 @@
             <div class="d-flex justify-content-between align-items-center">
             <h5 class="card-title">Datatables</h5>
             <div>
-                <a href="<?=base_url() ?>data-master/supir/tambah" type="button" class="btn btn-success"><i class="bi bi-plus-circle"></i> Tambah Data</a>
+                <button type="button" class="btn btn-success"><i class="bi bi-plus-circle"></i> Tambah Data</button>
             </div>
             </div>
               <!-- Table with stripped rows -->

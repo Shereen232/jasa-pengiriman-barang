@@ -9,6 +9,6 @@ class PelangganController extends BaseController
 {
     public function index()
     {
-        //
+        return view('data-master/pelanggan/index');
     }
 }

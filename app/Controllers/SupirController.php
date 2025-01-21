@@ -9,6 +9,11 @@ class SupirController extends BaseController
 {
     public function index()
     {
-        //
+        return view('data-master/supir/index');
+    }
+
+    public function tambah()
+    {
+        return view('data-master/supir/tambah');
     }
 }

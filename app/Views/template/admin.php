@@ -73,8 +73,6 @@
 <script src="<?= base_url() ?>NiceAdmin/assets/vendor/php-email-form/validate.js"></script>
 
 <!-- Template Main JS File -->
-<script src="assets/js/main.js"></script>
-
-
+<script src="<?= base_url() ?>NiceAdmin/assets/js/main.js"></script>
 
 </html>

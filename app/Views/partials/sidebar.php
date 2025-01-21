@@ -34,17 +34,17 @@
         </a>
         <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
         <li>
-            <a href="tables-general.html">
+            <a href="<?= base_url('data-master/supir') ?>">
               <i class="bi bi-circle"></i><span>Supir</span>
             </a>
           </li>
           <li>
-            <a href="tables-data.html">
+            <a href=<?= base_url('data-master/kendaraan') ?>>
               <i class="bi bi-circle"></i><span>Kendaraan</span>
             </a>
           </li>
           <li>
-            <a href="tables-data.html">
+            <a href=<?= base_url('data-master/pelanggan') ?>>
               <i class="bi bi-circle"></i><span>Pelanggan</span>
             </a>
           </li>
