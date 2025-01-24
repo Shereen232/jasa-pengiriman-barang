@@ -1,50 +1,44 @@
 <?= $this->extend('template/admin.php') ?>
 <?= $this->section('app') ?>
 
-    <section class="section">
-      <div class="row">
-        <div class="col-lg-12">
-
-          <div class="card">
-            <div class="card-body">
-            <div class="d-flex justify-content-between align-items-center">
-            <h5 class="card-title">Datatables</h5>
-            <div>
-                <button type="button" class="btn btn-success"><i class="bi bi-plus-circle"></i> Tambah Data</button>
-            </div>
-            </div>
-              <!-- Table with stripped rows -->
-              <table class="table datatable">
+<section class="section">
+    <div class="card">
+        <div class="card-header">
+            <h4>Daftar Pelanggan</h4>
+            <a href="<?= base_url('data-master/pelanggan/tambah') ?>" class="btn btn-success">Tambah Pelanggan</a>
+        </div>
+        <div class="card-body">
+            <table class="table">
                 <thead>
-                  <tr>
-                    <th>
-                      <b>No</b>
-                    </th>
-                    <th>Nama</th>
-                    <th>Alamat</th>
-                    <th>Telepon</th>
-                    <th>Aksi</th>
-                  </tr>
+                    <tr>
+                        <th>No</th>
+                        <th>No KTP</th>  <!-- Kolom No KTP -->
+                        <th>Nama</th>
+                        <th>Alamat</th>
+                        <th>Telepon</th>
+                        <th>Jenis Kelamin</th>  <!-- Kolom Jenis Kelamin -->
+                        <th>Aksi</th>
+                    </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>Unity Pugh</td>
-                    <td>9958</td>
-                    <td>Curicó</td>
-                    <td>2005/02/11</td>
-                    <td>
-                        <button type="button" class="btn btn-info"><i class="bi bi-pencil-square"></i></button>
-                        <button type="button" class="btn btn-danger"><i class="bi bi-trash"></i></button>
-                    </td>
-                  </tr>
+                    <?php foreach ($pelanggan as $index => $item): ?>
+                        <tr>
+                            <td><?= $index + 1 ?></td>
+                            <td><?= $item['no_ktp'] ?></td>  
+                            <td><?= $item['nama'] ?></td>
+                            <td><?= $item['alamat'] ?></td>
+                            <td><?= $item['telepon'] ?></td>
+                            <td><?= $item['jenis_kelamin'] ?></td>  <!-- Menampilkan Jenis Kelamin -->
+                            <td>
+                                <a href="<?= base_url('data-master/pelanggan/edit/' . $item['id']) ?>" class="btn btn-info">Edit</a>
+                                <a href="<?= base_url('data-master/pelanggan/delete/' . $item['id']) ?>" class="btn btn-danger" onclick="return confirm('Hapus data ini?')">Hapus</a>
+                            </td>
+                        </tr>
+                    <?php endforeach ?>
                 </tbody>
-              </table>
-              <!-- End Table with stripped rows -->
-
-            </div>
-          </div>
-
+            </table>
         </div>
-      </div>
-    </section>
-<?= $this->endSection( ) ?>
+    </div>
+</section>
+
+<?= $this->endSection() ?>
