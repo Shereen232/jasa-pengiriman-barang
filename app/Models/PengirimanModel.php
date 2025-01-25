@@ -20,9 +20,18 @@ class PengirimanModel extends Model
         'berat',
         'biaya_kirim',
         'id_kendaraan',
-        'id_supir'
+        'id_supir',
+        'status'
     ];
 
+    public function getPengirimanWithRelations()
+    {
+        return $this->select('pengiriman.*, kendaraan.no_polisi, kendaraan.merk, supir.nama AS nama_supir')
+                    ->join('kendaraan', 'kendaraan.id = pengiriman.id_kendaraan')
+                    ->join('supir', 'supir.id = pengiriman.id_supir')
+                    ->findAll();
+    }
+    
     public function generateNoPengiriman()
     {
         $lastRecord = $this->orderBy('no_pengiriman', 'DESC')->first();

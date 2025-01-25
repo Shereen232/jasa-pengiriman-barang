@@ -74,6 +74,7 @@ class PengirimanController extends BaseController
             'biaya_kirim' => $biayaKirim,
             'id_kendaraan' => $this->request->getPost('id_kendaraan'),
             'id_supir' => $this->request->getPost('id_supir'),
+            'status' => 'Menunggu Pengiriman'
         ];
 
         $this->pengirimanModel->insert($data);

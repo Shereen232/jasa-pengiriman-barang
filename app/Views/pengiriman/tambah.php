@@ -67,6 +67,16 @@
                         <?php endforeach ?>
                     </select>
                 </div>
+                <div class="form-group">
+                    <label>Status</label>
+                    <select name="status" class="form-control" required>
+                        <option value="Menunggu Pengiriman">Menunggu Pengiriman</option>
+                        <option value="Dalam Perjalanan">Dalam Perjalanan</option>
+                        <option value="Terkirim">Terkirim</option>
+                        <option value="Gagal Terkirim">Gagal Terkirim</option>
+                        <option value="Dibatalkan">Dibatalkan</option>
+                    </select>
+                </div>
                 <button type="submit" class="btn btn-primary">Simpan</button>
             </form>
         </div>

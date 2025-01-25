@@ -27,6 +27,7 @@
                 <th>Barang</th>
                 <th>Berat</th>
                 <th>Biaya Kirim</th>
+                <th>Status</th>
                 <th>Aksi</th>
               </tr>
             </thead>
@@ -42,6 +43,7 @@
                                 <td><?= $item['nama_barang'] ?></td>
                                 <td><?= $item['berat'] ?> kg</td>
                                 <td>Rp <?= number_format($item['biaya_kirim'], 0, ',', '.') ?></td>
+                                <td><?= $item['status'] ?></td>
                                 <td>
                                     <a href="<?= base_url('pengiriman/edit/' . $item['id']) ?>" class="btn btn-info">
                                         <i class="bi bi-pencil-square"></i>
@@ -50,6 +52,7 @@
                                         <i class="bi bi-trash"></i>
                                     </a>
                                 </td>
+                                
                             </tr>
                         <?php endforeach ?>
                     </tbody>
