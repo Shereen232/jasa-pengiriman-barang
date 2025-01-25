@@ -52,7 +52,7 @@
       </li><!-- End Forms Nav -->
 
       <li class="nav-item">
-        <a class="nav-link collapsed" href="users-profile.html">
+        <a class="nav-link collapsed" href="<?= base_url('pengiriman')?>">
           <i class="bi bi-clipboard-check"></i>
           <span>Pengiriman</span>
         </a>

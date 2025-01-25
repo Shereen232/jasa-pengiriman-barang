@@ -12,11 +12,11 @@
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>No KTP</th>  <!-- Kolom No KTP -->
+                        <th>No KTP</th>
                         <th>Nama</th>
+                        <th>Jenis Kelamin</th>
                         <th>Alamat</th>
                         <th>Telepon</th>
-                        <th>Jenis Kelamin</th>  <!-- Kolom Jenis Kelamin -->
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -24,14 +24,14 @@
                     <?php foreach ($pelanggan as $index => $item): ?>
                         <tr>
                             <td><?= $index + 1 ?></td>
-                            <td><?= $item['no_ktp'] ?></td>  
-                            <td><?= $item['nama'] ?></td>
+                            <td><?= $item['no_ktp'] ?></td>
+                            <td><?= $item['nama_pelanggan'] ?></td>
+                            <td><?= $item['jenis_kelamin'] ?></td>
                             <td><?= $item['alamat'] ?></td>
                             <td><?= $item['telepon'] ?></td>
-                            <td><?= $item['jenis_kelamin'] ?></td>  <!-- Menampilkan Jenis Kelamin -->
                             <td>
-                                <a href="<?= base_url('data-master/pelanggan/edit/' . $item['id']) ?>" class="btn btn-info">Edit</a>
-                                <a href="<?= base_url('data-master/pelanggan/delete/' . $item['id']) ?>" class="btn btn-danger" onclick="return confirm('Hapus data ini?')">Hapus</a>
+                                <a href="<?= base_url('data-master/pelanggan/edit/' . $item['id_pelanggan']) ?>" class="btn btn-info">Edit</a>
+                                <a href="<?= base_url('data-master/pelanggan/delete/' . $item['id_pelanggan']) ?>" class="btn btn-danger" onclick="return confirm('Hapus data ini?')">Hapus</a>
                             </td>
                         </tr>
                     <?php endforeach ?>

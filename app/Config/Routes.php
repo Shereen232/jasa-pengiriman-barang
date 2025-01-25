@@ -33,5 +33,14 @@ $routes->group('data-master/kendaraan', function ($routes) {
     $routes->get('delete/(:num)', 'KendaraanController::delete/$1'); // Hapus kendaraan
 });
 
+$routes->group('pengiriman', function ($routes) {
+    $routes->get('/', 'PengirimanController::index');                  // Halaman daftar pengiriman
+    $routes->get('tambah', 'PengirimanController::tambah');            // Form tambah pengiriman
+    $routes->post('create', 'PengirimanController::create');           // Proses tambah pengiriman
+    $routes->get('edit/(:num)', 'PengirimanController::edit/$1');      // Form edit pengiriman
+    $routes->post('update/(:num)', 'PengirimanController::update/$1'); // Proses update pengiriman
+    $routes->get('delete/(:num)', 'PengirimanController::delete/$1');  // Hapus pengiriman
+});
+
 // VIEW USER
 $routes->get('/', 'Home::index');

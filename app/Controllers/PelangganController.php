@@ -7,11 +7,19 @@ use App\Models\PelangganModel;
 
 class PelangganController extends BaseController
 {
-     // Menampilkan daftar pelanggan
+    protected $pelangganModel;
+
+    public function __construct()
+    {
+        $this->pelangganModel = new PelangganModel();
+    }
+
+    // Menampilkan daftar pelanggan
     public function index()
     {
-        $pelangganModel = new PelangganModel();
-        $data['pelanggan'] = $pelangganModel->findAll(); // Mengambil semua data pelanggan
+        $data = [
+            'pelanggan' => $this->pelangganModel->getAllPelanggan(),
+        ];
 
         return view('data-master/pelanggan/index', $data);
     }
@@ -22,47 +30,35 @@ class PelangganController extends BaseController
         return view('data-master/pelanggan/tambah');
     }
 
-    // Simpan data pelanggan ke database
+    // Simpan data pelanggan
     public function create()
     {
-        // Validasi data input
         $this->validate([
-            'nama' => 'required',
+            'no_ktp' => 'required',
+            'nama_pelanggan' => 'required',
+            'jenis_kelamin' => 'required',
             'alamat' => 'required',
             'telepon' => 'required',
-            'no_ktp' => 'required|numeric|exact_length[16]',  // Menambahkan validasi no_ktp
-            'jenis_kelamin' => 'required|in_list[Laki-laki,Perempuan]', // Validasi jenis kelamin
         ]);
 
-        // Jika validasi gagal
-        if (!$this->validate()) {
-            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
-        }
-
-        // Data pelanggan yang akan disimpan
         $data = [
-            'nama' => $this->request->getPost('nama'),
+            'no_ktp' => $this->request->getPost('no_ktp'),
+            'nama_pelanggan' => $this->request->getPost('nama_pelanggan'),
+            'jenis_kelamin' => $this->request->getPost('jenis_kelamin'),
             'alamat' => $this->request->getPost('alamat'),
             'telepon' => $this->request->getPost('telepon'),
-            'no_ktp' => $this->request->getPost('no_ktp'),
-            'jenis_kelamin' => $this->request->getPost('jenis_kelamin'),
         ];
 
-        // Memanggil model untuk menyimpan data
-        $pelangganModel = new PelangganModel();
-        $pelangganModel->insert($data);
+        $this->pelangganModel->insert($data);
 
-        // Redirect setelah berhasil
         return redirect()->to(base_url('data-master/pelanggan'))->with('success', 'Data pelanggan berhasil ditambahkan.');
     }
 
     // Form edit pelanggan
-    public function edit($id)
+    public function edit($id_pelanggan)
     {
-        $pelangganModel = new PelangganModel();
+        $pelanggan = $this->pelangganModel->find($id_pelanggan);
 
-        // Ambil data pelanggan berdasarkan ID
-        $pelanggan = $pelangganModel->find($id);
         if (!$pelanggan) {
             return redirect()->to(base_url('data-master/pelanggan'))->with('error', 'Data pelanggan tidak ditemukan.');
         }
@@ -75,43 +71,33 @@ class PelangganController extends BaseController
     }
 
     // Update data pelanggan
-    public function update($id)
+    public function update($id_pelanggan)
     {
-        // Validasi input
         $this->validate([
-            'nama' => 'required',
+            'no_ktp' => 'required',
+            'nama_pelanggan' => 'required',
+            'jenis_kelamin' => 'required',
             'alamat' => 'required',
             'telepon' => 'required',
-            'no_ktp' => 'required|numeric|exact_length[16]',  // Menambahkan validasi no_ktp
-            'jenis_kelamin' => 'required|in_list[Laki-laki,Perempuan]', // Validasi jenis kelamin
         ]);
 
-        // Jika validasi gagal
-        if (!$this->validate()) {
-            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
-        }
-
-        // Data yang akan diupdate
         $data = [
-            'nama' => $this->request->getPost('nama'),
+            'no_ktp' => $this->request->getPost('no_ktp'),
+            'nama_pelanggan' => $this->request->getPost('nama_pelanggan'),
+            'jenis_kelamin' => $this->request->getPost('jenis_kelamin'),
             'alamat' => $this->request->getPost('alamat'),
             'telepon' => $this->request->getPost('telepon'),
-            'no_ktp' => $this->request->getPost('no_ktp'),
-            'jenis_kelamin' => $this->request->getPost('jenis_kelamin'),
         ];
 
-        // Memanggil model untuk update data pelanggan
-        $pelangganModel = new PelangganModel();
-        $pelangganModel->update($id, $data);
+        $this->pelangganModel->update($id_pelanggan, $data);
 
         return redirect()->to(base_url('data-master/pelanggan'))->with('success', 'Data pelanggan berhasil diperbarui.');
     }
 
     // Hapus data pelanggan
-    public function delete($id)
+    public function delete($id_pelanggan)
     {
-        $pelangganModel = new PelangganModel();
-        $pelangganModel->delete($id);
+        $this->pelangganModel->delete($id_pelanggan);
 
         return redirect()->to(base_url('data-master/pelanggan'))->with('success', 'Data pelanggan berhasil dihapus.');
     }
