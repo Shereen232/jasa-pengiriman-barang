@@ -80,4 +80,5 @@ class PengirimanController extends BaseController
 
         return redirect()->to(base_url('pengiriman'))->with('success', 'Data pengiriman berhasil ditambahkan.');
     }
+    
 }
