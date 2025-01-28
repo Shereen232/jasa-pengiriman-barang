@@ -6,6 +6,7 @@ use CodeIgniter\Router\RouteCollection;
  * @var RouteCollection $routes
  */
 $routes->get('/admin', 'DashboardController::index');
+
 $routes->group('data-master/supir', function ($routes) {
     $routes->get('/', 'SupirController::index');              // Halaman daftar supir
     $routes->get('tambah', 'SupirController::tambah');        // Form tambah supir

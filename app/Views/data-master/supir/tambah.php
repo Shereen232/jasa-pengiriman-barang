@@ -8,7 +8,7 @@
           <h5 class="card-title">Input Data Supir</h5>
 
           <!-- Horizontal Form -->
-          <form method="post" action="<?= base_url('supir/create') ?>">
+          <form method="post" action="<?= base_url('data-master/supir/create') ?>">
             <div class="row mb-3">
               <label for="noKtp" class="col-sm-2 col-form-label">No. KTP</label>
               <div class="col-sm-10">

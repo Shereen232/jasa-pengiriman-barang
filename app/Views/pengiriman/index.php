@@ -38,7 +38,7 @@
                                 <td><?= $no++ ?></td>
                                 <td><?= $item['no_pengiriman'] ?></td>
                                 <td><?= $item['tanggal'] ?></td>
-                                <td><?= $item['nama_pengirim'] ?></td>
+                                <td><?= $item['nama_supir'] ?></td>
                                 <td><?= $item['penerima'] ?></td>
                                 <td><?= $item['nama_barang'] ?></td>
                                 <td><?= $item['berat'] ?> kg</td>

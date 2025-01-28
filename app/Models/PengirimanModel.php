@@ -11,8 +11,7 @@ class PengirimanModel extends Model
     protected $allowedFields = [
         'no_pengiriman',
         'tanggal',
-        'nama_pengirim',
-        'alamat_pengirim',
+        'id_pelanggan',
         'penerima',
         'alamat_penerima',
         'nama_barang',
@@ -20,7 +19,6 @@ class PengirimanModel extends Model
         'berat',
         'biaya_kirim',
         'id_kendaraan',
-        'id_supir',
         'status'
     ];
 
@@ -28,7 +26,7 @@ class PengirimanModel extends Model
     {
         return $this->select('pengiriman.*, kendaraan.no_polisi, kendaraan.merk, supir.nama AS nama_supir')
                     ->join('kendaraan', 'kendaraan.id = pengiriman.id_kendaraan')
-                    ->join('supir', 'supir.id = pengiriman.id_supir')
+                    ->join('supir', 'kendaraan.id_supir = supir.id')
                     ->findAll();
     }
     

@@ -4,16 +4,16 @@
 <section class="section">
     <div class="card">
         <div class="card-header">
-            <h4>Tambah Pengiriman</h4>
+            <h4>Edit Pengiriman</h4>
         </div>
         <div class="card-body">
-            <form action="<?= base_url('pengiriman/create') ?>" method="post">
+            <form action="<?= base_url('pengiriman/update/'. $pengiriman->id) ?>" method="post">
                 <?= csrf_field() ?>
                 <div class="row mt-3 mb-3">
                     <div class="col">
                         <div class="form-group">
                             <label>No Pengiriman</label>
-                            <input type="text" name="no_pengiriman" class="form-control" value="<?= $no_pengiriman ?>" readonly>
+                            <input type="text" name="no_pengiriman" class="form-control" value="<?= $pengiriman->no_pengiriman ?>" readonly>
                         </div>
                     </div>
                     <div class="col">
@@ -38,27 +38,27 @@
                 </div>
                 <div class="form-group mt-3 mb-3">
                     <label>Penerima</label>
-                    <input type="text" name="penerima" class="form-control" required>
+                    <input type="text" name="penerima" class="form-control" value="<?= $pengiriman->penerima ?>" required>
                 </div>
                 <div class="form-group mt-3 mb-3">
                     <label>Alamat Penerima</label>
-                    <textarea name="alamat_penerima" class="form-control" required></textarea>
+                    <textarea name="alamat_penerima" class="form-control" required><?= $pengiriman->alamat_penerima ?></textarea>
                 </div>
                 <div class="form-group mt-3 mb-3">
                     <label>Nama Barang</label>
-                    <input type="text" name="nama_barang" class="form-control" required>
+                    <input type="text" name="nama_barang" class="form-control" value="<?= $pengiriman->nama_barang ?>" required>
                 </div>
                 <div class="form-group mt-3 mb-3">
                     <label>Jumlah</label>
-                    <input type="number" name="jumlah" class="form-control" required>
+                    <input type="number" name="jumlah" class="form-control" value="<?= $pengiriman->jumlah ?>" required>
                 </div>
                 <div class="form-group mt-3 mb-3">
                     <label>Berat (Kg)</label>
-                    <input type="number" name="berat" id="berat" class="form-control" step="0.1" required>
+                    <input type="number" name="berat" id="berat" class="form-control" value="<?= $pengiriman->berat ?>" step="0.1" required>
                 </div>
                 <div class="form-group mt-3 mb-3">
                     <label>Biaya Kirim (Rp)</label>
-                    <input type="text" id="biaya_kirim" class="form-control" readonly>
+                    <input type="text" id="biaya_kirim" class="form-control" value="<?= $pengiriman->biaya_kirim ?>" readonly>
                 </div>
                 <div class="form-group mt-3 mb-3">
                     <label>Kendaraan</label>
@@ -67,6 +67,16 @@
                         <?php foreach ($kendaraan as $item): ?>
                             <option value="<?= $item['id'] ?>"><?= $item['merk'] ?> | No. Polisi : <?= $item['no_polisi'] ?> | Supir : <?= $item['supir'] ?></option>
                         <?php endforeach ?>
+                    </select>
+                </div>
+                <div class="form-group mt-3 mb-3">
+                    <label>Status</label>
+                    <select name="status" class="form-control" required>
+                        <option value="Menunggu Pengiriman">Menunggu Pengiriman</option>
+                        <option value="Dalam Perjalanan">Dalam Perjalanan</option>
+                        <option value="Terkirim">Terkirim</option>
+                        <option value="Gagal Terkirim">Gagal Terkirim</option>
+                        <option value="Dibatalkan">Dibatalkan</option>
                     </select>
                 </div>
                 <button type="submit" class="btn btn-primary">Simpan</button>

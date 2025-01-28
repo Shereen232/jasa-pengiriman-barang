@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use App\Models\PengirimanModel;
 use App\Models\KendaraanModel;
+use App\Models\PelangganModel;
 use App\Models\SupirModel;
 
 class PengirimanController extends BaseController
@@ -12,19 +13,21 @@ class PengirimanController extends BaseController
     protected $pengirimanModel;
     protected $kendaraanModel;
     protected $supirModel;
+    protected $pelangganModel;
 
     public function __construct()
     {
         $this->pengirimanModel = new PengirimanModel();
         $this->kendaraanModel = new KendaraanModel();
         $this->supirModel = new SupirModel();
+        $this->pelangganModel = new PelangganModel();
     }
 
     // Menampilkan daftar pengiriman
     public function index()
     {
         $data = [
-            'pengiriman' => $this->pengirimanModel->findAll(),
+            'pengiriman' => $this->pengirimanModel->getPengirimanWithRelations(),
         ];
 
         return view('pengiriman/index', $data);
@@ -35,8 +38,8 @@ class PengirimanController extends BaseController
     {
         $data = [
             'no_pengiriman' => $this->pengirimanModel->generateNoPengiriman(),
-            'kendaraan' => $this->kendaraanModel->findAll(),
-            'supir' => $this->supirModel->findAll(),
+            'kendaraan' => $this->kendaraanModel->getKendaraanWithSupir(),
+            'pengirim' => $this->pelangganModel->asObject()->findAll()
         ];
 
         return view('pengiriman/tambah', $data);
@@ -46,15 +49,13 @@ class PengirimanController extends BaseController
     public function create()
     {
         $this->validate([
-            'nama_pengirim' => 'required',
-            'alamat_pengirim' => 'required',
+            'id_pelanggan' => 'required',
             'penerima' => 'required',
             'alamat_penerima' => 'required',
             'nama_barang' => 'required',
             'jumlah' => 'required|integer',
             'berat' => 'required|decimal',
             'id_kendaraan' => 'required',
-            'id_supir' => 'required',
         ]);
          // Perhitungan biaya pengiriman
          $berat = $this->request->getPost('berat'); // berat dalam kilogram
@@ -64,8 +65,7 @@ class PengirimanController extends BaseController
         $data = [
             'no_pengiriman' => $this->request->getPost('no_pengiriman'),
             'tanggal' => $this->request->getPost('tanggal'),
-            'nama_pengirim' => $this->request->getPost('nama_pengirim'),
-            'alamat_pengirim' => $this->request->getPost('alamat_pengirim'),
+            'id_pelanggan' => $this->request->getPost('id_pelanggan'),
             'penerima' => $this->request->getPost('penerima'),
             'alamat_penerima' => $this->request->getPost('alamat_penerima'),
             'nama_barang' => $this->request->getPost('nama_barang'),
@@ -73,13 +73,67 @@ class PengirimanController extends BaseController
             'berat' => $berat,
             'biaya_kirim' => $biayaKirim,
             'id_kendaraan' => $this->request->getPost('id_kendaraan'),
-            'id_supir' => $this->request->getPost('id_supir'),
             'status' => 'Menunggu Pengiriman'
         ];
 
         $this->pengirimanModel->insert($data);
 
         return redirect()->to(base_url('pengiriman'))->with('success', 'Data pengiriman berhasil ditambahkan.');
+    }
+    
+    public function edit($id)
+    {
+        $pengiriman = $this->pengirimanModel->asObject()->find($id);
+        $data = [
+            'no_pengiriman' => $this->pengirimanModel->generateNoPengiriman(),
+            'kendaraan'     => $this->kendaraanModel->getKendaraanWithSupir(),
+            'pengirim'      => $this->pelangganModel->asObject()->findAll(),
+            'pengiriman'    => $pengiriman
+        ];
+
+        return view('pengiriman/edit', $data);
+    }
+
+    public function update($id)
+    {
+        $this->validate([
+            'id_pelanggan' => 'required',
+            'penerima' => 'required',
+            'alamat_penerima' => 'required',
+            'nama_barang' => 'required',
+            'jumlah' => 'required|integer',
+            'berat' => 'required|decimal',
+            'id_kendaraan' => 'required',
+        ]);
+         // Perhitungan biaya pengiriman
+         $berat = $this->request->getPost('berat'); // berat dalam kilogram
+         $biayaPerKg = 10000; // Rp 10.000 per kg
+         $biayaKirim = $berat * $biayaPerKg;
+
+        $data = [
+            'no_pengiriman' => $this->request->getPost('no_pengiriman'),
+            'tanggal' => $this->request->getPost('tanggal'),
+            'id_pelanggan' => $this->request->getPost('id_pelanggan'),
+            'penerima' => $this->request->getPost('penerima'),
+            'alamat_penerima' => $this->request->getPost('alamat_penerima'),
+            'nama_barang' => $this->request->getPost('nama_barang'),
+            'jumlah' => $this->request->getPost('jumlah'),
+            'berat' => $berat,
+            'biaya_kirim' => $biayaKirim,
+            'id_kendaraan' => $this->request->getPost('id_kendaraan'),
+            'status' => $this->request->getPost('status')
+        ];
+
+        $this->pengirimanModel->update($id, $data);
+
+        return redirect()->to(base_url('pengiriman'))->with('success', 'Data pengiriman berhasil diperbarui.');
+    }
+
+    public function delete($id)
+    {
+        $this->pengirimanModel->delete($id);
+
+        return redirect()->to('pengiriman')->with('success', 'Data Pengiriman berhasil dihapus');
     }
     
 }
