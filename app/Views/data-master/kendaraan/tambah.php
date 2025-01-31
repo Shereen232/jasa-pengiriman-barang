@@ -2,40 +2,49 @@
 <?= $this->section('app') ?>
 
 <section class="section">
-    <div class="card">
-        <div class="card-header">
-            <h4>Tambah Kendaraan</h4>
-        </div>
-        <div class="card-body">
-            <form action="<?= base_url('data-master/kendaraan/create') ?>" method="post">
-                <?= csrf_field() ?>
-                <div class="form-group">
-                    <label>No. Polisi</label>
-                    <input type="text" name="no_polisi" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label>Merk</label>
-                    <input type="text" name="merk" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label>No. Mesin</label>
-                    <input type="text" name="no_mesin" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label>Warna</label>
-                    <input type="text" name="warna" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label>Supir</label>
-                    <select name="id_supir" class="form-control" required>
-                        <option value="">-- Pilih Supir --</option>
-                        <?php foreach ($supir as $item): ?>
-                            <option value="<?= $item['id'] ?>"><?= $item['nama'] ?></option>
-                        <?php endforeach ?>
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-primary">Simpan</button>
-            </form>
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Input Data Supir</h5>
+                <form action="<?= base_url('data-master/kendaraan/create') ?>" method="post">
+                    <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label">No. Polisi</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="no_polisi" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label">Merk</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="merk" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label">No. Mesin</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="no_mesin" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label">Warna</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="warna" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label">Supir</label>
+                        <div class="col-sm-10">
+                            <select name="id_supir" class="form-control" required>
+                                <option value="">-- Pilih Supir --</option>
+                                <?php foreach ($supir as $item): ?>
+                                    <option value="<?= $item['id'] ?>"><?= $item['nama'] ?></option>
+                                <?php endforeach ?>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                </form>
+            </div>
         </div>
     </div>
 </section>

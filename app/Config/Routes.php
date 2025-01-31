@@ -6,6 +6,8 @@ use CodeIgniter\Router\RouteCollection;
  * @var RouteCollection $routes
  */
 $routes->get('/admin', 'DashboardController::index');
+$routes->get('/admin/setting', 'SettingController::index');
+$routes->post('/admin/setting', 'SettingController::save');
 
 $routes->group('data-master/supir', function ($routes) {
     $routes->get('/', 'SupirController::index');              // Halaman daftar supir
@@ -42,6 +44,8 @@ $routes->group('pengiriman', function ($routes) {
     $routes->post('update/(:num)', 'PengirimanController::update/$1'); // Proses update pengiriman
     $routes->get('delete/(:num)', 'PengirimanController::delete/$1');  // Hapus pengiriman
 });
+
+$routes->get('profil', 'AuthController::index');
 
 // VIEW USER
 $routes->get('/', 'Home::index');

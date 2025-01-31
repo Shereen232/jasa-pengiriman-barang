@@ -15,8 +15,8 @@
           <i class="bi bi-question-circle-fill"></i><span>Informasi</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="components-alerts.html">
+          <li> 
+            <a href="<?= base_url('admin/setting') ?>">
               <i class="bi bi-circle"></i><span>Tentang Kami</span>
             </a>
           </li>
@@ -59,7 +59,7 @@
       </li><!-- End Tables Nav -->
 
       <li class="nav-item">
-        <a class="nav-link collapsed" href="users-profile.html">
+        <a class="nav-link collapsed" href="<?= base_url('profil')?>">
           <i class="bi bi-person"></i>
           <span>Profile</span>
         </a>

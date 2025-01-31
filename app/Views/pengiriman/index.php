@@ -51,6 +51,9 @@
                                     <a href="<?= base_url('pengiriman/delete/' . $item['id']) ?>" class="btn btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
                                         <i class="bi bi-trash"></i>
                                     </a>
+                                    <a href="<?= base_url('pengiriman/delete/' . $item['id']) ?>" class="btn btn-success" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
+                                        <i class="bi bi-printer-fill"></i>
+                                    </a>
                                 </td>
                                 
                             </tr>

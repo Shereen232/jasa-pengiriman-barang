@@ -24,6 +24,8 @@
   <link href="<?= base_url() ?>Logis/assets/vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
   <link href="<?= base_url() ?>Logis/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
   <link href="<?= base_url() ?>Logis/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <link href="<?= base_url() ?>css/custom-table.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <!-- Main CSS File -->
   <link href="<?= base_url() ?>Logis/assets/css/main.css" rel="stylesheet">
@@ -95,7 +97,7 @@
             <p data-aos="fade-up" data-aos-delay="100">Silahkan Masukan nomer resi pengiriman</p>
 
             <form action="" method="GET" class="form-search d-flex align-items-stretch mb-3" data-aos="fade-up" data-aos-delay="200">
-              <input type="text" name="no_resi" class="form-control" placeholder="Ketikan Resi">
+              <input type="text" name="no_resi" class="form-control" placeholder="Ketikan Resi" value="<?= !empty($_GET['no_resi']) ? $_GET['no_resi'] : '' ?>" required>
               <button type="submit" class="btn btn-primary">Search</button>
             </form>
 
@@ -111,37 +113,44 @@
 
     </section><!-- /Hero Section -->
 
-
-    <div class="container" style="display:none; ">
-        <div class="card">
-            <div class="card-body">
-            <h5 class="card-title" style="text-align: center;">Default Table</h5>
-
-              <!-- Default Table -->
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Position</th>
-                    <th scope="col">Age</th>
-                    <th scope="col">Start Date</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Brandon Jacob</td>
-                    <td>Designer</td>
-                    <td>28</td>
-                    <td>2016-05-25</td>
-                  </tr>
-                </tbody>
-              </table>
-              <!-- End Default Table Example -->
-            </div>
+    <?php if ($pengiriman) : ?>
+      <?php foreach ($pengiriman as $key => $row) : ?>
+        <div id="trxResi" class="container mt-5 mb-5">
+          <h3 class="fw-bold text-center">Hasil Pencarian: #P0001</h3>
+          <div class="table-wrap">
+            <table class="table table-responsive-xl">
+              <thead>
+                <tr>
+                  <th>No Resi</th>
+                  <th>Tanggal</th>
+                  <th>Paket</th>
+                  <th>Checkpoint</th>
+                  <th>Status</th>
+                  <th>&nbsp;</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="alert" role="alert">
+                  <td class="d-flex">
+                    <span><a href="#"><?= $row->no_pengiriman ?></a></span>
+                  </td>
+                  <td><?= $row->tanggal ?></td>
+                  <td><?= $row->nama_barang ?></td>
+                  <td><?= $row->alamat_penerima ?></td>
+                  <!-- <td class="status"><span class="active">Active</span></td> -->
+                  <td class="status"><span class="waiting"><?= $row->status ?></span></td>
+                  <td>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true"><i class="fa fa-print"></i></span>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-    </div>
+      <?php endforeach; ?>
+    <?php endif; ?>
         
 
     <!-- Featured Services Section -->
@@ -200,7 +209,7 @@
           <div class="col-lg-6 content order-last  order-lg-first" data-aos="fade-up" data-aos-delay="100">
             <h3>About Us</h3>
             <p>
-              Dolor iure expedita id fuga asperiores qui sunt consequatur minima. Quidem voluptas deleniti. Sit quia molestiae quia quas qui magnam itaque veritatis dolores. Corrupti totam ut eius incidunt reiciendis veritatis asperiores placeat.
+              <?= $setting->about_content ?>
             </p>
             <ul>
               <li>
@@ -244,7 +253,7 @@
           <a href="index.html" class="logo d-flex align-items-center">
             <span class="sitename">Logis</span>
           </a>
-          <p>Cras fermentum odio eu feugiat lide par naso tierra. Justo eget nada terra videa magna derita valies darta donna mare fermentum iaculis eu non diam phasellus.</p>
+          <?= $setting->footer_content ?>
           <div class="social-links d-flex mt-4">
             <a href=""><i class="bi bi-twitter-x"></i></a>
             <a href=""><i class="bi bi-facebook"></i></a>
@@ -316,6 +325,42 @@
 
   <!-- Main JS File -->
   <script src="<?= base_url() ?>Logis/assets/js/main.js"></script>
+
+  <script>
+    var Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000
+    });
+
+    const succesSessionFlashMsg = '<?= session()->getFlashdata('success_message') ?>';
+    const errorSessionFlashMsg = '<?= session()->getFlashdata('error_message') ?>';
+    const trxResiFlashMsg = '<?= session()->getFlashdata('tracking_resi') ?>';
+    window.onload = function () {
+      if (trxResiFlashMsg !== '') {
+        const target = document.getElementById("trxResi");
+        target.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    };
+
+    if (succesSessionFlashMsg !== '') {
+        Toast.fire({
+            icon: 'success',
+            title: succesSessionFlashMsg
+        })
+    }
+
+    if (errorSessionFlashMsg !== '') {
+      console.log('ok');
+      
+        Toast.fire({
+            icon: 'warning',
+            title: errorSessionFlashMsg
+        })
+    }
+
+  </script>
 
 </body>
 

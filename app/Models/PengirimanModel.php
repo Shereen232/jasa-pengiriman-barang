@@ -29,6 +29,16 @@ class PengirimanModel extends Model
                     ->join('supir', 'kendaraan.id_supir = supir.id')
                     ->findAll();
     }
+
+    public function getPengirimanByResi($resi)
+    {
+        return $this->select('pengiriman.*, kendaraan.no_polisi, kendaraan.merk, supir.nama AS nama_supir')
+                    ->join('kendaraan', 'kendaraan.id = pengiriman.id_kendaraan')
+                    ->join('supir', 'kendaraan.id_supir = supir.id')
+                    ->where('pengiriman.no_pengiriman', $resi)
+                    ->asObject()
+                    ->findAll();
+    }
     
     public function generateNoPengiriman()
     {

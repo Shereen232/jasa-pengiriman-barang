@@ -24,17 +24,21 @@
                     </div>
                 </div>
                 <div class="form-group mt-3 mb-3">
+                <div class="form-group mt-3 mb-3">
                     <label>Nama Pengirim</label>
                     <select name="id_pelanggan" id="pelanggan" class="form-control">
                         <option value="">-- Pilih Pengirim --</option>
-                        <?php foreach ($pengirim as $key => $pengirim) : ?>
-                            <option value="<?= $pengirim->id_pelanggan ?>"><?= $pengirim->nama_pelanggan ?></option>
+                        <?php foreach ($pengirim as $key => $item): ?>
+                            <option value="<?= $item->id_pelanggan ?>" 
+                                    data-alamat="<?= $item->alamat ?>">
+                                <?= $item->nama_pelanggan ?>
+                            </option>
                         <?php endforeach; ?>
                     </select>
                 </div>
                 <div class="form-group mt-3 mb-3">
                     <label>Alamat Pengirim</label>
-                    <textarea name="alamat_pengirim" class="form-control" required></textarea>
+                    <textarea name="alamat_pengirim" id="alamat_pengirim" class="form-control" readonly></textarea>
                 </div>
                 <div class="form-group mt-3 mb-3">
                     <label>Penerima</label>
@@ -83,4 +87,13 @@
         document.getElementById('biaya_kirim').value = biayaKirim.toLocaleString('id-ID');
     });
 </script>
+
+<script>
+    document.getElementById('pelanggan').addEventListener('change', function () {
+        const selectedOption = this.options[this.selectedIndex];
+        const alamat = selectedOption.getAttribute('data-alamat');
+        document.getElementById('alamat_pengirim').value = alamat || '';
+    });
+</script>
+
 <?= $this->endSection() ?>
