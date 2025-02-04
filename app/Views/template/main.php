@@ -37,6 +37,35 @@
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
+  <style>
+  .help-icon {
+    position: fixed;
+    bottom: 60px;
+    right: 20px;
+    padding: 30px;
+    background-color: #0056b3;
+    color: #fff;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+  }
+
+  .help-icon i {
+    font-size: 24px;
+  }
+
+  .help-icon:hover {
+    background-color: #0056b3;
+  }
+</style>
+
+
 </head>
 
 <body class="index-page">
@@ -163,8 +192,8 @@
           <div class="col-lg-4 col-md-6 service-item d-flex" data-aos="fade-up" data-aos-delay="100">
             <div class="icon flex-shrink-0"><i class="fa-solid fa-cart-flatbed"></i></div>
             <div>
-              <h4 class="title">Lorem Ipsum</h4>
-              <p class="description">Voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident</p>
+              <h4 class="title">Pengiriman Cepat</h4>
+              <p class="description">Kami memastikan paket Anda sampai dengan aman dan tepat waktu ke tujuan.</p>
               <a href="#" class="readmore stretched-link"><span>Learn More</span><i class="bi bi-arrow-right"></i></a>
             </div>
           </div>
@@ -173,8 +202,8 @@
           <div class="col-lg-4 col-md-6 service-item d-flex" data-aos="fade-up" data-aos-delay="200">
             <div class="icon flex-shrink-0"><i class="fa-solid fa-truck"></i></div>
             <div>
-              <h4 class="title">Dolor Sitema</h4>
-              <p class="description">Minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat tarad limino ata</p>
+              <h4 class="title">Layanan Profesional</h4>
+              <p class="description">Tim kami siap memberikan pelayanan terbaik dengan jaringan pengiriman yang luas.</p>
               <a href="#" class="readmore stretched-link"><span>Learn More</span><i class="bi bi-arrow-right"></i></a>
             </div>
           </div><!-- End Service Item -->
@@ -182,8 +211,8 @@
           <div class="col-lg-4 col-md-6 service-item d-flex" data-aos="fade-up" data-aos-delay="300">
             <div class="icon flex-shrink-0"><i class="fa-solid fa-truck-ramp-box"></i></div>
             <div>
-              <h4 class="title">Sed ut perspiciatis</h4>
-              <p class="description">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur</p>
+              <h4 class="title">Keamanan Terjamin</h4>
+              <p class="description">Setiap paket dilindungi dengan sistem keamanan yang ketat untuk mencegah kehilangan atau kerusakan.</p>
               <a href="#" class="readmore stretched-link"><span>Learn More</span><i class="bi bi-arrow-right"></i></a>
             </div>
           </div><!-- End Service Item -->
@@ -193,6 +222,10 @@
       </div>
 
     </section><!-- /Featured Services Section -->
+
+    <a href="<?= base_url()?> komplain" class="help-icon ms-3">
+      <i class="bi bi-chat-right-text-fill fs-4 "></i>
+    </a>
 
     <!-- About Section -->
     <section id="about" class="about section">
@@ -207,7 +240,7 @@
           </div>
 
           <div class="col-lg-6 content order-last  order-lg-first" data-aos="fade-up" data-aos-delay="100">
-            <h3>About Us</h3>
+            <h3>Tentang Kami</h3>
             <p>
               <?= $setting->about_content ?>
             </p>
@@ -215,22 +248,22 @@
               <li>
                 <i class="bi bi-diagram-3"></i>
                 <div>
-                  <h5>Ullamco laboris nisi ut aliquip consequat</h5>
-                  <p>Magni facilis facilis repellendus cum excepturi quaerat praesentium libre trade</p>
+                  <h5>Jangkauan Luas & Tepat Waktu</h5>
+                  <p>Layanan kami mencakup berbagai daerah dengan komitmen ketepatan waktu.</p>
                 </div>
               </li>
               <li>
                 <i class="bi bi-fullscreen-exit"></i>
                 <div>
-                  <h5>Magnam soluta odio exercitationem reprehenderi</h5>
-                  <p>Quo totam dolorum at pariatur aut distinctio dolorum laudantium illo direna pasata redi</p>
+                  <h5>Proses Mudah & Efisien</h5>
+                  <p>Pengiriman mudah dengan sistem tracking real-time.</p>
                 </div>
               </li>
               <li>
                 <i class="bi bi-broadcast"></i>
                 <div>
-                  <h5>Voluptatem et qui exercitationem</h5>
-                  <p>Et velit et eos maiores est tempora et quos dolorem autem tempora incidunt maxime veniam</p>
+                  <h5>Keamanan Terjamin</h5>
+                  <p>Paket Anda dilindungi dengan asuransi dan keamanan terbaik.</p>
                 </div>
               </li>
             </ul>
@@ -246,12 +279,15 @@
   </main>
 
   <footer id="footer" class="footer dark-background">
+    <a href="<?= base_url()?> komplain" class="help-icon ms-3">
+      <i class="bi bi-chat-right-text-fill fs-4 "></i>
+    </a>
 
     <div class="container footer-top">
       <div class="row gy-4">
         <div class="col-lg-5 col-md-12 footer-about">
-          <a href="index.html" class="logo d-flex align-items-center">
-            <span class="sitename">Logis</span>
+          <a href="<?= base_url()?> komplain" class="logo d-flex align-items-center">
+            <span class="sitename">Tazza Paket Express</span>
           </a>
           <?= $setting->footer_content ?>
           <div class="social-links d-flex mt-4">
@@ -260,28 +296,6 @@
             <a href=""><i class="bi bi-instagram"></i></a>
             <a href=""><i class="bi bi-linkedin"></i></a>
           </div>
-        </div>
-
-        <div class="col-lg-2 col-6 footer-links">
-          <h4>Useful Links</h4>
-          <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">About us</a></li>
-            <li><a href="#">Services</a></li>
-            <li><a href="#">Terms of service</a></li>
-            <li><a href="#">Privacy policy</a></li>
-          </ul>
-        </div>
-
-        <div class="col-lg-2 col-6 footer-links">
-          <h4>Our Services</h4>
-          <ul>
-            <li><a href="#">Web Design</a></li>
-            <li><a href="#">Web Development</a></li>
-            <li><a href="#">Product Management</a></li>
-            <li><a href="#">Marketing</a></li>
-            <li><a href="#">Graphic Design</a></li>
-          </ul>
         </div>
 
         <div class="col-lg-3 col-md-12 footer-contact text-center text-md-start">

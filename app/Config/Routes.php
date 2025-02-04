@@ -1,5 +1,6 @@
 <?php
 
+use App\Controllers\KomplainController;
 use CodeIgniter\Router\RouteCollection;
 
 /**
@@ -46,6 +47,11 @@ $routes->group('pengiriman', function ($routes) {
 });
 
 $routes->get('profil', 'AuthController::index');
+$routes->get('/auth/login', 'AuthController::login');
+$routes->post('/auth/processLogin', 'AuthController::processLogin');
+$routes->get('/auth/logout', 'AuthController::logout');
+
 
 // VIEW USER
 $routes->get('/', 'Home::index');
+$routes->get('/komplain', 'KomplainController::index');
