@@ -3,6 +3,8 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 use App\Models\PengirimanModel;
 use App\Models\KendaraanModel;
 use App\Models\PelangganModel;
@@ -135,5 +137,47 @@ class PengirimanController extends BaseController
 
         return redirect()->to('pengiriman')->with('success', 'Data Pengiriman berhasil dihapus');
     }
+
+    public function cetakResi($id)
+    {
+        $pengirimanModel = new PengirimanModel();
+        $pengiriman = $pengirimanModel->find($id);
+        
+        if (!$pengiriman) {
+            return redirect()->to('/pengiriman')->with('error', 'Data tidak ditemukan');
+        }
+
+        $options = new Options();
+        $options->set('defaultFont', 'Helvetica');
+        $dompdf = new Dompdf($options);
+
+        $html = view('pengiriman/cetak_resi', ['pengiriman' => $pengiriman]);
+        
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A6', 'portrait'); // Ukuran kertas A6 mirip dengan resi
+        $dompdf->render();
+        $dompdf->stream("resi_pengiriman_{$pengiriman['no_pengiriman']}.pdf", ['Attachment' => false]);
+    }
+
+    public function cetakPDF()
+    {
+        $pengiriman = $this->pengirimanModel->getPengirimanWithRelations();
+
+        // Load view HTML ke variabel
+        $html = view('pengiriman/pdf_pengiriman', ['pengiriman' => $pengiriman]);
+
+        // Konfigurasi Dompdf
+        $options = new Options();
+        $options->set('defaultFont', 'Courier');
+        $dompdf = new Dompdf($options);
+
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'landscape');
+        $dompdf->render();
+
+        // Download file PDF
+        $dompdf->stream('Data_Pengiriman.pdf', ['Attachment' => false]);
+    }
+
     
 }

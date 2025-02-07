@@ -24,6 +24,8 @@
   <link href="<?= base_url() ?>Logis/assets/vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
   <link href="<?= base_url() ?>Logis/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
   <link href="<?= base_url() ?>Logis/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <link href="<?= base_url() ?>NiceAdmin/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+
   <link href="<?= base_url() ?>css/custom-table.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -43,7 +45,7 @@
     bottom: 60px;
     right: 20px;
     padding: 30px;
-    background-color: #0056b3;
+    background-color:rgb(6, 2, 255);
     color: #fff;
     width: 50px;
     height: 50px;
@@ -85,23 +87,7 @@
           <li><a href="about.html">About</a></li>
           <li><a href="services.html">Services</a></li>
           <li><a href="pricing.html">Pricing</a></li>
-          <li class="dropdown"><a href="#"><span>Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-            <ul>
-              <li><a href="#">Dropdown 1</a></li>
-              <li class="dropdown"><a href="#"><span>Deep Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-                <ul>
-                  <li><a href="#">Deep Dropdown 1</a></li>
-                  <li><a href="#">Deep Dropdown 2</a></li>
-                  <li><a href="#">Deep Dropdown 3</a></li>
-                  <li><a href="#">Deep Dropdown 4</a></li>
-                  <li><a href="#">Deep Dropdown 5</a></li>
-                </ul>
-              </li>
-              <li><a href="#">Dropdown 2</a></li>
-              <li><a href="#">Dropdown 3</a></li>
-              <li><a href="#">Dropdown 4</a></li>
-            </ul>
-          </li>
+          
           <li><a href="contact.html">Contact</a></li>
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
@@ -223,8 +209,8 @@
 
     </section><!-- /Featured Services Section -->
 
-    <a href="<?= base_url()?> komplain" class="help-icon ms-3">
-      <i class="bi bi-chat-right-text-fill fs-4 "></i>
+    <a href="<?= base_url()?> komplain/tambah" class="help-icon ms-3">
+      <i class="ri-customer-service-2-fill fs-4 "></i>
     </a>
 
     <!-- About Section -->
@@ -279,14 +265,14 @@
   </main>
 
   <footer id="footer" class="footer dark-background">
-    <a href="<?= base_url()?> komplain" class="help-icon ms-3">
-      <i class="bi bi-chat-right-text-fill fs-4 "></i>
+    <a href="<?= base_url()?> komplain/tambah" class="help-icon ms-3">
+      <i class="ri-customer-service-2-fill fs-4 "></i>
     </a>
 
     <div class="container footer-top">
       <div class="row gy-4">
         <div class="col-lg-5 col-md-12 footer-about">
-          <a href="<?= base_url()?> komplain" class="logo d-flex align-items-center">
+          <a href="<?= base_url()?> komplain/tambah" class="logo d-flex align-items-center">
             <span class="sitename">Tazza Paket Express</span>
           </a>
           <?= $setting->footer_content ?>

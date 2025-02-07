@@ -6,12 +6,15 @@ use CodeIgniter\Model;
 
 class UserModel extends Model
 {
-    protected $table = 'users';
+    protected $table = 'users'; // Sesuaikan dengan nama tabel di database
     protected $primaryKey = 'id';
-    protected $allowedFields = ['username', 'password', 'name'];
+    protected $allowedFields = ['email', 'username', 'password_hash'];
 
-    public function getUserByUsername($username)
+    // Method untuk mendapatkan semua data user
+   
+    // Method untuk mendapatkan user berdasarkan ID
+    public function getUserById($id)
     {
-        return $this->where('username', $username)->first();
+        return $this->where('id', $id)->first();
     }
 }

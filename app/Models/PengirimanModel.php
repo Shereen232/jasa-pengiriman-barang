@@ -21,12 +21,25 @@ class PengirimanModel extends Model
         'id_kendaraan',
         'status'
     ];
+    public function getPengiriman($id = null)
+{
+    $this->select('pengiriman.*, supir.nama as nama_supir');
+    $this->join('supir', 'supir.id = pengiriman.id', 'left');
+
+    if ($id) {
+        return $this->where('pengiriman.id', $id)->first();
+    }
+
+    return $this->findAll();
+}
+
 
     public function getPengirimanWithRelations()
     {
-        return $this->select('pengiriman.*, kendaraan.no_polisi, kendaraan.merk, supir.nama AS nama_supir')
+        return $this->select('pengiriman.*, kendaraan.no_polisi, kendaraan.merk, supir.nama AS nama_supir, pelanggan.nama_pelanggan AS nama_pelanggan')
                     ->join('kendaraan', 'kendaraan.id = pengiriman.id_kendaraan')
                     ->join('supir', 'kendaraan.id_supir = supir.id')
+                    ->join('pelanggan', 'pengiriman.id_pelanggan = pelanggan.id_pelanggan')
                     ->findAll();
     }
 
@@ -52,4 +65,6 @@ class PengirimanModel extends Model
 
         return 'P' . str_pad($newNumber, 5, '0', STR_PAD_LEFT);
     }
+
+    
 }

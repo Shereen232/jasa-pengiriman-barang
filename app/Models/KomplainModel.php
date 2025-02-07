@@ -6,19 +6,11 @@ use CodeIgniter\Model;
 
 class KomplainModel extends Model
 {
-    protected $table = 'komplain';
-    protected $primaryKey = 'id';
-    protected $allowedFields = ['nama', 'email', 'no_telp', 'no_resi', 'pesan', 'created_at'];
+    protected $table = 'komplain'; // Nama tabel di database
+    protected $primaryKey = 'id'; // Primary key tabel
+    protected $allowedFields = ['nama', 'email', 'no_telp', 'no_resi', 'pesan', 'status'];    // Kolom yang bisa diisi
 
-    // Mendapatkan semua komplain
-    public function getAllKomplain()
-    {
-        return $this->orderBy('created_at', 'DESC')->findAll();
-    }
-
-    // Mendapatkan komplain berdasarkan ID
-    public function getKomplainById($id)
-    {
-        return $this->where('id', $id)->first();
-    }
+    // Set default values saat insert data baru
+    protected $useTimestamps = true;
+    protected $createdField  = 'created_at';
 }

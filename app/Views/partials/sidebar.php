@@ -4,7 +4,7 @@
     <ul class="sidebar-nav" id="sidebar-nav">
 
       <li class="nav-item">
-        <a class="nav-link " href="index.html">
+        <a class="nav-link " href="<?= base_url('admin') ?>">
           <i class="bi bi-grid"></i>
           <span>Dashboard</span>
         </a>
@@ -57,6 +57,20 @@
           <span>Pengiriman</span>
         </a>
       </li><!-- End Tables Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="<?= base_url('komplain')?>">
+          <i class="ri-customer-service-2-fill"></i>
+          <span>Komplain Pelanggan</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="<?= base_url('user')?>">
+          <i class="bi bi-person-lines-fill"></i>
+          <span>Kelola User</span>
+        </a>
+      </li>
 
       <li class="nav-item">
         <a class="nav-link collapsed" href="<?= base_url('profil')?>">

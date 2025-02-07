@@ -41,4 +41,9 @@ class AuthController extends Controller
         session()->destroy();
         return redirect()->to('/auth/login');
     }
+
+    public function Profil()
+    {
+        return view('auth/profile');
+    }
 }

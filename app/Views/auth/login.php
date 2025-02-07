@@ -53,6 +53,7 @@
                     <span class="d-none d-lg-block">Tazza Paket Express</span>
                     </a>
                 </div><!-- End Logo -->
+                <?= view('Myth\Auth\Views\_message_block') ?>
 
                 <div class="card mb-3">
                     <div class="card-body">
@@ -62,29 +63,26 @@
                         <p class="text-center small">Silahkan Masukan Username dan Password Anda</p>
                     </div>
 
-                    <?php if (session()->getFlashdata('error')) : ?>
-                        <div class="alert alert-danger text-center"><?= session()->getFlashdata('error') ?></div>
-                    <?php endif; ?>
-
-                    <form class="row g-3 needs-validation" action="<?= base_url('auth/processLogin') ?>" method="post" novalidate>
+                    <form action="<?= url_to('login') ?>" class="row g-3 needs-validation" method="post" novalidate>
+                    <?= csrf_field() ?>
 
                         <div class="col-12">
                         <label for="yourUsername" class="form-label">Username</label>
                         <div class="input-group has-validation">
                             <span class="input-group-text">@</span>
-                            <input type="text" name="username" class="form-control" id="yourUsername" required>
+                            <input type="text" name="login" class="form-control" id="yourUsername" placeholder="<?=lang('Auth.emailOrUsername')?>" required>
                             <div class="invalid-feedback">Please enter your username.</div>
                         </div>
                         </div>
 
                         <div class="col-12">
                         <label for="yourPassword" class="form-label">Password</label>
-                        <input type="password" name="password" class="form-control" id="yourPassword" required>
+                        <input type="password" name="password" class="form-control" id="yourPassword" placeholder="<?=lang('Auth.password')?>" required>
                         <div class="invalid-feedback">Please enter your password!</div>
                         </div>
 
                         <div class="col-12">
-                        <button class="btn btn-primary w-100" type="submit">Login</button>
+                        <button class="btn btn-primary w-100" type="submit"><?=lang('Auth.loginAction')?></button>
                         </div>
 
                     </form>
