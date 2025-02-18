@@ -42,8 +42,10 @@
                                         <td><?= esc($k['no_resi']) ?></td>
                                         <td><?= esc($k['pesan']) ?></td>
                                         <td>
-                                            <span class="badge 
-                                                <?= ($k['status'] == 'Pending') ? 'bg-warning' : (($k['status'] == 'Selesai') ? 'bg-success' : 'bg-primary') ?>">
+                                        <span class="badge 
+                                                <?= ($k['status'] == 'Pending') ? 'bg-warning' : 
+                                                    (($k['status'] == 'Selesai') ? 'bg-success' : 
+                                                    (($k['status'] == 'Diproses') ? 'bg-info' : 'bg-primary')) ?>">
                                                 <?= esc($k['status']) ?>
                                             </span>
                                         </td>
