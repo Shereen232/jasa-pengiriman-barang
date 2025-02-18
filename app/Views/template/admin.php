@@ -1,3 +1,4 @@
+<?php $auth = service('authentication'); ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -25,17 +26,10 @@
   <link href="<?= base_url() ?>NiceAdmin/assets/vendor/quill/quill.bubble.css" rel="stylesheet">
   <link href="<?= base_url() ?>NiceAdmin/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
   <link href="<?= base_url() ?>NiceAdmin/assets/vendor/simple-datatables/style.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <!-- Template Main CSS File -->
   <link href="<?= base_url() ?>NiceAdmin/assets/css/style.css" rel="stylesheet">
-
-  <!-- =======================================================
-  * Template Name: NiceAdmin
-  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
-  * Updated: Apr 20 2024 with Bootstrap v5.3.3
-  * Author: BootstrapMade.com
-  * License: https://bootstrapmade.com/license/
-  ======================================================== -->
 </head>
 
 <body>
@@ -75,5 +69,30 @@
 
 <!-- Template Main JS File -->
 <script src="<?= base_url() ?>NiceAdmin/assets/js/main.js"></script>
+<script>
+    var Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000
+    });
+</script>
+<script>
+  const succesSessionFlashMsg = '<?= session()->getFlashdata('success_message') ?>';
+  const errorSessionFlashMsg = '<?= session()->getFlashdata('error_message') ?>';
+  if (succesSessionFlashMsg !== '') {
+      Toast.fire({
+          icon: 'success',
+          title: succesSessionFlashMsg
+      })
+  }
+
+  if (errorSessionFlashMsg !== '') {
+      Toast.fire({
+          icon: 'warning',
+          title: errorSessionFlashMsg
+      })
+  }
+</script>
 
 </html>

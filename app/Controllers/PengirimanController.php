@@ -80,7 +80,7 @@ class PengirimanController extends BaseController
 
         $this->pengirimanModel->insert($data);
 
-        return redirect()->to(base_url('pengiriman'))->with('success', 'Data pengiriman berhasil ditambahkan.');
+        return redirect()->to(base_url('pengiriman'))->with('success_message', 'Data pengiriman berhasil ditambahkan.');
     }
     
     public function edit($id)
@@ -128,35 +128,47 @@ class PengirimanController extends BaseController
 
         $this->pengirimanModel->update($id, $data);
 
-        return redirect()->to(base_url('pengiriman'))->with('success', 'Data pengiriman berhasil diperbarui.');
+        return redirect()->to(base_url('pengiriman'))->with('success_message', 'Data pengiriman berhasil diperbarui.');
     }
 
     public function delete($id)
     {
         $this->pengirimanModel->delete($id);
 
-        return redirect()->to('pengiriman')->with('success', 'Data Pengiriman berhasil dihapus');
+        return redirect()->to('pengiriman')->with('success_message', 'Data Pengiriman berhasil dihapus');
     }
 
     public function cetakResi($id)
     {
-        $pengirimanModel = new PengirimanModel();
-        $pengiriman = $pengirimanModel->find($id);
-        
-        if (!$pengiriman) {
-            return redirect()->to('/pengiriman')->with('error', 'Data tidak ditemukan');
-        }
+        // Data contoh (bisa diganti dengan data dari database)
+        $data = [
+            'no_pengiriman' => 'P00001',
+            'nama_pengirim' => 'Nama Pengirim',
+            'alamat_pengirim' => 'Alamat Pengirim',
+            'telepon_pengirim' => '08xxxxxxxxxx',
+            'nama_penerima' => 'Nama Penerima',
+            'alamat_penerima' => 'Alamat Penerima',
+            'telepon_penerima' => '08xxxxxxxxxx',
+            'nama_barang' => 'Nama Barang',
+            'jumlah' => '1',
+            'berat' => '2 Kg',
+            'biaya_kirim' => 'Rp 20.000',
+            'tanggal_kirim' => date('d-m-Y'),
+        ];
 
+        // Load view HTML
+        $html = view('pengiriman/cetak_resi', $data);
+
+        // Inisialisasi Dompdf
         $options = new Options();
-        $options->set('defaultFont', 'Helvetica');
+        $options->set('defaultFont', 'Arial');
         $dompdf = new Dompdf($options);
-
-        $html = view('pengiriman/cetak_resi', ['pengiriman' => $pengiriman]);
-        
         $dompdf->loadHtml($html);
-        $dompdf->setPaper('A6', 'portrait'); // Ukuran kertas A6 mirip dengan resi
+        $dompdf->setPaper('A4', 'portrait');
         $dompdf->render();
-        $dompdf->stream("resi_pengiriman_{$pengiriman['no_pengiriman']}.pdf", ['Attachment' => false]);
+
+        // Output PDF
+        $dompdf->stream('cetak_resi.pdf', ['Attachment' => false]);
     }
 
     public function cetakPDF()

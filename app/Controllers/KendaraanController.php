@@ -45,7 +45,7 @@ class KendaraanController extends BaseController
         $kendaraanModel = new KendaraanModel();
         $kendaraanModel->insert($data);
 
-        return redirect()->to(base_url('data-master/kendaraan'))->with('success', 'Data kendaraan berhasil ditambahkan.');
+        return redirect()->to(base_url('data-master/kendaraan'))->with('success_message', 'Data kendaraan berhasil ditambahkan.');
     }
 
    public function edit($id)
@@ -88,7 +88,7 @@ class KendaraanController extends BaseController
         $kendaraanModel = new KendaraanModel();
         $kendaraanModel->update($id, $data);
 
-        return redirect()->to(base_url('data-master/kendaraan'))->with('success', 'Data kendaraan berhasil diperbarui.');
+        return redirect()->to(base_url('data-master/kendaraan'))->with('success_message', 'Data kendaraan berhasil diperbarui.');
     }
 
     public function delete($id)
@@ -96,6 +96,6 @@ class KendaraanController extends BaseController
         $kendaraanModel = new KendaraanModel();
         $kendaraanModel->delete($id);
 
-        return redirect()->to('data-master/kendaraan')->with('success', 'Data Kendaraan berhasil dihapus');
+        return redirect()->to('data-master/kendaraan')->with('success_message', 'Data Kendaraan berhasil dihapus');
     }
 }

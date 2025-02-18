@@ -52,14 +52,14 @@ class KomplainController extends Controller
             'status'   => 'Pending' // Status default
         ]);
 
-        return redirect()->to('/komplain/tambah')->with('message', 'Komplain berhasil ditambahkan');
+        return redirect()->to('/komplain/tambah')->with('success_message', 'Komplain berhasil ditambahkan');
     }
 
     // Menghapus komplain
     public function delete($id)
     {
         $this->komplainModel->delete($id);
-        return redirect()->to('/komplain')->with('message', 'Komplain berhasil dihapus');
+        return redirect()->to('/komplain')->with('success_message', 'Komplain berhasil dihapus');
     }
 
     public function edit($id)
@@ -88,7 +88,7 @@ class KomplainController extends Controller
             'status' => $this->request->getPost('status')
         ]);
 
-        return redirect()->to('/komplain')->with('success', 'Status berhasil diperbarui.');
+        return redirect()->to('/komplain')->with('success_message', 'Status berhasil diperbarui.');
     }
 
 }

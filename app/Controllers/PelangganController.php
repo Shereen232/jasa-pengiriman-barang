@@ -51,7 +51,7 @@ class PelangganController extends BaseController
 
         $this->pelangganModel->insert($data);
 
-        return redirect()->to(base_url('data-master/pelanggan'))->with('success', 'Data pelanggan berhasil ditambahkan.');
+        return redirect()->to(base_url('data-master/pelanggan'))->with('success_message', 'Data pelanggan berhasil ditambahkan.');
     }
 
     // Form edit pelanggan
@@ -91,7 +91,7 @@ class PelangganController extends BaseController
 
         $this->pelangganModel->update($id_pelanggan, $data);
 
-        return redirect()->to(base_url('data-master/pelanggan'))->with('success', 'Data pelanggan berhasil diperbarui.');
+        return redirect()->to(base_url('data-master/pelanggan'))->with('success_message', 'Data pelanggan berhasil diperbarui.');
     }
 
     // Hapus data pelanggan
@@ -99,6 +99,6 @@ class PelangganController extends BaseController
     {
         $this->pelangganModel->delete($id_pelanggan);
 
-        return redirect()->to(base_url('data-master/pelanggan'))->with('success', 'Data pelanggan berhasil dihapus.');
+        return redirect()->to(base_url('data-master/pelanggan'))->with('success_message', 'Data pelanggan berhasil dihapus.');
     }
 }

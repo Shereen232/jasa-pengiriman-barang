@@ -8,7 +8,7 @@ class UserModel extends Model
 {
     protected $table = 'users'; // Sesuaikan dengan nama tabel di database
     protected $primaryKey = 'id';
-    protected $allowedFields = ['email', 'username', 'password_hash'];
+    protected $allowedFields = ['email', 'username', 'password_hash', 'active'];
 
     // Method untuk mendapatkan semua data user
    

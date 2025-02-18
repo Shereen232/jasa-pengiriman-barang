@@ -28,7 +28,11 @@
                     <select name="id_pelanggan" id="pelanggan" class="form-control">
                         <option value="">-- Pilih Pengirim --</option>
                         <?php foreach ($pengirim as $key => $pengirim) : ?>
-                            <option value="<?= $pengirim->id_pelanggan ?>"><?= $pengirim->nama_pelanggan ?></option>
+                            <?php if ($pengirim->id_pelanggan == $pengiriman->id_pelanggan) : ?>
+                                <option value="<?= $pengirim->id_pelanggan ?>" selected><?= $pengirim->nama_pelanggan ?></option>
+                            <?php else: ?>
+                                <option value="<?= $pengirim->id_pelanggan ?>"><?= $pengirim->nama_pelanggan ?></option>
+                            <?php endif; ?>
                         <?php endforeach; ?>
                     </select>
                 </div>
@@ -65,18 +69,22 @@
                     <select name="id_kendaraan" class="form-control" required>
                         <option value="">-- Pilih Kendaraan --</option>
                         <?php foreach ($kendaraan as $item): ?>
-                            <option value="<?= $item['id'] ?>"><?= $item['merk'] ?> | No. Polisi : <?= $item['no_polisi'] ?> | Supir : <?= $item['supir'] ?></option>
+                            <?php if ($item['id'] == $pengiriman->id_kendaraan) : ?>
+                                <option value="<?= $item['id'] ?>" selected><?= $item['merk'] ?> | No. Polisi : <?= $item['no_polisi'] ?> | Supir : <?= $item['supir'] ?></option>
+                            <?php else: ?>
+                                <option value="<?= $item['id'] ?>"><?= $item['merk'] ?> | No. Polisi : <?= $item['no_polisi'] ?> | Supir : <?= $item['supir'] ?></option>
+                            <?php endif; ?>
                         <?php endforeach ?>
                     </select>
                 </div>
                 <div class="form-group mt-3 mb-3">
                     <label>Status</label>
                     <select name="status" class="form-control" required>
-                        <option value="Menunggu Pengiriman">Menunggu Pengiriman</option>
-                        <option value="Dalam Perjalanan">Dalam Perjalanan</option>
-                        <option value="Terkirim">Terkirim</option>
-                        <option value="Gagal Terkirim">Gagal Terkirim</option>
-                        <option value="Dibatalkan">Dibatalkan</option>
+                        <option value="Menunggu Pengiriman" <?php if ($pengiriman->status == 'Menunggu Pengiriman') {echo 'selected';} ?>>Menunggu Pengiriman</option>
+                        <option value="Dalam Perjalanan" <?php if ($pengiriman->status == 'Dalam Perjalanan') {echo 'selected';} ?>>Dalam Perjalanan</option>
+                        <option value="Terkirim" <?php if ($pengiriman->status == 'Terkirim') {echo 'selected';} ?>>Terkirim</option>
+                        <option value="Gagal Terkirim" <?php if ($pengiriman->status == 'Gagal Terkirim') {echo 'selected';} ?>>Gagal Terkirim</option>
+                        <option value="Dibatalkan" <?php if ($pengiriman->status == 'Dibatalkan') {echo 'selected';} ?>>Dibatalkan</option>
                     </select>
                 </div>
                 <button type="submit" class="btn btn-primary">Simpan</button>

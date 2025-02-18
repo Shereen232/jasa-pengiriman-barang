@@ -7,6 +7,7 @@ use CodeIgniter\Router\RouteCollection;
  * @var RouteCollection $routes
  */
 $routes->get('profil', 'AuthController::profil', ['filter' => 'login']);
+$routes->post('profil/upload', 'AuthController::uploadProfile', ['filter' => 'login']);
 
 $routes->group('admin', ['filter' => 'login'], function($routes) {
     $routes->get('/', 'DashboardController::index');
@@ -53,7 +54,6 @@ $routes->group('pengiriman', ['filter' => 'login'], function($routes) {
     $routes->get('cetak/(:num)', 'PengirimanController::cetakResi/$1');
     $routes->get('cetak_pdf', 'PengirimanController::cetakPDF');
 
-
 });
 
 $routes->group('komplain', ['filter' => 'login'], function($routes) {
@@ -65,17 +65,19 @@ $routes->group('komplain', ['filter' => 'login'], function($routes) {
     $routes->post('update/(:num)', 'KomplainController::update/$1');
 });
 
+$routes->group('user', ['filter' => 'login'], function($routes) {
+    $routes->get('/', 'UserController::index');
+    $routes->get('create', 'UserController::create');
+    $routes->post('store', 'UserController::store');
+    $routes->get('edit/(:num)', 'UserController::edit/$1');
+    $routes->post('update/(:num)', 'UserController::update/$1');
+    $routes->get('delete/(:num)', 'UserController::delete/$1');
+});
 
-$routes->get('/user', 'UserController::index');
-$routes->get('/user/create', 'UserController::create');
-$routes->post('/user/store', 'UserController::store');
-$routes->get('/user/edit/(:num)', 'UserController::edit/$1');
-$routes->post('/user/update/(:num)', 'UserController::update/$1');
-$routes->get('/user/delete/(:num)', 'UserController::delete/$1');
 
 // $routes->get('/auth/login', 'AuthController::login');
 // $routes->post('/auth/processLogin', 'AuthController::processLogin');
-// $routes->get('/auth/logout', 'AuthController::logout');
+$routes->get('/auth/logout', 'AuthController::logout');
 
 $routes->get('wilayah/provinsi', 'AjaxController::getProvinsi');
 $routes->get('wilayah/kota/(:num)', 'AjaxController::getKota/$1');

@@ -57,7 +57,7 @@ class SupirController extends BaseController
         $this->supirModel->insert($data);
 
         // Redirect dengan pesan sukses
-        return redirect()->to('data-master/supir')->with('success', 'Data Supir berhasil ditambahkan');
+        return redirect()->to('data-master/supir')->with('success_message', 'Data Supir berhasil ditambahkan');
     }
 
     public function delete($id)
@@ -66,7 +66,7 @@ class SupirController extends BaseController
         $this->supirModel->delete($id);
 
         // Redirect dengan pesan sukses
-        return redirect()->to('data-master/supir')->with('success', 'Data Supir berhasil dihapus');
+        return redirect()->to('data-master/supir')->with('success_message', 'Data Supir berhasil dihapus');
     }
 
     public function edit($id)
@@ -113,6 +113,6 @@ class SupirController extends BaseController
         $this->supirModel->update($id, $data);
 
         // Redirect dengan pesan sukses
-        return redirect()->to('data-master/supir')->with('success', 'Data Supir berhasil diperbarui');
+        return redirect()->to('data-master/supir')->with('success_message', 'Data Supir berhasil diperbarui');
     }
 }

@@ -9,5 +9,5 @@ return [
     'is_unique'     => 'Kolom {field} sudah digunakan, silakan gunakan yang lain.',
     'integer'       => 'Kolom {field} harus berupa angka bulat.',
     'regex_match'   => 'Format {field} tidak valid.',
-    'matches'       => 'Kolom {field} tidak cocok dengan kolom {param}.',
+    'matches'       => 'Kolom {field} tidak cocok dengan kolom {param}.',        
 ];

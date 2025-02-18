@@ -3,7 +3,7 @@
 <section class="section">
     <div class="row">
         <form action="<?= base_url('admin/setting') ?>" method="post">
-        <div class="col-lg-6">
+        <div class="col">
 
             <div class="card">
                 <div class="card-body">
@@ -19,7 +19,7 @@
 
             </div>
 
-            <div class="col-lg-6">
+            <div class="col">
 
                 <div class="card">
                 <div class="card-body">

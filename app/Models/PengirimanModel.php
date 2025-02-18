@@ -65,6 +65,10 @@ class PengirimanModel extends Model
 
         return 'P' . str_pad($newNumber, 5, '0', STR_PAD_LEFT);
     }
+    public function getResiById($id)
+    {
+        return $this->where('id_pengiriman', $id)->first();
+    }
 
     
 }
