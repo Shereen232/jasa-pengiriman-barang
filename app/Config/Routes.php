@@ -58,7 +58,6 @@ $routes->group('pengiriman', ['filter' => 'login'], function($routes) {
 
 $routes->group('komplain', ['filter' => 'login'], function($routes) {
     $routes->get('/', 'KomplainController::index');
-    $routes->get('tambah', 'KomplainController::tambah');
     $routes->post('simpan', 'KomplainController::simpan');
     $routes->get('delete/(:num)', 'KomplainController::delete/$1');
     $routes->get('edit/(:num)', 'KomplainController::edit/$1');
@@ -86,6 +85,7 @@ $routes->get('wilayah/kelurahan/(:num)', 'AjaxController::getKelurahan/$1');
 
 // VIEW USER
 $routes->get('/', 'Home::index');
+$routes->get('komplain/tambah', 'KomplainController::tambah');
 
 
 

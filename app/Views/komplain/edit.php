@@ -22,9 +22,9 @@
                         <div class="mb-3">
                             <label class="form-label">Status</label>
                             <select name="status" class="form-select">
-                                <option value="Pending" <?= $komplain['status'] == 'Pending' ? 'selected' : '' ?>>Pending</option>
-                                <option value="Diproses" <?= $komplain['status'] == 'Diproses' ? 'selected' : '' ?>>Diproses</option>
-                                <option value="Selesai" <?= $komplain['status'] == 'Selesai' ? 'selected' : '' ?>>Selesai</option>
+                                <option value="Pending" <?= ($komplain['status'] == 'Pending') ? 'selected' : '' ?>>Pending</option>
+                                <option value="Diproses" <?= ($komplain['status'] == 'Diproses') ? 'selected' : '' ?>>Diproses</option>
+                                <option value="Selesai" <?= ($komplain['status'] == 'Selesai') ? 'selected' : '' ?>>Selesai</option>
                             </select>
                         </div>
 

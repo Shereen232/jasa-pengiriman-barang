@@ -45,7 +45,7 @@
                                         <span class="badge 
                                                 <?= ($k['status'] == 'Pending') ? 'bg-warning' : 
                                                     (($k['status'] == 'Selesai') ? 'bg-success' : 
-                                                    (($k['status'] == 'Diproses') ? 'bg-info' : 'bg-primary')) ?>">
+                                                    (($k['status'] == 'Proses') ? 'bg-info' : 'bg-primary')) ?>">
                                                 <?= esc($k['status']) ?>
                                             </span>
                                         </td>

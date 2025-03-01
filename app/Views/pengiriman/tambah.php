@@ -73,6 +73,10 @@
                     <textarea id="alamat" name="alamat_penerima" class="form-control" required></textarea>
                 </div>
                 <div class="form-group mt-3 mb-3">
+                    <label>Telepon Penerima</label>
+                    <input type="text" name="telepon_penerima" class="form-control" required pattern="[0-9]+" title="Hanya boleh berisi angka">
+                </div>
+                <div class="form-group mt-3 mb-3">
                     <label>Nama Barang</label>
                     <input type="text" name="nama_barang" class="form-control" required>
                 </div>

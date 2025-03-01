@@ -28,17 +28,17 @@
                     <select name="id_pelanggan" id="pelanggan" class="form-control">
                         <option value="">-- Pilih Pengirim --</option>
                         <?php foreach ($pengirim as $key => $pengirim) : ?>
-                            <?php if ($pengirim->id_pelanggan == $pengiriman->id_pelanggan) : ?>
-                                <option value="<?= $pengirim->id_pelanggan ?>" selected><?= $pengirim->nama_pelanggan ?></option>
-                            <?php else: ?>
-                                <option value="<?= $pengirim->id_pelanggan ?>"><?= $pengirim->nama_pelanggan ?></option>
-                            <?php endif; ?>
+                            <option value="<?= $pengirim->id_pelanggan ?>" 
+                                data-alamat="<?= $pengirim->alamat ?>" 
+                                <?= ($pengirim->id_pelanggan == $pengiriman->id_pelanggan) ? 'selected' : '' ?>>
+                                <?= $pengirim->nama_pelanggan ?>
+                            </option>
                         <?php endforeach; ?>
                     </select>
                 </div>
                 <div class="form-group mt-3 mb-3">
                     <label>Alamat Pengirim</label>
-                    <textarea name="alamat_pengirim" class="form-control" required></textarea>
+                    <textarea name="alamat_pengirim" id="alamat_pengirim" class="form-control" readonly required><?= $pengiriman->alamat_pengirim ?></textarea>
                 </div>
                 <div class="form-group mt-3 mb-3">
                     <label>Penerima</label>
@@ -47,6 +47,10 @@
                 <div class="form-group mt-3 mb-3">
                     <label>Alamat Penerima</label>
                     <textarea name="alamat_penerima" class="form-control" required><?= $pengiriman->alamat_penerima ?></textarea>
+                </div>
+                <div class="form-group mt-3 mb-3">
+                    <label>Telepon Penerima</label>
+                    <input type="text" name="telepon_penerima" class="form-control" value="<?= $pengiriman->telepon_penerima ?>" required>
                 </div>
                 <div class="form-group mt-3 mb-3">
                     <label>Nama Barang</label>
@@ -101,4 +105,12 @@
         document.getElementById('biaya_kirim').value = biayaKirim.toLocaleString('id-ID');
     });
 </script>
+<script>
+    document.getElementById('pelanggan').addEventListener('change', function () {
+        const selectedOption = this.options[this.selectedIndex];
+        const alamat = selectedOption.getAttribute('data-alamat');
+        document.getElementById('alamat_pengirim').value = alamat || '';
+    });
+</script>
+
 <?= $this->endSection() ?>

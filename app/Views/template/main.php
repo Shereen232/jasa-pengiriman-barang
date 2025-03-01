@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Index - Logis Bootstrap Template</title>
+  <title>Track Paket Tazza Paket Express</title>
   <meta name="description" content="">
   <meta name="keywords" content="">
 
@@ -82,19 +82,9 @@
       </a>
 
       <nav id="navmenu" class="navmenu">
-        <ul>
-          <li><a href="index.html" class="active">Home<br></a></li>
-          <li><a href="about.html">About</a></li>
-          <li><a href="services.html">Services</a></li>
-          <li><a href="pricing.html">Pricing</a></li>
-          
-          <li><a href="contact.html">Contact</a></li>
-        </ul>
+        
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
-
-      <a class="btn-getstarted" href="get-a-quote.html">Get a Quote</a>
-
     </div>
   </header>
 
@@ -141,7 +131,7 @@
                   <th>Paket</th>
                   <th>Checkpoint</th>
                   <th>Status</th>
-                  <th>&nbsp;</th>
+                  
                 </tr>
               </thead>
               <tbody>
@@ -154,11 +144,7 @@
                   <td><?= $row->alamat_penerima ?></td>
                   <!-- <td class="status"><span class="active">Active</span></td> -->
                   <td class="status"><span class="waiting"><?= $row->status ?></span></td>
-                  <td>
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                      <span aria-hidden="true"><i class="fa fa-print"></i></span>
-                    </button>
-                  </td>
+                 
                 </tr>
               </tbody>
             </table>

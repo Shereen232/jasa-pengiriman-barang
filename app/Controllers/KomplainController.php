@@ -76,19 +76,20 @@ class KomplainController extends Controller
 
     public function update($id)
     {
-        $komplainModel = new \App\Models\KomplainModel();
-        
-        // Debugging: Cek data sebelum update
-        dd([
-            'id' => $id,
-            'status' => $this->request->getPost('status')
-        ]);
+        $komplainModel = new \App\Models\KomplainModel(); 
 
-        $komplainModel->update($id, [
-            'status' => $this->request->getPost('status')
-        ]);
+        // Ambil data dari form
+        $status = $this->request->getPost('status');
 
-        return redirect()->to('/komplain')->with('success_message', 'Status berhasil diperbarui.');
+        // Pastikan data dikirim dengan benar sebelum update
+        if (!$status) {
+            return redirect()->back()->with('error', 'Status tidak boleh kosong');
+        }
+
+        // Update ke database
+        $komplainModel->update($id, ['status' => $status]);
+
+        return redirect()->to(base_url('komplain'))->with('success', 'Status berhasil diperbarui');
     }
 
 }

@@ -19,7 +19,7 @@
                       </div>
                       <div class="ps-3">
                         <h6><?= $total_supir ?></h6>
-                        <span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">increase</span>
+                        
 
                       </div>
                     </div>
@@ -40,7 +40,7 @@
                     </div>
                     <div class="ps-3">
                       <h6><?= $total_kendaraan ?></h6>
-                      <span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">increase</span>
+                     
 
                     </div>
                   </div>
@@ -62,7 +62,7 @@
                     </div>
                     <div class="ps-3">
                       <h6><?= $total_pelanggan ?></h6>
-                      <span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">increase</span>
+                      
 
                     </div>
                   </div>
@@ -84,7 +84,7 @@
                     </div>
                     <div class="ps-3">
                       <h6><?= $total_pengiriman ?></h6>
-                      <span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">increase</span>
+                      
 
                     </div>
                   </div>
@@ -106,8 +106,7 @@
                     </div>
                     <div class="ps-3">
                       <h6><?= $total_komplain ?></h6>
-                      <span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">increase</span>
-
+                     
                     </div>
                   </div>
                 </div>

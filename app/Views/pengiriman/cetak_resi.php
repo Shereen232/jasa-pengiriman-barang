@@ -1,3 +1,12 @@
+<?php 
+    function imageToBase64($path) {
+        $type = pathinfo($path, PATHINFO_EXTENSION);
+        $data = file_get_contents($path);
+        return 'data:image/' . $type . ';base64,' . base64_encode($data);
+    }
+
+    $imageBase64 = imageToBase64('images/logo.png');
+?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -20,38 +29,43 @@
 <body>
 
     <div class="container">
+        <div style="width: 60px; float: left;">
+                <img src="<?=$imageBase64?>" alt="Logo" style="width:60px; height:auto;">
+            </div>
         <div class="header">
-            PT. Tazza Paket Express
+            <span style="margin-left: -60px;">PT. Tazza Paket Express</span>
         </div>
-
+        <br>
+        <br>
+        <br>
         <table class="info-table">
             <tr>
                 <th>No. Pengiriman</th>
-                <td><?= $no_pengiriman ?></td>
+                <td><?= esc($data['no_pengiriman']) ?></td>
             </tr>
             <tr>
                 <th>Penerima</th>
-                <td><?= $nama_penerima ?></td>
+                <td><?= esc($data['nama_penerima']) ?></td>
             </tr>
             <tr>
                 <th>Alamat Penerima</th>
-                <td><?= $alamat_penerima ?></td>
+                <td><?= esc($data['alamat_penerima']) ?></td>
             </tr>
             <tr>
                 <th>Telepon Penerima</th>
-                <td><?= $telepon_penerima ?></td>
+                <td><?= esc($data['telepon_penerima']) ?></td>
             </tr>
             <tr>
                 <th>Pengirim</th>
-                <td><?= $nama_pengirim ?></td>
+                <td><?= esc($data['nama_pengirim']) ?></td>
             </tr>
             <tr>
                 <th>Alamat Pengirim</th>
-                <td><?= $alamat_pengirim ?></td>
+                <td><?= esc($data['alamat_pengirim']) ?></td>
             </tr>
             <tr>
                 <th>Telepon Pengirim</th>
-                <td><?= $telepon_pengirim ?></td>
+                <td><?= esc($data['telepon_pengirim']) ?></td>
             </tr>
         </table>
 
@@ -64,11 +78,11 @@
                 <th>Tanggal Kirim</th>
             </tr>
             <tr>
-                <td><?= $nama_barang ?></td>
-                <td><?= $jumlah ?> pcs</td>
-                <td><?= $berat ?></td>
-                <td><?= $biaya_kirim ?></td>
-                <td><?= $tanggal_kirim ?></td>
+                <td><?= esc($data['nama_barang']) ?></td>
+                <td><?= esc($data['jumlah']) ?> pcs</td>
+                <td><?= esc($data['berat']) ?></td>
+                <td><?= esc($data['biaya_kirim']) ?></td>
+                <td><?= esc($data['tanggal_kirim']) ?></td>
             </tr>
         </table>
 
@@ -79,19 +93,19 @@
         <table class="info-table">
             <tr>
                 <th>No. Pengiriman</th>
-                <td><?= $no_pengiriman ?></td>
+                <td><?= esc($data['no_pengiriman']) ?></td>
             </tr>
             <tr>
                 <th>Pengirim</th>
-                <td><?= $nama_pengirim ?></td>
+                <td><?= esc($data['nama_pengirim']) ?></td>
             </tr>
             <tr>
                 <th>Penerima</th>
-                <td><?= $nama_penerima ?></td>
+                <td><?= esc($data['nama_penerima']) ?></td>
             </tr>
             <tr>
                 <th>Alamat Penerima</th>
-                <td><?= $alamat_penerima ?></td>
+                <td><?= esc($data['alamat_penerima']) ?></td>
             </tr>
         </table>
 
@@ -102,8 +116,8 @@
                 <th>Lain-lain</th>
             </tr>
             <tr>
-                <td><?= $berat ?></td>
-                <td><?= $biaya_kirim ?></td>
+                <td><?= esc($data['berat']) ?></td>
+                <td><?= esc($data['biaya_kirim']) ?></td>
                 <td>-</td>
             </tr>
         </table>

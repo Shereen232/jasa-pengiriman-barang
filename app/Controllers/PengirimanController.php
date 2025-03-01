@@ -52,8 +52,10 @@ class PengirimanController extends BaseController
     {
         $this->validate([
             'id_pelanggan' => 'required',
+            'tanggal'=> 'required',
             'penerima' => 'required',
             'alamat_penerima' => 'required',
+            'telepon_penerima' => 'required|numeric',
             'nama_barang' => 'required',
             'jumlah' => 'required|integer',
             'berat' => 'required|decimal',
@@ -70,6 +72,7 @@ class PengirimanController extends BaseController
             'id_pelanggan' => $this->request->getPost('id_pelanggan'),
             'penerima' => $this->request->getPost('penerima'),
             'alamat_penerima' => $this->request->getPost('alamat_penerima'),
+            'telepon_penerima' => $this->request->getPost('telepon_penerima'),
             'nama_barang' => $this->request->getPost('nama_barang'),
             'jumlah' => $this->request->getPost('jumlah'),
             'berat' => $berat,
@@ -83,25 +86,33 @@ class PengirimanController extends BaseController
         return redirect()->to(base_url('pengiriman'))->with('success_message', 'Data pengiriman berhasil ditambahkan.');
     }
     
-    public function edit($id)
+    public function edit($id) 
     {
-        $pengiriman = $this->pengirimanModel->asObject()->find($id);
+        $pengiriman = $this->pengirimanModel->getPengirimanById($id);
+    
+        if (!$pengiriman) {
+            return redirect()->back()->with('error', 'Data tidak ditemukan');
+        }
+    
         $data = [
             'no_pengiriman' => $this->pengirimanModel->generateNoPengiriman(),
-            'kendaraan'     => $this->kendaraanModel->getKendaraanWithSupir(),
-            'pengirim'      => $this->pelangganModel->asObject()->findAll(),
-            'pengiriman'    => $pengiriman
+            'kendaraan' => $this->kendaraanModel->getKendaraanWithSupir(),
+            'pengirim' => $this->pelangganModel->asObject()->findAll(),
+            'pengiriman' => $pengiriman // Ini harus objek
         ];
-
+    
         return view('pengiriman/edit', $data);
     }
+    
 
     public function update($id)
     {
         $this->validate([
             'id_pelanggan' => 'required',
+            'tanggal'=> 'required',
             'penerima' => 'required',
             'alamat_penerima' => 'required',
+            'telepon_penerima' => 'required|numeric',
             'nama_barang' => 'required',
             'jumlah' => 'required|integer',
             'berat' => 'required|decimal',
@@ -118,6 +129,7 @@ class PengirimanController extends BaseController
             'id_pelanggan' => $this->request->getPost('id_pelanggan'),
             'penerima' => $this->request->getPost('penerima'),
             'alamat_penerima' => $this->request->getPost('alamat_penerima'),
+            'telepon_penerima' => $this->request->getPost('telepon_penerima'),
             'nama_barang' => $this->request->getPost('nama_barang'),
             'jumlah' => $this->request->getPost('jumlah'),
             'berat' => $berat,
@@ -140,25 +152,37 @@ class PengirimanController extends BaseController
 
     public function cetakResi($id)
     {
-        // Data contoh (bisa diganti dengan data dari database)
+        // Ambil data pengiriman berdasarkan ID
+        $pengiriman = $this->pengirimanModel->find($id);
+    
+        // Jika data tidak ditemukan, tampilkan pesan error
+        if (!$pengiriman) {
+            return redirect()->to('pengiriman')->with('error_message', 'Data pengiriman tidak ditemukan.');
+        }
+    
+        // Ambil data pelanggan (pengirim)
+        $pelanggan = $this->pelangganModel->find($pengiriman['id_pelanggan']);
+    
+        // Data untuk dikirim ke view (gunakan data dummy jika NULL)
         $data = [
-            'no_pengiriman' => 'P00001',
-            'nama_pengirim' => 'Nama Pengirim',
-            'alamat_pengirim' => 'Alamat Pengirim',
-            'telepon_pengirim' => '08xxxxxxxxxx',
-            'nama_penerima' => 'Nama Penerima',
-            'alamat_penerima' => 'Alamat Penerima',
-            'telepon_penerima' => '08xxxxxxxxxx',
-            'nama_barang' => 'Nama Barang',
-            'jumlah' => '1',
-            'berat' => '2 Kg',
-            'biaya_kirim' => 'Rp 20.000',
-            'tanggal_kirim' => date('d-m-Y'),
+            'no_pengiriman'   => $pengiriman['no_pengiriman'] ?? 'P00001',
+            'nama_pengirim'   => $pelanggan['nama_pelanggan'] ?? 'Nama Pengirim',
+            'alamat_pengirim' => $pelanggan['alamat'] ?? 'Alamat Pengirim',
+            'telepon_pengirim' => $pelanggan['telepon'] ?? '08xxxxxxxxxx',
+            'nama_penerima'   => $pengiriman['penerima'] ?? 'Nama Penerima',
+            'alamat_penerima' => $pengiriman['alamat_penerima'] ?? 'Alamat Penerima',
+            'telepon_penerima' => $pengiriman['telepon_penerima'] ?? '08xxxxxxxxxx', // Tambahkan data dummy
+            'nama_barang'     => $pengiriman['nama_barang'] ?? 'Nama Barang',
+            'jumlah'          => $pengiriman['jumlah'] ?? 1,
+            'berat'           => ($pengiriman['berat'] ?? 1) . ' Kg',
+            'biaya_kirim'     => 'Rp ' . number_format($pengiriman['biaya_kirim'] ?? 20000, 0, ',', '.'),
+            'tanggal_kirim'   => isset($pengiriman['tanggal']) ? date('d-m-Y', strtotime($pengiriman['tanggal'])) : date('d-m-Y'),
         ];
+    
+        // Load tampilan cetak_resi dengan data dari database
+        $html = view('pengiriman/cetak_resi', ['data' => $data]);
 
-        // Load view HTML
-        $html = view('pengiriman/cetak_resi', $data);
-
+    
         // Inisialisasi Dompdf
         $options = new Options();
         $options->set('defaultFont', 'Arial');
@@ -166,10 +190,12 @@ class PengirimanController extends BaseController
         $dompdf->loadHtml($html);
         $dompdf->setPaper('A4', 'portrait');
         $dompdf->render();
-
+    
         // Output PDF
-        $dompdf->stream('cetak_resi.pdf', ['Attachment' => false]);
+        $dompdf->stream('resi_pengiriman_' . $data['no_pengiriman'] . '.pdf', ['Attachment' => false]);
     }
+    
+
 
     public function cetakPDF()
     {

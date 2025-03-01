@@ -7,7 +7,7 @@
       <div class="card">
         <div class="card-body">
           <div class="d-flex justify-content-between align-items-center">
-            <h5 class="card-title">Data Supir</h5>
+            <h5 class="card-title">Data Pelanggan</h5>
             <div>
               <a href="<?= base_url('data-master/pelanggan/tambah') ?>" class="btn btn-success">
                 <i class="bi bi-plus-circle"></i> Tambah Data

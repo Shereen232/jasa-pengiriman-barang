@@ -5,7 +5,7 @@
     <div class="col-lg-6">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">Input Data Supir</h5>
+                <h5 class="card-title">Input Data Kendaraan</h5>
                 <form action="<?= base_url('data-master/kendaraan/create') ?>" method="post">
                     <div class="row mb-3">
                         <label class="col-sm-2 col-form-label">No. Polisi</label>
@@ -42,7 +42,10 @@
                             </select>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="reset" class="btn btn-secondary">Reset</button>
+                    </div>
                 </form>
             </div>
         </div>

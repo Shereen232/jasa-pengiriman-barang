@@ -1,10 +1,22 @@
   <!-- ======= Sidebar ======= -->
+<style>
+  .sidebar-nav .nav-link.active {
+    background-color: #007bff !important; /* Warna latar belakang */
+    color: white !important; /* Warna teks */
+  }
+
+  .sidebar-nav .nav-content a.active {
+    color: #007bff !important; /* Warna teks untuk submenu */
+    font-weight: bold;
+  }
+
+</style>
   <aside id="sidebar" class="sidebar">
 
     <ul class="sidebar-nav" id="sidebar-nav">
 
       <li class="nav-item">
-        <a class="nav-link " href="<?= base_url('admin') ?>">
+        <a class="nav-link collapsed" href="<?= base_url('admin') ?>">
           <i class="bi bi-grid"></i>
           <span>Dashboard</span>
         </a>
@@ -20,11 +32,7 @@
               <i class="bi bi-circle"></i><span>Tentang Kami</span>
             </a>
           </li>
-          <li>
-            <a href="components-accordion.html">
-              <i class="bi bi-circle"></i><span>Layanan</span>
-            </a>
-          </li>
+          
         </ul>
       </li><!-- End Components Nav -->
 
@@ -82,3 +90,26 @@
     </ul>
 
   </aside><!-- End Sidebar-->
+
+  <script>
+  document.addEventListener("DOMContentLoaded", function () {
+      let currentUrl = window.location.href;
+      let sidebarLinks = document.querySelectorAll(".sidebar-nav .nav-link, .sidebar-nav .nav-content a");
+
+      sidebarLinks.forEach(function (link) {
+          if (link.href === currentUrl) {
+              link.classList.add("active");
+
+              // Untuk menu dropdown, buka parent-nya jika ada
+              let parentMenu = link.closest(".nav-content.collapse");
+              if (parentMenu) {
+                  parentMenu.classList.add("show"); // Membuka menu dropdown
+                  let parentLink = parentMenu.previousElementSibling;
+                  if (parentLink) {
+                      parentLink.classList.remove("collapsed");
+                  }
+              }
+          }
+      });
+  });
+</script>

@@ -14,6 +14,7 @@ class PengirimanModel extends Model
         'id_pelanggan',
         'penerima',
         'alamat_penerima',
+        'telepon_penerima',
         'nama_barang',
         'jumlah',
         'berat',
@@ -22,15 +23,24 @@ class PengirimanModel extends Model
         'status'
     ];
     public function getPengiriman($id = null)
-{
-    $this->select('pengiriman.*, supir.nama as nama_supir');
-    $this->join('supir', 'supir.id = pengiriman.id', 'left');
+    {
+        $this->select('pengiriman.*, supir.nama as nama_supir');
+        $this->join('supir', 'supir.id = pengiriman.id', 'left');
 
-    if ($id) {
-        return $this->where('pengiriman.id', $id)->first();
+        if ($id) {
+            return $this->where('pengiriman.id', $id)->first();
+        }
+
+        return $this->findAll();
     }
 
-    return $this->findAll();
+    public function getPengirimanById($id)
+{
+    return $this->select('pengiriman.*, pelanggan.alamat AS alamat_pengirim')
+                ->join('pelanggan', 'pelanggan.id_pelanggan = pengiriman.id_pelanggan', 'left')
+                ->where('pengiriman.id', $id)
+                ->get()
+                ->getRow();
 }
 
 
