@@ -13,7 +13,7 @@ class KendaraanModel extends Model
     // Optional: Tambahkan fungsi join dengan tabel supir
     public function getKendaraanWithSupir()
     {
-        return $this->select('kendaraan.*, supir.nama AS supir')
+        return $this->select('kendaraan.*, supir.nama_supir AS supir')
                     ->join('supir', 'supir.id = kendaraan.id_supir')
                     ->findAll();
     }

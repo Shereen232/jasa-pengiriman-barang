@@ -31,18 +31,18 @@
                                 <?php foreach ($kendaraan as $k) : ?>
                                     <tr>
                                         <td><?= $no++ ?></td>
-                                        <td><?= $k['no_polisi'] ?></td>
-                                        <td><?= $k['merk'] ?></td>
-                                        <td><?= $k['no_mesin'] ?></td>
-                                        <td><?= $k['warna'] ?></td>
-                                        <td><?= $k['supir'] ?></td>
+                                        <td><?= esc($k['no_polisi']) ?></td>
+                                        <td><?= esc($k['merk']) ?></td>
+                                        <td><?= esc($k['no_mesin']) ?></td>
+                                        <td><?= esc($k['warna']) ?></td>
+                                        <td><?= esc($k['supir']) ?></td>
                                         <td>
                                             <a href="<?= base_url('data-master/kendaraan/edit/' . $k['id']) ?>" class="btn btn-info">
                                                 <i class="bi bi-pencil-square"></i>
                                             </a>
-                                            <a href="<?= base_url('data-master/kendaraan/delete/' . $k['id']) ?>" class="btn btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
+                                            <button class="btn btn-danger delete-btn" data-id="<?= $k['id'] ?>">
                                                 <i class="bi bi-trash"></i>
-                                            </a>
+                                            </button>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
@@ -59,5 +59,45 @@
         </div>
     </div>
 </section>
+
+<!-- Tambahkan SweetAlert -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const deleteButtons = document.querySelectorAll(".delete-btn");
+
+    deleteButtons.forEach(button => {
+        button.addEventListener("click", function() {
+            const kendaraanId = this.getAttribute("data-id");
+
+            Swal.fire({
+                title: "Konfirmasi",
+                text: "Apakah Anda yakin ingin menghapus data kendaraan ini?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Ya, hapus!",
+                cancelButtonText: "Batal"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "<?= base_url('data-master/kendaraan/delete/') ?>" + kendaraanId;
+                }
+            });
+        });
+    });
+});
+
+// Notifikasi sukses setelah menghapus data
+<?php if(session()->getFlashdata('success_message')) : ?>
+    Swal.fire({
+        icon: 'success',
+        title: 'Sukses!',
+        text: "<?= session()->getFlashdata('success_message') ?>",
+        showConfirmButton: false,
+        timer: 2000
+    });
+<?php endif; ?>
+</script>
 
 <?= $this->endSection() ?>

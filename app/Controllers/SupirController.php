@@ -32,33 +32,31 @@ class SupirController extends BaseController
 
     public function create()
     {
-        // Validasi Input
-        $validation = $this->validate([
-            'no_ktp' => 'required',
+        $validation = \Config\Services::validation();
+    
+        $rules = [
+            'no_ktp' => 'required|numeric|min_length[16]|max_length[16]|is_unique[supir.no_ktp]',
             'nama_supir' => 'required',
             'alamat' => 'required',
-            'telepon' => 'required',
-        ]);
-
-        if (!$validation) {
-            // Jika validasi gagal, kembali ke halaman tambah dengan pesan error
-            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+            'telepon' => 'required|numeric'
+        ];
+    
+        if (!$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('errors', $validation->getErrors());
         }
-
-        // Ambil data dari form
+    
         $data = [
             'no_ktp' => $this->request->getPost('no_ktp'),
-            'nama' => $this->request->getPost('nama_supir'),
+            'nama_supir' => $this->request->getPost('nama_supir'),
             'alamat' => $this->request->getPost('alamat'),
-            'telepon' => $this->request->getPost('telepon'),
+            'telepon' => $this->request->getPost('telepon')
         ];
-
-        // Simpan data ke database
+    
         $this->supirModel->insert($data);
-
-        // Redirect dengan pesan sukses
-        return redirect()->to('data-master/supir')->with('success_message', 'Data Supir berhasil ditambahkan');
+    
+        return redirect()->to(base_url('data-master/supir'))->with('success_message', 'Data supir berhasil ditambahkan.');
     }
+    
 
     public function delete($id)
     {
@@ -87,32 +85,30 @@ class SupirController extends BaseController
 
 
     public function update($id)
-    {
-        // Validasi Input
-        $validation = $this->validate([
-            'no_ktp' => 'required',
-            'nama_supir' => 'required',
-            'alamat' => 'required',
-            'telepon' => 'required',
-        ]);
+{
+    $validation = \Config\Services::validation();
 
-        if (!$validation) {
-            // Jika validasi gagal, kembali ke halaman edit dengan pesan error
-            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
-        }
+    $rules = [
+        'no_ktp' => "required|numeric|min_length[16]|max_length[16]|is_unique[supir.no_ktp,id,$id]",
+        'nama_supir' => 'required',
+        'alamat' => 'required',
+        'telepon' => 'required|numeric'
+    ];
 
-        // Ambil data dari form
-        $data = [
-            'no_ktp' => $this->request->getPost('no_ktp'),
-            'nama' => $this->request->getPost('nama_supir'),
-            'alamat' => $this->request->getPost('alamat'),
-            'telepon' => $this->request->getPost('telepon'),
-        ];
-
-        // Update data supir
-        $this->supirModel->update($id, $data);
-
-        // Redirect dengan pesan sukses
-        return redirect()->to('data-master/supir')->with('success_message', 'Data Supir berhasil diperbarui');
+    if (!$this->validate($rules)) {
+        return redirect()->back()->withInput()->with('errors', $validation->getErrors());
     }
+
+    $data = [
+        'no_ktp' => $this->request->getPost('no_ktp'),
+        'nama_supir' => $this->request->getPost('nama_supir'),
+        'alamat' => $this->request->getPost('alamat'),
+        'telepon' => $this->request->getPost('telepon')
+    ];
+
+    $this->supirModel->update($id, $data);
+
+    return redirect()->to(base_url('data-master/supir'))->with('success_message', 'Data supir berhasil diperbarui.');
+}
+
 }

@@ -18,7 +18,7 @@
           <!-- Table with stripped rows -->
           <table class="table datatable">
             <thead>
-            <tr>
+              <tr>
                 <th>No</th>
                 <th>No KTP</th>
                 <th>Nama</th>
@@ -26,28 +26,28 @@
                 <th>Alamat</th>
                 <th>Telepon</th>
                 <th>Aksi</th>
-            </tr>
+              </tr>
             </thead>
-                <tbody>
-                    <?php foreach ($pelanggan as $index => $item): ?>
-                        <tr>
-                            <td><?= $index + 1 ?></td>
-                            <td><?= $item['no_ktp'] ?></td>
-                            <td><?= $item['nama_pelanggan'] ?></td>
-                            <td><?= $item['jenis_kelamin'] ?></td>
-                            <td><?= $item['alamat'] ?></td>
-                            <td><?= $item['telepon'] ?></td>
-                            <td>
-                                <a href="<?= base_url('data-master/pelanggan/edit/' . $item['id_pelanggan']) ?>" class="btn btn-info">
-                                    <i class="bi bi-pencil-square"></i>
-                                </a>
-                                <a href="<?= base_url('data-master/pelanggan/delete/' . $item['id_pelanggan']) ?>" class="btn btn-danger" onclick="return confirm('Yakin ingin menghapus data ini?')">
-                                    <i class="bi bi-trash"></i>
-                                </a>
-                            </td>
-                        </tr>
-                    <?php endforeach ?>
-                </tbody>
+            <tbody>
+              <?php foreach ($pelanggan as $index => $item): ?>
+                <tr>
+                  <td><?= $index + 1 ?></td>
+                  <td><?= esc($item['no_ktp']) ?></td>
+                  <td><?= esc($item['nama_pelanggan']) ?></td>
+                  <td><?= esc($item['jenis_kelamin']) ?></td>
+                  <td><?= esc($item['alamat']) ?></td>
+                  <td><?= esc($item['telepon']) ?></td>
+                  <td>
+                    <a href="<?= base_url('data-master/pelanggan/edit/' . $item['id_pelanggan']) ?>" class="btn btn-info">
+                      <i class="bi bi-pencil-square"></i>
+                    </a>
+                    <button class="btn btn-danger delete-btn" data-id="<?= $item['id_pelanggan'] ?>">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+              <?php endforeach ?>
+            </tbody>
           </table>
           <!-- End Table with stripped rows -->
         </div>
@@ -55,5 +55,45 @@
     </div>
   </div>
 </section>
+
+<!-- Tambahkan SweetAlert -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const deleteButtons = document.querySelectorAll(".delete-btn");
+
+    deleteButtons.forEach(button => {
+        button.addEventListener("click", function() {
+            const pelangganId = this.getAttribute("data-id");
+
+            Swal.fire({
+                title: "Konfirmasi",
+                text: "Apakah Anda yakin ingin menghapus data pelanggan ini?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Ya, hapus!",
+                cancelButtonText: "Batal"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "<?= base_url('data-master/pelanggan/delete/') ?>" + pelangganId;
+                }
+            });
+        });
+    });
+});
+
+// Notifikasi sukses setelah menghapus data
+<?php if(session()->getFlashdata('success_message')) : ?>
+    Swal.fire({
+        icon: 'success',
+        title: 'Sukses!',
+        text: "<?= session()->getFlashdata('success_message') ?>",
+        showConfirmButton: false,
+        timer: 2000
+    });
+<?php endif; ?>
+</script>
 
 <?= $this->endSection() ?>

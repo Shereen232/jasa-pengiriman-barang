@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Models\PelangganModel;
+use CodeIgniter\Validation\Validation;
 
 class PelangganController extends BaseController
 {
@@ -33,13 +34,19 @@ class PelangganController extends BaseController
     // Simpan data pelanggan
     public function create()
     {
-        $this->validate([
-            'no_ktp' => 'required',
+        $validation = \Config\Services::validation();
+
+        $rules = [
+            'no_ktp' => 'required|numeric|min_length[16]|max_length[16]',
             'nama_pelanggan' => 'required',
             'jenis_kelamin' => 'required',
             'alamat' => 'required',
-            'telepon' => 'required',
-        ]);
+            'telepon' => 'required|numeric',
+        ];
+
+        if (!$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('errors', $validation->getErrors());
+        }
 
         $data = [
             'no_ktp' => $this->request->getPost('no_ktp'),
@@ -56,43 +63,47 @@ class PelangganController extends BaseController
 
     // Form edit pelanggan
     public function edit($id_pelanggan)
-    {
-        $pelanggan = $this->pelangganModel->find($id_pelanggan);
+{
+    $pelanggan = $this->pelangganModel->find($id_pelanggan);
 
-        if (!$pelanggan) {
-            return redirect()->to(base_url('data-master/pelanggan'))->with('error', 'Data pelanggan tidak ditemukan.');
-        }
-
-        $data = [
-            'pelanggan' => $pelanggan,
-        ];
-
-        return view('data-master/pelanggan/edit', $data);
+    if (!$pelanggan) {
+        return redirect()->to(base_url('data-master/pelanggan'))->with('error_message', 'Data tidak ditemukan.');
     }
 
-    // Update data pelanggan
-    public function update($id_pelanggan)
-    {
-        $this->validate([
-            'no_ktp' => 'required',
-            'nama_pelanggan' => 'required',
-            'jenis_kelamin' => 'required',
-            'alamat' => 'required',
-            'telepon' => 'required',
-        ]);
+    return view('data-master/pelanggan/edit', [
+        'pelanggan' => $pelanggan,
+        'validation' => session()->getFlashdata('errors')
+    ]);
+}
 
-        $data = [
-            'no_ktp' => $this->request->getPost('no_ktp'),
-            'nama_pelanggan' => $this->request->getPost('nama_pelanggan'),
-            'jenis_kelamin' => $this->request->getPost('jenis_kelamin'),
-            'alamat' => $this->request->getPost('alamat'),
-            'telepon' => $this->request->getPost('telepon'),
-        ];
+public function update($id_pelanggan)
+{
+    $validation = \Config\Services::validation();
 
-        $this->pelangganModel->update($id_pelanggan, $data);
+    $rules = [
+        'no_ktp' => 'required|numeric|min_length[16]|max_length[16]',
+        'nama_pelanggan' => 'required',
+        'jenis_kelamin' => 'required',
+        'alamat' => 'required',
+        'telepon' => 'required|numeric',
+    ];
 
-        return redirect()->to(base_url('data-master/pelanggan'))->with('success_message', 'Data pelanggan berhasil diperbarui.');
+    if (!$this->validate($rules)) {
+        return redirect()->back()->withInput()->with('errors', $validation->getErrors());
     }
+
+    $data = [
+        'no_ktp' => $this->request->getPost('no_ktp'),
+        'nama_pelanggan' => $this->request->getPost('nama_pelanggan'),
+        'jenis_kelamin' => $this->request->getPost('jenis_kelamin'),
+        'alamat' => $this->request->getPost('alamat'),
+        'telepon' => $this->request->getPost('telepon'),
+    ];
+
+    $this->pelangganModel->update($id_pelanggan, $data);
+
+    return redirect()->to(base_url('data-master/pelanggan'))->with('success_message', 'Data pelanggan berhasil diperbarui.');
+}
 
     // Hapus data pelanggan
     public function delete($id_pelanggan)

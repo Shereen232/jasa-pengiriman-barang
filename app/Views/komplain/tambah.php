@@ -12,24 +12,6 @@
         <h1 class="text-3xl font-bold mb-2">Tambah Komplain</h1>
         <p class="text-lg mb-8">Silakan isi form di bawah untuk mengajukan komplain.</p>
 
-        <!-- Menampilkan pesan error jika ada -->
-        <?php if(session()->getFlashdata('errors')): ?>
-            <div class="bg-red-100 text-red-700 p-4 rounded-md mb-4">
-                <ul>
-                    <?php foreach(session()->getFlashdata('errors') as $error): ?>
-                        <li><?= esc($error) ?></li>
-                    <?php endforeach; ?>
-                </ul>
-            </div>
-        <?php endif; ?>
-
-        <!-- Menampilkan pesan sukses -->
-        <?php if(session()->getFlashdata('message')): ?>
-            <div class="bg-green-100 text-green-700 p-4 rounded-md mb-4">
-                <?= session()->getFlashdata('message') ?>
-            </div>
-        <?php endif; ?>
-
         <div class="flex flex-col md:flex-row items-center justify-center">
             <div class="mb-8 md:mb-0 md:mr-8">
                 <img alt="Illustration" class="w-72 md:w-96" height="400"
@@ -39,14 +21,67 @@
             <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
                 <form action="/komplain/simpan" method="post">
                     <?= csrf_field() ?>
+                    
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                        <input class="border border-gray-300 p-2 rounded-md" name="nama" placeholder="Nama" type="text" required/>
-                        <input class="border border-gray-300 p-2 rounded-md" name="email" placeholder="Email" type="email" required/>
-                        <input class="border border-gray-300 p-2 rounded-md" name="no_telp" placeholder="No. Telp" type="text" required/>
-                        <input class="border border-gray-300 p-2 rounded-md" name="no_resi" placeholder="No. Resi" type="text" required/>
+                        <!-- Input Nama -->
+                        <div>
+                            <input class="border border-gray-300 p-2 rounded-md w-full" 
+                                   name="nama" 
+                                   placeholder="Nama" 
+                                   type="text" 
+                                   value="<?= old('nama') ?>" />
+                            <span class="text-red-500 text-sm">
+                                <?= session('validation') ? session('validation')->getError('nama') : '' ?>
+                            </span>
+                        </div>
+
+                        <!-- Input Email -->
+                        <div>
+                            <input class="border border-gray-300 p-2 rounded-md w-full" 
+                                   name="email" 
+                                   placeholder="Email" 
+                                   type="email" 
+                                   value="<?= old('email') ?>" />
+                            <span class="text-red-500 text-sm">
+                                <?= session('validation') ? session('validation')->getError('email') : '' ?>
+                            </span>
+                        </div>
+
+                        <!-- Input No. Telp -->
+                        <div>
+                            <input class="border border-gray-300 p-2 rounded-md w-full" 
+                                   name="no_telp" 
+                                   placeholder="No. Telp" 
+                                   type="text" 
+                                   value="<?= old('no_telp') ?>" />
+                            <span class="text-red-500 text-sm">
+                                <?= session('validation') ? session('validation')->getError('no_telp') : '' ?>
+                            </span>
+                        </div>
+
+                        <!-- Input No. Resi -->
+                        <div>
+                            <input class="border border-gray-300 p-2 rounded-md w-full" 
+                                   name="no_resi" 
+                                   placeholder="No. Resi" 
+                                   type="text" 
+                                   value="<?= old('no_resi') ?>" />
+                            <span class="text-red-500 text-sm">
+                                <?= session('validation') ? session('validation')->getError('no_resi') : '' ?>
+                            </span>
+                        </div>
                     </div>
-                    <textarea class="border border-gray-300 p-2 rounded-md w-full mb-4 h-32"
-                              name="pesan" placeholder="Pesan" required></textarea>
+
+                    <!-- Input Pesan -->
+                    <div class="mb-4">
+                        <textarea class="border border-gray-300 p-2 rounded-md w-full h-32"
+                                  name="pesan"
+                                  placeholder="Pesan"><?= old('pesan') ?></textarea>
+                        <span class="text-red-500 text-sm">
+                            <?= session('validation') ? session('validation')->getError('pesan') : '' ?>
+                        </span>
+                    </div>
+
                     <button class="bg-yellow-500 text-white py-2 px-4 rounded-md w-full" type="submit">
                         Simpan
                     </button>

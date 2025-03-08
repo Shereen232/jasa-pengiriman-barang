@@ -31,28 +31,34 @@ class KomplainController extends Controller
     // Menyimpan data komplain
     public function simpan()
     {
-        // Validasi input
-        if (!$this->validate([
-            'nama'     => 'required',
-            'email'    => 'required|valid_email',
-            'no_telp'  => 'required|numeric',
-            'no_resi'  => 'required',
-            'pesan'    => 'required'
-        ])) {
-            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
-        }
+        $validation = \Config\Services::validation();
+
+        // Aturan validasi
+        $rules = [
+            'nama' => 'required|min_length[3]|max_length[100]',
+            'email' => 'required|valid_email',
+            'komplain' => 'required|min_length[10]',
+        ];
+    
+        if ($this->request->getMethod() === 'post') {
+            if (!$this->validate($rules)) {
+                return redirect()->back()->withInput()->with('validation', $validation);
+            }
 
         // Simpan ke database
-        $this->komplainModel->insert([
+        $data = [
             'nama'     => $this->request->getPost('nama'),
             'email'    => $this->request->getPost('email'),
             'no_telp'  => $this->request->getPost('no_telp'),
             'no_resi'  => $this->request->getPost('no_resi'),
             'pesan'    => $this->request->getPost('pesan'),
             'status'   => 'Pending' // Status default
-        ]);
+        ];
+        $this->komplainModel->insert($data);
 
         return redirect()->to('/komplain/tambah')->with('success_message', 'Komplain berhasil ditambahkan');
+        }
+        return view('komplain/tambah');
     }
 
     // Menghapus komplain

@@ -16,7 +16,6 @@
                 <i class="bi bi-file-earmark-pdf-fill"></i> Cetak PDF
               </a>
             </div>
-             
           </div>
 
           <!-- Table with stripped rows -->
@@ -37,34 +36,33 @@
               </tr>
             </thead>
             <tbody>
-                    <?php $no = 1; ?>
-                        <?php foreach ($pengiriman as $item): ?>
-                            <tr>
-                                <td><?= $no++ ?></td>
-                                <td><?= $item['no_pengiriman'] ?></td>
-                                <td><?= $item['tanggal'] ?></td>
-                                <td><?= $item['nama_pelanggan'] ?></td>
-                                <td><?= $item['penerima'] ?></td>
-                                <td><?= $item['nama_supir'] ?></td>
-                                <td><?= $item['nama_barang'] ?></td>
-                                <td><?= $item['berat'] ?> kg</td>
-                                <td>Rp <?= number_format($item['biaya_kirim'], 0, ',', '.') ?></td>
-                                <td><?= $item['status'] ?></td>
-                                <td>
-                                    <a href="<?= base_url('pengiriman/edit/' . $item['id']) ?>" class="btn btn-info">
-                                        <i class="bi bi-pencil-square"></i>
-                                    </a>
-                                    <a href="<?= base_url('pengiriman/delete/' . $item['id']) ?>" class="btn btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
-                                        <i class="bi bi-trash"></i>
-                                    </a>
-                                    <a href="<?= base_url('pengiriman/cetak/' . $item['id']) ?>" class="btn btn-success" >
-                                        <i class="bi bi-printer-fill"></i>
-                                    </a>
-                                </td>
-                                
-                            </tr>
-                        <?php endforeach ?>
-                    </tbody>
+              <?php $no = 1; ?>
+              <?php foreach ($pengiriman as $item): ?>
+                <tr>
+                  <td><?= $no++ ?></td>
+                  <td><?= esc($item['no_pengiriman']) ?></td>
+                  <td><?= esc($item['tanggal']) ?></td>
+                  <td><?= esc($item['nama_pelanggan']) ?></td>
+                  <td><?= esc($item['penerima']) ?></td>
+                  <td><?= esc($item['nama_supir']) ?></td>
+                  <td><?= esc($item['nama_barang']) ?></td>
+                  <td><?= esc($item['berat']) ?> kg</td>
+                  <td>Rp <?= number_format($item['biaya_kirim'], 0, ',', '.') ?></td>
+                  <td><?= esc($item['status']) ?></td>
+                  <td>
+                    <a href="<?= base_url('pengiriman/edit/' . $item['id']) ?>" class="btn btn-info">
+                      <i class="bi bi-pencil-square"></i>
+                    </a>
+                    <button class="btn btn-danger delete-btn" data-id="<?= $item['id'] ?>">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                    <a href="<?= base_url('pengiriman/cetak/' . $item['id']) ?>" class="btn btn-success">
+                      <i class="bi bi-printer-fill"></i>
+                    </a>
+                  </td>
+                </tr>
+              <?php endforeach ?>
+            </tbody>
           </table>
           <!-- End Table with stripped rows -->
         </div>
@@ -72,5 +70,45 @@
     </div>
   </div>
 </section>
+
+<!-- Tambahkan SweetAlert -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const deleteButtons = document.querySelectorAll(".delete-btn");
+
+    deleteButtons.forEach(button => {
+        button.addEventListener("click", function() {
+            const pengirimanId = this.getAttribute("data-id");
+
+            Swal.fire({
+                title: "Konfirmasi",
+                text: "Apakah Anda yakin ingin menghapus data pengiriman ini?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Ya, hapus!",
+                cancelButtonText: "Batal"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "<?= base_url('pengiriman/delete/') ?>" + pengirimanId;
+                }
+            });
+        });
+    });
+});
+
+// Notifikasi sukses setelah menghapus data
+<?php if(session()->getFlashdata('success_message')) : ?>
+    Swal.fire({
+        icon: 'success',
+        title: 'Sukses!',
+        text: "<?= session()->getFlashdata('success_message') ?>",
+        showConfirmButton: false,
+        timer: 2000
+    });
+<?php endif; ?>
+</script>
 
 <?= $this->endSection() ?>

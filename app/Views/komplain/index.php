@@ -8,12 +8,19 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <h5 class="card-title">Data Komplain</h5>
-                        
                     </div>
 
                     <!-- Menampilkan pesan sukses jika ada -->
                     <?php if (session()->getFlashdata('message')): ?>
-                        <div class="alert alert-success"><?= session()->getFlashdata('message') ?></div>
+                        <script>
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Sukses!',
+                                text: "<?= session()->getFlashdata('message') ?>",
+                                showConfirmButton: false,
+                                timer: 2000
+                            });
+                        </script>
                     <?php endif; ?>
 
                     <!-- Table with stripped rows -->
@@ -42,10 +49,10 @@
                                         <td><?= esc($k['no_resi']) ?></td>
                                         <td><?= esc($k['pesan']) ?></td>
                                         <td>
-                                        <span class="badge 
-                                                <?= ($k['status'] == 'Pending') ? 'bg-warning' : 
-                                                    (($k['status'] == 'Selesai') ? 'bg-success' : 
-                                                    (($k['status'] == 'Proses') ? 'bg-info' : 'bg-primary')) ?>">
+                                            <span class="badge 
+                                                    <?= ($k['status'] == 'Pending') ? 'bg-warning' : 
+                                                        (($k['status'] == 'Selesai') ? 'bg-success' : 
+                                                        (($k['status'] == 'Proses') ? 'bg-info' : 'bg-primary')) ?>">
                                                 <?= esc($k['status']) ?>
                                             </span>
                                         </td>
@@ -53,9 +60,9 @@
                                             <a href="<?= base_url('komplain/edit/' . $k['id']) ?>" class="btn btn-info">
                                                 <i class="bi bi-pencil-square"></i>
                                             </a>
-                                            <a href="<?= base_url('komplain/delete/' . $k['id']) ?>" class="btn btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
+                                            <button class="btn btn-danger delete-btn" data-id="<?= $k['id'] ?>">
                                                 <i class="bi bi-trash"></i>
-                                            </a>
+                                            </button>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
@@ -72,5 +79,34 @@
         </div>
     </div>
 </section>
+
+<!-- Tambahkan SweetAlert -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const deleteButtons = document.querySelectorAll(".delete-btn");
+
+    deleteButtons.forEach(button => {
+        button.addEventListener("click", function() {
+            const komplainId = this.getAttribute("data-id");
+
+            Swal.fire({
+                title: "Konfirmasi",
+                text: "Apakah Anda yakin ingin menghapus data komplain ini?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Ya, hapus!",
+                cancelButtonText: "Batal"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "<?= base_url('komplain/delete/') ?>" + komplainId;
+                }
+            });
+        });
+    });
+});
+</script>
 
 <?= $this->endSection() ?>

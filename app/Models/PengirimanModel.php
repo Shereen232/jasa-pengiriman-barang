@@ -24,7 +24,7 @@ class PengirimanModel extends Model
     ];
     public function getPengiriman($id = null)
     {
-        $this->select('pengiriman.*, supir.nama as nama_supir');
+        $this->select('pengiriman.*, supir.nama_supir as nama_supir');
         $this->join('supir', 'supir.id = pengiriman.id', 'left');
 
         if ($id) {
@@ -46,7 +46,7 @@ class PengirimanModel extends Model
 
     public function getPengirimanWithRelations()
     {
-        return $this->select('pengiriman.*, kendaraan.no_polisi, kendaraan.merk, supir.nama AS nama_supir, pelanggan.nama_pelanggan AS nama_pelanggan')
+        return $this->select('pengiriman.*, kendaraan.no_polisi, kendaraan.merk, supir.nama_supir AS nama_supir, pelanggan.nama_pelanggan AS nama_pelanggan')
                     ->join('kendaraan', 'kendaraan.id = pengiriman.id_kendaraan')
                     ->join('supir', 'kendaraan.id_supir = supir.id')
                     ->join('pelanggan', 'pengiriman.id_pelanggan = pelanggan.id_pelanggan')
@@ -55,7 +55,7 @@ class PengirimanModel extends Model
 
     public function getPengirimanByResi($resi)
     {
-        return $this->select('pengiriman.*, kendaraan.no_polisi, kendaraan.merk, supir.nama AS nama_supir')
+        return $this->select('pengiriman.*, kendaraan.no_polisi, kendaraan.merk, supir.nama_supir AS nama_supir')
                     ->join('kendaraan', 'kendaraan.id = pengiriman.id_kendaraan')
                     ->join('supir', 'kendaraan.id_supir = supir.id')
                     ->where('pengiriman.no_pengiriman', $resi)

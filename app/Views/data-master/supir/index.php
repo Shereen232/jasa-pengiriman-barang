@@ -33,16 +33,16 @@
                   <tr>
                     <td><?= $no++; ?></td>
                     <td><?= esc($row['no_ktp']); ?></td>
-                    <td><?= esc($row['nama']); ?></td>
+                    <td><?= esc($row['nama_supir']); ?></td>
                     <td><?= esc($row['alamat']); ?></td>
                     <td><?= esc($row['telepon']); ?></td>
                     <td>
                       <a href="<?= base_url('data-master/supir/edit/' . $row['id']) ?>" class="btn btn-info">
                         <i class="bi bi-pencil-square"></i>
                       </a>
-                      <a href="<?= base_url('data-master/supir/delete/' . $row['id']) ?>" class="btn btn-danger" onclick="return confirm('Yakin ingin menghapus data ini?')">
+                      <button class="btn btn-danger delete-btn" data-id="<?= $row['id'] ?>">
                         <i class="bi bi-trash"></i>
-                      </a>
+                      </button>
                     </td>
                   </tr>
                 <?php endforeach; ?>
@@ -59,5 +59,45 @@
     </div>
   </div>
 </section>
+
+<!-- Tambahkan SweetAlert -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const deleteButtons = document.querySelectorAll(".delete-btn");
+
+    deleteButtons.forEach(button => {
+        button.addEventListener("click", function() {
+            const supirId = this.getAttribute("data-id");
+
+            Swal.fire({
+                title: "Konfirmasi",
+                text: "Apakah Anda yakin ingin menghapus data ini?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Ya, hapus!",
+                cancelButtonText: "Batal"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "<?= base_url('data-master/supir/delete/') ?>" + supirId;
+                }
+            });
+        });
+    });
+});
+
+// Notifikasi sukses setelah menghapus data
+<?php if(session()->getFlashdata('success_message')) : ?>
+    Swal.fire({
+        icon: 'success',
+        title: 'Sukses!',
+        text: "<?= session()->getFlashdata('success_message') ?>",
+        showConfirmButton: false,
+        timer: 2000
+    });
+<?php endif; ?>
+</script>
 
 <?= $this->endSection() ?>
