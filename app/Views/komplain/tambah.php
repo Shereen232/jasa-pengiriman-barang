@@ -4,7 +4,13 @@
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>Tambah Komplain</title>
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- SweetAlert CSS & JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
@@ -19,7 +25,7 @@
                      width="300"/>
             </div>
             <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-                <form action="/komplain/simpan" method="post">
+                <form action="<?= base_url('komplain/simpan') ?>" method="post">
                     <?= csrf_field() ?>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
@@ -31,7 +37,7 @@
                                    type="text" 
                                    value="<?= old('nama') ?>" />
                             <span class="text-red-500 text-sm">
-                                <?= session('validation') ? session('validation')->getError('nama') : '' ?>
+                                <?= !empty(session()->getFlashdata('validation')['nama']) ? session()->getFlashdata('validation')['nama'] : '' ?>
                             </span>
                         </div>
 
@@ -43,7 +49,7 @@
                                    type="email" 
                                    value="<?= old('email') ?>" />
                             <span class="text-red-500 text-sm">
-                                <?= session('validation') ? session('validation')->getError('email') : '' ?>
+                                <?= !empty(session()->getFlashdata('validation')['email']) ? session()->getFlashdata('validation')['email'] : '' ?>
                             </span>
                         </div>
 
@@ -55,7 +61,7 @@
                                    type="text" 
                                    value="<?= old('no_telp') ?>" />
                             <span class="text-red-500 text-sm">
-                                <?= session('validation') ? session('validation')->getError('no_telp') : '' ?>
+                                <?= !empty(session()->getFlashdata('validation')['no_telp']) ? session()->getFlashdata('validation')['no_telp'] : '' ?>
                             </span>
                         </div>
 
@@ -67,7 +73,7 @@
                                    type="text" 
                                    value="<?= old('no_resi') ?>" />
                             <span class="text-red-500 text-sm">
-                                <?= session('validation') ? session('validation')->getError('no_resi') : '' ?>
+                                <?= !empty(session()->getFlashdata('validation')['no_resi']) ? session()->getFlashdata('validation')['no_resi'] : '' ?>
                             </span>
                         </div>
                     </div>
@@ -78,7 +84,7 @@
                                   name="pesan"
                                   placeholder="Pesan"><?= old('pesan') ?></textarea>
                         <span class="text-red-500 text-sm">
-                            <?= session('validation') ? session('validation')->getError('pesan') : '' ?>
+                            <?= !empty(session()->getFlashdata('validation')['pesan']) ? session()->getFlashdata('validation')['pesan'] : '' ?>
                         </span>
                     </div>
 
@@ -89,5 +95,28 @@
             </div>
         </div>
     </div>
+
+    <!-- SweetAlert Notifikasi -->
+    <script>
+        <?php if (session()->getFlashdata('message')) : ?>
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: "<?= session()->getFlashdata('message') ?>",
+                showConfirmButton: false,
+                timer: 2000
+            });
+        <?php endif; ?>
+
+        <?php if (session()->getFlashdata('validation')) : ?>
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops!',
+                text: "Harap periksa kembali form Anda.",
+                showConfirmButton: false,
+                timer: 2000
+            });
+        <?php endif; ?>
+    </script>
 </body>
 </html>

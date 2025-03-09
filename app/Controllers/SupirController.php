@@ -38,7 +38,7 @@ class SupirController extends BaseController
             'no_ktp' => 'required|numeric|min_length[16]|max_length[16]|is_unique[supir.no_ktp]',
             'nama_supir' => 'required',
             'alamat' => 'required',
-            'telepon' => 'required|numeric'
+            'telepon' => 'required|numeric|min_length[10]'
         ];
     
         if (!$this->validate($rules)) {
@@ -92,7 +92,7 @@ class SupirController extends BaseController
         'no_ktp' => "required|numeric|min_length[16]|max_length[16]|is_unique[supir.no_ktp,id,$id]",
         'nama_supir' => 'required',
         'alamat' => 'required',
-        'telepon' => 'required|numeric'
+        'telepon' => 'required|numeric|min_length[10]'
     ];
 
     if (!$this->validate($rules)) {

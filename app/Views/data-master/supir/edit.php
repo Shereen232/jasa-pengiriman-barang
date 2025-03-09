@@ -14,6 +14,9 @@
               <label class="col-sm-2 col-form-label">No. KTP</label>
               <div class="col-sm-10">
                 <input type="text" class="form-control" name="no_ktp" value="<?= old('no_ktp', $supir['no_ktp']) ?>" required>
+                <?php if (session()->getFlashdata('errors')['no_ktp'] ?? false) : ?>
+                    <small class="text-danger"><?= session()->getFlashdata('errors')['no_ktp']; ?></small>
+                <?php endif; ?>
               </div>
             </div>
 
@@ -21,6 +24,9 @@
               <label class="col-sm-2 col-form-label">Nama Supir</label>
               <div class="col-sm-10">
                 <input type="text" class="form-control" name="nama_supir" value="<?= old('nama_supir', $supir['nama_supir']) ?>" required>
+                <?php if (session()->getFlashdata('errors')['nama_supir'] ?? false) : ?>
+                    <small class="text-danger"><?= session()->getFlashdata('errors')['nama_supir']; ?></small>
+                <?php endif; ?>
               </div>
             </div>
 
@@ -28,6 +34,9 @@
               <label class="col-sm-2 col-form-label">Alamat</label>
               <div class="col-sm-10">
                 <textarea class="form-control" name="alamat" required><?= old('alamat', $supir['alamat']) ?></textarea>
+                <?php if (session()->getFlashdata('errors')['alamat'] ?? false) : ?>
+                    <small class="text-danger"><?= session()->getFlashdata('errors')['alamat']; ?></small>
+                <?php endif; ?>
               </div>
             </div>
 
@@ -35,6 +44,9 @@
               <label class="col-sm-2 col-form-label">Telepon</label>
               <div class="col-sm-10">
                 <input type="text" class="form-control" name="telepon" value="<?= old('telepon', $supir['telepon']) ?>" required>
+                <?php if (session()->getFlashdata('errors')['telepon'] ?? false) : ?>
+                    <small class="text-danger"><?= session()->getFlashdata('errors')['telepon']; ?></small>
+                <?php endif; ?>
               </div>
             </div>
 

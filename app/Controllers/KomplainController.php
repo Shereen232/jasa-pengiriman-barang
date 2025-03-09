@@ -8,7 +8,7 @@ use CodeIgniter\Controller;
 class KomplainController extends Controller
 {
     protected $komplainModel;
-    protected $helpers = ['url', 'form'];
+
 
     public function __construct()
     {
@@ -31,19 +31,18 @@ class KomplainController extends Controller
     // Menyimpan data komplain
     public function simpan()
     {
-        $validation = \Config\Services::validation();
-
         // Aturan validasi
         $rules = [
-            'nama' => 'required|min_length[3]|max_length[100]',
-            'email' => 'required|valid_email',
-            'komplain' => 'required|min_length[10]',
+            'nama'     => 'required|min_length[3]',
+            'email'    => 'required|valid_email',
+            'no_telp'  => 'required|numeric',
+            'no_resi'  => 'required',
+            'pesan'    => 'required|min_length[5]',
         ];
-    
-        if ($this->request->getMethod() === 'post') {
-            if (!$this->validate($rules)) {
-                return redirect()->back()->withInput()->with('validation', $validation);
-            }
+        
+        if (!$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('validation', $this->validator->getErrors());
+        }
 
         // Simpan ke database
         $data = [
@@ -52,13 +51,13 @@ class KomplainController extends Controller
             'no_telp'  => $this->request->getPost('no_telp'),
             'no_resi'  => $this->request->getPost('no_resi'),
             'pesan'    => $this->request->getPost('pesan'),
-            'status'   => 'Pending' // Status default
+            'status'   => 'Pending',
         ];
-        $this->komplainModel->insert($data);
+        
+        $komplainModel = new \App\Models\KomplainModel();
+        $komplainModel->insert($data);
 
-        return redirect()->to('/komplain/tambah')->with('success_message', 'Komplain berhasil ditambahkan');
-        }
-        return view('komplain/tambah');
+        return redirect()->to('/komplain/tambah')->with('message', 'Komplain berhasil dikirim!');
     }
 
     // Menghapus komplain

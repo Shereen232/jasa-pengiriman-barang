@@ -57,7 +57,7 @@
                                 <option value="">-- Pilih Supir --</option>
                                 <?php foreach ($supir as $item): ?>
                                     <option value="<?= $item['id'] ?>" <?= old('id_supir') == $item['id'] ? 'selected' : '' ?>>
-                                        <?= $item['nama'] ?>
+                                        <?= $item['nama_supir'] ?>
                                     </option>
                                 <?php endforeach ?>
                             </select>
