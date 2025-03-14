@@ -50,6 +50,23 @@
               </div>
             </div>
 
+            <!-- Tambahkan Radio Button untuk Status -->
+            <div class="row mb-3">
+              <label class="col-sm-2 col-form-label">Status</label>
+              <div class="col-sm-10">
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="status" id="statusAktif" value="Aktif" 
+                    <?= ($supir['status'] == 'Aktif') ? 'checked' : '' ?>>
+                  <label class="form-check-label" for="statusAktif">Aktif</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="status" id="statusTidakAktif" value="Tidak Aktif" 
+                    <?= ($supir['status'] == 'Tidak Aktif') ? 'checked' : '' ?>>
+                  <label class="form-check-label" for="statusTidakAktif">Tidak Aktif</label>
+                </div>
+              </div>
+            </div>
+
             <div class="text-center">
               <button type="button" id="submitBtn" class="btn btn-primary">Update</button>
               <a href="<?= base_url('data-master/supir') ?>" class="btn btn-secondary">Batal</a>

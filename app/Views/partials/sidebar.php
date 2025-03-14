@@ -51,11 +51,11 @@
               <i class="bi bi-circle"></i><span>Kendaraan</span>
             </a>
           </li>
-          <li>
+          <!-- <li>
             <a href=<?= base_url('data-master/pelanggan') ?>>
               <i class="bi bi-circle"></i><span>Pelanggan</span>
             </a>
-          </li>
+          </li> -->
         </ul>
       </li><!-- End Forms Nav -->
 

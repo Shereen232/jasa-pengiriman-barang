@@ -10,11 +10,13 @@ class PengirimanModel extends Model
     protected $primaryKey = 'id';
     protected $allowedFields = [
         'no_pengiriman',
+        'nama_pengirim',
+        'alamat_pengirim',
         'tanggal',
-        'id_pelanggan',
         'penerima',
         'alamat_penerima',
         'telepon_penerima',
+        'jenis_barang',
         'nama_barang',
         'jumlah',
         'berat',
@@ -46,10 +48,9 @@ class PengirimanModel extends Model
 
     public function getPengirimanWithRelations()
     {
-        return $this->select('pengiriman.*, kendaraan.no_polisi, kendaraan.merk, supir.nama_supir AS nama_supir, pelanggan.nama_pelanggan AS nama_pelanggan')
+        return $this->select('pengiriman.*, kendaraan.no_polisi, kendaraan.merk, supir.nama_supir AS nama_supir')
                     ->join('kendaraan', 'kendaraan.id = pengiriman.id_kendaraan')
                     ->join('supir', 'kendaraan.id_supir = supir.id')
-                    ->join('pelanggan', 'pengiriman.id_pelanggan = pelanggan.id_pelanggan')
                     ->findAll();
     }
 
@@ -63,9 +64,14 @@ class PengirimanModel extends Model
                     ->findAll();
     }
     
-    public function generateNoPengiriman()
+    public function generateNoPengiriman($jenis_barang)
     {
-        $lastRecord = $this->orderBy('no_pengiriman', 'DESC')->first();
+        $kode = ($jenis_barang == 'Makhluk Hidup') ? 'PH' : 'PM'; // PH = Makhluk Hidup, PM = Benda Mati
+        $bulan = date('m'); // Ambil bulan saat ini
+
+        // Ambil nomor terakhir dengan prefix yang sesuai
+        $lastRecord = $this->orderBy('no_pengiriman', 'DESC')->like('no_pengiriman', "$kode-$bulan", 'after')->first();
+
         if ($lastRecord) {
             $lastNumber = (int) substr($lastRecord['no_pengiriman'], -5);
             $newNumber = $lastNumber + 1;
@@ -73,12 +79,7 @@ class PengirimanModel extends Model
             $newNumber = 1;
         }
 
-        return 'P' . str_pad($newNumber, 5, '0', STR_PAD_LEFT);
+        return $kode . '-' . $bulan . str_pad($newNumber, 5, '0', STR_PAD_LEFT);
     }
-    public function getResiById($id)
-    {
-        return $this->where('id_pengiriman', $id)->first();
-    }
-
-    
+  
 }

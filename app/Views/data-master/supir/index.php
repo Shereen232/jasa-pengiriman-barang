@@ -24,6 +24,7 @@
                 <th>Nama</th>
                 <th>Alamat</th>
                 <th>Telepon</th>
+                <th>Status</th>
                 <th>Aksi</th>
               </tr>
             </thead>
@@ -36,6 +37,13 @@
                     <td><?= esc($row['nama_supir']); ?></td>
                     <td><?= esc($row['alamat']); ?></td>
                     <td><?= esc($row['telepon']); ?></td>
+                    <td>
+                        <?php if ($row['status'] == 'Aktif') : ?>
+                          <span class="badge bg-success">Aktif</span>
+                        <?php else : ?>
+                          <span class="badge bg-danger">Tidak Aktif</span>
+                        <?php endif; ?>
+                    </td>
                     <td>
                       <a href="<?= base_url('data-master/supir/edit/' . $row['id']) ?>" class="btn btn-info">
                         <i class="bi bi-pencil-square"></i>

@@ -40,9 +40,9 @@
                                             <a href="<?= base_url('data-master/kendaraan/edit/' . $k['id']) ?>" class="btn btn-info">
                                                 <i class="bi bi-pencil-square"></i>
                                             </a>
-                                            <button class="btn btn-danger delete-btn" data-id="<?= $k['id'] ?>">
+                                            <!-- <button class="btn btn-danger delete-btn" data-id="<?= $k['id'] ?>">
                                                 <i class="bi bi-trash"></i>
-                                            </button>
+                                            </button> -->
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>

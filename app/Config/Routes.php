@@ -23,6 +23,7 @@ $routes->group('data-master', ['filter' => 'login'], function($routes) {
         $routes->get('edit/(:num)', 'SupirController::edit/$1');  // Form edit supir
         $routes->post('update/(:num)', 'SupirController::update/$1'); // Proses update supir
         $routes->get('delete/(:num)', 'SupirController::delete/$1'); // Hapus supir
+        $routes->get('check-input', 'SupirController::delete/$1');
     });
 
     $routes->group('pelanggan', function ($routes) {

@@ -42,7 +42,7 @@
                   <td><?= $no++ ?></td>
                   <td><?= esc($item['no_pengiriman']) ?></td>
                   <td><?= esc($item['tanggal']) ?></td>
-                  <td><?= esc($item['nama_pelanggan']) ?></td>
+                  <td><?= esc($item['nama_pengirim']) ?></td>
                   <td><?= esc($item['penerima']) ?></td>
                   <td><?= esc($item['nama_supir']) ?></td>
                   <td><?= esc($item['nama_barang']) ?></td>

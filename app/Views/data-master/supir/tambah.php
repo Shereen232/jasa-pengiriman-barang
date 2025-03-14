@@ -50,6 +50,20 @@
                             </div>
                         </div>
 
+                        <div class="row mb-3">
+                            <label class="col-sm-3 col-form-label">Status</label>
+                            <div class="col-sm-9">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="status" id="statusAktif" value="Aktif" checked>
+                                    <label class="form-check-label" for="statusAktif">Aktif</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="status" id="statusTidakAktif" value="Tidak Aktif">
+                                    <label class="form-check-label" for="statusTidakAktif">Tidak Aktif</label>
+                                </div>
+                            </div>
+                        </div>
+                    
                         <div class="text-center">
                             <button type="submit" class="btn btn-primary">Submit</button>
                             <button type="reset" class="btn btn-secondary">Reset</button>

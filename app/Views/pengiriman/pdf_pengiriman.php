@@ -12,76 +12,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Pengiriman</title>
+    <title>Laporan Data Pengiriman</title>
     <style>
-        body { font-family: Arial, sans-serif; }
+        body { font-family: Arial, sans-serif; font-size: 12px; }
         table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { border: 1px solid black; padding: 8px; text-align: left; }
+        th, td { border: 1px solid black; padding: 8px; text-align: center; }
         th { background-color: #f2f2f2; }
         h2 { text-align: center; }
-        
-        body {
-            font-size: 12px;
-        }
 
-        table, tr, td {
-            border-color: #000;
-        }
-
-        .logo-container {
+        .header-container {
             display: flex;
             align-items: center;
+            margin-bottom: 10px;
         }
 
-        .logo-container img {
+        .header-container img {
             width: 50px;
             height: 50px;
             margin-right: 10px;
         }
 
-        .title-text {
+        .header-text {
             font-size: 16px;
             font-weight: bold;
         }
 
-        .bulan {
-            font-size: 16px;
-            font-weight: bold;
+        .signature {
+            margin-top: 30px;
             text-align: right;
+            font-size: 14px;
         }
-
-        table {
-            margin-top: 0.5rem;
-            text-align: left;
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        tfoot th, tfoot td {
-            text-align: right;
-        }
-    
     </style>
 </head>
 <body>
-    <header style="display: table; width: 100%">
-        <div class="logo-container" style="height:70px; display: table-cell; vertical-align: middle;">
-            <div style="width: 70px; float: left;">
-                <img src="<?=$imageBase64?>" alt="Logo" style="width:70px; height:auto;">
-            </div>
-            <div style="margin-left: 100px;">
-                <b>LAPORAN DATA PENGIRIMAN</b>
-                <br>
-                <b>PT. TAZZA PAKET EXPRESS</b>
-            </div>
-        </div>
-    </header>
 
-    <table border=1 width=100% cellpadding=2 cellspacing=0 style=" text-align:center;">
+    <!-- Header -->
+    <div class="header-container">
+        <img src="<?=$imageBase64?>" alt="Logo">
+        <div>
+            <p class="header-text">LAPORAN DATA PENGIRIMAN</p>
+            <p class="header-text">PT. TAZZA PAKET EXPRESS</p>
+        </div>
+    </div>
+
+    <!-- Tabel Data Pengiriman -->
+    <table border="1">
         <thead>
             <tr>
                 <th>No</th>
-                <th>No Pengiriman</th>
+                <th>No. Resi</th>
                 <th>Tanggal</th>
                 <th>Pengirim</th>
                 <th>Penerima</th>
@@ -93,13 +72,13 @@
             </tr>
         </thead>
         <tbody>
-            <?php $no = 1; ?>
+            <?php $no = 1; $totalBiaya = 0; ?>
             <?php foreach ($pengiriman as $item): ?>
                 <tr>
                     <td><?= $no++ ?></td>
                     <td><?= $item['no_pengiriman'] ?></td>
                     <td><?= $item['tanggal'] ?></td>
-                    <td><?= $item['nama_pelanggan'] ?></td>
+                    <td><?= $item['nama_pengirim'] ?></td>
                     <td><?= $item['penerima'] ?></td>
                     <td><?= $item['nama_supir'] ?></td>
                     <td><?= $item['nama_barang'] ?></td>
@@ -107,9 +86,24 @@
                     <td>Rp <?= number_format($item['biaya_kirim'], 0, ',', '.') ?></td>
                     <td><?= $item['status'] ?></td>
                 </tr>
+                <?php $totalBiaya += $item['biaya_kirim']; ?>
             <?php endforeach; ?>
         </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="8"><b>Jumlah</b></td>
+                <td colspan="2"><b>Rp <?= number_format($totalBiaya, 0, ',', '.') ?></b></td>
+            </tr>
+        </tfoot>
     </table>
+
+    <!-- Bagian Tanda Tangan -->
+    <div class="signature">
+        <p>Kota, <?= date('d-m-Y') ?></p>
+        <br><br><br>
+        <p>ttd</p>
+        <p><b>Nama Admin</b></p>
+    </div>
 
 </body>
 </html>

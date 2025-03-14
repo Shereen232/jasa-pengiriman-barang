@@ -38,56 +38,68 @@ class PengirimanController extends BaseController
     // Form tambah pengiriman
     public function tambah()
     {
+        // Ambil jenis barang dari request (default: 'benda mati')
+        $jenis_barang = $this->request->getPost('jenis_barang') ?? 'benda mati';
+
         $data = [
-            'no_pengiriman' => $this->pengirimanModel->generateNoPengiriman(),
+            'no_pengiriman' => $this->pengirimanModel->generateNoPengiriman($jenis_barang),
             'kendaraan' => $this->kendaraanModel->getKendaraanWithSupir(),
-            'pengirim' => $this->pelangganModel->asObject()->findAll()
+            'pengirim' => $this->pelangganModel->asObject()->findAll(),
+            'jenis_barang' => $jenis_barang // Kirim ke view
         ];
 
         return view('pengiriman/tambah', $data);
     }
 
+
     // Simpan data pengiriman
     public function create()
     {
         $this->validate([
-            'id_pelanggan' => 'required',
-            'tanggal'=> 'required',
+            'nama_pengirim' => 'required',
+            'alamat_pengirim' => 'required',
+            'tanggal' => 'required',
             'penerima' => 'required',
             'alamat_penerima' => 'required',
             'telepon_penerima' => 'required|numeric',
+            'jenis_barang' => 'required', // Validasi jenis barang
             'nama_barang' => 'required',
             'jumlah' => 'required|integer',
             'berat' => 'required|decimal',
             'id_kendaraan' => 'required',
         ]);
-         // Perhitungan biaya pengiriman
-         $berat = $this->request->getPost('berat'); // berat dalam kilogram
-         $biayaPerKg = 10000; // Rp 10.000 per kg
-         $biayaKirim = $berat * $biayaPerKg;
-
+    
+        $jenis_barang = $this->request->getPost('jenis_barang'); // Ambil jenis barang dari form
+    
+        // Generate nomor pengiriman berdasarkan jenis barang
+        $no_pengiriman = $this->pengirimanModel->generateNoPengiriman($jenis_barang);
+    
         $data = [
-            'no_pengiriman' => $this->request->getPost('no_pengiriman'),
+            'no_pengiriman' => $no_pengiriman,
+            'nama_pengirim' => $this->request->getPost('nama_pengirim'),
+            'alamat_pengirim' => $this->request->getPost('alamat_pengirim'),
             'tanggal' => $this->request->getPost('tanggal'),
-            'id_pelanggan' => $this->request->getPost('id_pelanggan'),
             'penerima' => $this->request->getPost('penerima'),
             'alamat_penerima' => $this->request->getPost('alamat_penerima'),
             'telepon_penerima' => $this->request->getPost('telepon_penerima'),
+            'jenis_barang' => $jenis_barang, // Simpan jenis barang
             'nama_barang' => $this->request->getPost('nama_barang'),
             'jumlah' => $this->request->getPost('jumlah'),
-            'berat' => $berat,
-            'biaya_kirim' => $biayaKirim,
+            'berat' => $this->request->getPost('berat'),
+            'biaya_kirim' => $this->request->getPost('biaya_kirim'),
             'id_kendaraan' => $this->request->getPost('id_kendaraan'),
             'status' => 'Menunggu Pengiriman'
         ];
-
+    
+        // Simpan ke database
         $this->pengirimanModel->insert($data);
-
+    
         return redirect()->to(base_url('pengiriman'))->with('success_message', 'Data pengiriman berhasil ditambahkan.');
     }
-    
+        
     public function edit($id) 
     {
+        $jenis_barang = $this->request->getPost('jenis_barang') ?? 'benda mati';
         $pengiriman = $this->pengirimanModel->getPengirimanById($id);
     
         if (!$pengiriman) {
@@ -95,10 +107,11 @@ class PengirimanController extends BaseController
         }
     
         $data = [
-            'no_pengiriman' => $this->pengirimanModel->generateNoPengiriman(),
+            'no_pengiriman' => $this->pengirimanModel->generateNoPengiriman($jenis_barang),
             'kendaraan' => $this->kendaraanModel->getKendaraanWithSupir(),
             'pengirim' => $this->pelangganModel->asObject()->findAll(),
             'pengiriman' => $pengiriman // Ini harus objek
+            
         ];
     
         return view('pengiriman/edit', $data);
@@ -108,34 +121,34 @@ class PengirimanController extends BaseController
     public function update($id)
     {
         $this->validate([
-            'id_pelanggan' => 'required',
-            'tanggal'=> 'required',
+            'nama_pengirim' => 'required',
+            'alamat_pengirim' => 'required',
+            'tanggal' => 'required',
             'penerima' => 'required',
             'alamat_penerima' => 'required',
             'telepon_penerima' => 'required|numeric',
+            'jenis_barang' => 'required', // Tambahkan validasi jenis barang
             'nama_barang' => 'required',
             'jumlah' => 'required|integer',
             'berat' => 'required|decimal',
             'id_kendaraan' => 'required',
         ]);
-         // Perhitungan biaya pengiriman
-         $berat = $this->request->getPost('berat'); // berat dalam kilogram
-         $biayaPerKg = 10000; // Rp 10.000 per kg
-         $biayaKirim = $berat * $biayaPerKg;
 
         $data = [
             'no_pengiriman' => $this->request->getPost('no_pengiriman'),
+            'nama_pengirim' => $this->request->getPost('nama_pengirim'),
+            'alamat_pengirim' => $this->request->getPost('alamat_pengirim'),
             'tanggal' => $this->request->getPost('tanggal'),
-            'id_pelanggan' => $this->request->getPost('id_pelanggan'),
             'penerima' => $this->request->getPost('penerima'),
             'alamat_penerima' => $this->request->getPost('alamat_penerima'),
             'telepon_penerima' => $this->request->getPost('telepon_penerima'),
+            'jenis_barang' => $this->request->getPost('jenis_barang'), // Simpan jenis barang
             'nama_barang' => $this->request->getPost('nama_barang'),
             'jumlah' => $this->request->getPost('jumlah'),
-            'berat' => $berat,
-            'biaya_kirim' => $biayaKirim,
+            'berat' => $this->request->getPost('berat'),
+            'biaya_kirim' => $this->request->getPost('biaya_kirim'),
             'id_kendaraan' => $this->request->getPost('id_kendaraan'),
-            'status' => $this->request->getPost('status')
+            'status' => 'Menunggu Pengiriman'
         ];
 
         $this->pengirimanModel->update($id, $data);

@@ -33,30 +33,58 @@ class SupirController extends BaseController
     public function create()
     {
         $validation = \Config\Services::validation();
-    
+
         $rules = [
             'no_ktp' => 'required|numeric|min_length[16]|max_length[16]|is_unique[supir.no_ktp]',
             'nama_supir' => 'required',
             'alamat' => 'required',
             'telepon' => 'required|numeric|min_length[10]'
         ];
-    
+
+        // Jalankan validasi
         if (!$this->validate($rules)) {
             return redirect()->back()->withInput()->with('errors', $validation->getErrors());
         }
-    
+
+        // Cek apakah no_ktp sudah ada di database
+        $existingSupir = $this->supirModel->where('no_ktp', $this->request->getPost('no_ktp'))->first();
+
+        if ($existingSupir) {
+            return redirect()->back()->withInput()->with('errors', ['no_ktp' => 'Nomor KTP sudah terdaftar!']);
+        }
+
+        // Jika lolos validasi, simpan data supir
         $data = [
             'no_ktp' => $this->request->getPost('no_ktp'),
             'nama_supir' => $this->request->getPost('nama_supir'),
             'alamat' => $this->request->getPost('alamat'),
-            'telepon' => $this->request->getPost('telepon')
+            'telepon' => $this->request->getPost('telepon'),
+            'status' => $this->request->getPost('status')
         ];
-    
+
         $this->supirModel->insert($data);
-    
+
         return redirect()->to(base_url('data-master/supir'))->with('success_message', 'Data supir berhasil ditambahkan.');
     }
-    
+
+    public function checkInput()
+    {
+        $field = $this->request->getPost('field'); // Nama field yang dikirim (misal: no_ktp, telepon)
+        $value = $this->request->getPost('value'); // Nilai yang dimasukkan user
+
+        if (!in_array($field, ['no_ktp', 'telepon'])) {
+            return $this->response->setJSON(['status' => 'error', 'message' => 'Field tidak valid!']);
+        }
+
+        $existing = $this->supirModel->where($field, $value)->first();
+
+        if ($existing) {
+            return $this->response->setJSON(['status' => 'error', 'message' => ucfirst(str_replace('_', ' ', $field)) . ' sudah terdaftar!']);
+        } else {
+            return $this->response->setJSON(['status' => 'success']);
+        }
+    }
+
 
     public function delete($id)
     {
@@ -103,7 +131,8 @@ class SupirController extends BaseController
         'no_ktp' => $this->request->getPost('no_ktp'),
         'nama_supir' => $this->request->getPost('nama_supir'),
         'alamat' => $this->request->getPost('alamat'),
-        'telepon' => $this->request->getPost('telepon')
+        'telepon' => $this->request->getPost('telepon'),
+        'status' => $this->request->getPost('status')
     ];
 
     $this->supirModel->update($id, $data);
