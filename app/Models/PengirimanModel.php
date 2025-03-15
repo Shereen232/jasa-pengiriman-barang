@@ -12,6 +12,7 @@ class PengirimanModel extends Model
         'no_pengiriman',
         'nama_pengirim',
         'alamat_pengirim',
+        'telepon_pengirim',
         'tanggal',
         'penerima',
         'alamat_penerima',
@@ -38,21 +39,27 @@ class PengirimanModel extends Model
 
     public function getPengirimanById($id)
 {
-    return $this->select('pengiriman.*, pelanggan.alamat AS alamat_pengirim')
-                ->join('pelanggan', 'pelanggan.id_pelanggan = pengiriman.id_pelanggan', 'left')
+    return $this->select('pengiriman.*')
                 ->where('pengiriman.id', $id)
                 ->get()
                 ->getRow();
 }
 
 
-    public function getPengirimanWithRelations()
+    public function getPengirimanWithRelations($startDate = null, $endDate = null)
     {
-        return $this->select('pengiriman.*, kendaraan.no_polisi, kendaraan.merk, supir.nama_supir AS nama_supir')
-                    ->join('kendaraan', 'kendaraan.id = pengiriman.id_kendaraan')
-                    ->join('supir', 'kendaraan.id_supir = supir.id')
-                    ->findAll();
+        $builder = $this->select('pengiriman.*, kendaraan.no_polisi, kendaraan.merk, supir.nama_supir AS nama_supir')
+                        ->join('kendaraan', 'kendaraan.id = pengiriman.id_kendaraan')
+                        ->join('supir', 'kendaraan.id_supir = supir.id');
+
+        if ($startDate && $endDate) {
+            $builder->where('pengiriman.tanggal >=', $startDate)
+                    ->where('pengiriman.tanggal <=', $endDate);
+        }
+
+        return $builder->findAll();
     }
+
 
     public function getPengirimanByResi($resi)
     {

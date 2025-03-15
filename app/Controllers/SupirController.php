@@ -67,19 +67,23 @@ class SupirController extends BaseController
         return redirect()->to(base_url('data-master/supir'))->with('success_message', 'Data supir berhasil ditambahkan.');
     }
 
-    public function checkInput()
+    public function checkKtp()
     {
-        $field = $this->request->getPost('field'); // Nama field yang dikirim (misal: no_ktp, telepon)
-        $value = $this->request->getPost('value'); // Nilai yang dimasukkan user
+        $field = $this->request->getGet('ktp');
+        $c_length = strlen($field);
 
-        if (!in_array($field, ['no_ktp', 'telepon'])) {
+        if ($c_length < 16) {
+            return $this->response->setJSON(['status' => 'error', 'message' => 'Kolom no_ktp harus memiliki minimal 16 karakter.'. ' Terisi: ' . $c_length]);
+        }
+
+        if (empty($field)) {
             return $this->response->setJSON(['status' => 'error', 'message' => 'Field tidak valid!']);
         }
 
-        $existing = $this->supirModel->where($field, $value)->first();
+        $existing = $this->supirModel->where('no_ktp', $field)->first();
 
         if ($existing) {
-            return $this->response->setJSON(['status' => 'error', 'message' => ucfirst(str_replace('_', ' ', $field)) . ' sudah terdaftar!']);
+            return $this->response->setJSON(['status' => 'error', 'message' => 'Nomor KTP: ' . ucfirst(str_replace('_', ' ', $field)) . ' sudah terdaftar!']);
         } else {
             return $this->response->setJSON(['status' => 'success']);
         }

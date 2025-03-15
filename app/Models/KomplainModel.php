@@ -13,4 +13,17 @@ class KomplainModel extends Model
     // Set default values saat insert data baru
     protected $useTimestamps = true;
     protected $createdField  = 'created_at';
+
+    public function filterDate($startDate = null, $endDate = null)
+    {
+        $builder = $this->select('*');
+
+        if ($startDate && $endDate) {
+            $builder->where('created_at >=', $startDate)
+                    ->where('created_at <=', $endDate);
+        }
+
+        return $builder->findAll();
+    }
+
 }

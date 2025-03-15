@@ -4,6 +4,9 @@ namespace App\Controllers;
 
 use App\Models\KomplainModel;
 use CodeIgniter\Controller;
+use Dompdf\Dompdf;
+use Dompdf\Options;
+
 
 class KomplainController extends Controller
 {
@@ -18,7 +21,10 @@ class KomplainController extends Controller
     // Menampilkan daftar komplain
     public function index()
     {
-        $data['komplain'] = $this->komplainModel->findAll();
+        $startDate = $this->request->getGet('start_date');
+        $endDate = $this->request->getGet('end_date');
+
+        $data['komplain'] = $this->komplainModel->filterDate($startDate, $endDate);
         return view('komplain/index', $data);
     }
 
@@ -96,5 +102,32 @@ class KomplainController extends Controller
 
         return redirect()->to(base_url('komplain'))->with('success', 'Status berhasil diperbarui');
     }
+
+        
+    public function generatePdf()
+    {
+        $startDate = $this->request->getGet('start_date');
+        $endDate = $this->request->getGet('end_date');
+
+        $data['komplain'] = $this->komplainModel->filterDate($startDate, $endDate);
+
+        // Load view dengan data yang sudah difilter
+        $html = view('komplain/pdf_komplain', $data);
+
+        // Konfigurasi Dompdf
+        $options = new Options();
+        $options->set('defaultFont', 'Arial');
+        $dompdf = new Dompdf($options);
+        
+        // Load HTML ke Dompdf
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->render();
+
+        // Output PDF (bisa langsung didownload atau ditampilkan)
+        $dompdf->stream("Laporan_Komplain.pdf", ["Attachment" => 0]); // Set Attachment => 1 untuk langsung mengunduh
+    }
+
+    
 
 }

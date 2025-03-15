@@ -22,14 +22,16 @@ class PengirimanController extends BaseController
         $this->pengirimanModel = new PengirimanModel();
         $this->kendaraanModel = new KendaraanModel();
         $this->supirModel = new SupirModel();
-        $this->pelangganModel = new PelangganModel();
     }
 
     // Menampilkan daftar pengiriman
     public function index()
     {
+        $startDate = $this->request->getGet('start_date');
+        $endDate = $this->request->getGet('end_date');
+
         $data = [
-            'pengiriman' => $this->pengirimanModel->getPengirimanWithRelations(),
+            'pengiriman' => $this->pengirimanModel->getPengirimanWithRelations($startDate, $endDate),
         ];
 
         return view('pengiriman/index', $data);
@@ -44,7 +46,6 @@ class PengirimanController extends BaseController
         $data = [
             'no_pengiriman' => $this->pengirimanModel->generateNoPengiriman($jenis_barang),
             'kendaraan' => $this->kendaraanModel->getKendaraanWithSupir(),
-            'pengirim' => $this->pelangganModel->asObject()->findAll(),
             'jenis_barang' => $jenis_barang // Kirim ke view
         ];
 
@@ -58,6 +59,7 @@ class PengirimanController extends BaseController
         $this->validate([
             'nama_pengirim' => 'required',
             'alamat_pengirim' => 'required',
+            'telepon_pengirim' => 'required',
             'tanggal' => 'required',
             'penerima' => 'required',
             'alamat_penerima' => 'required',
@@ -78,6 +80,7 @@ class PengirimanController extends BaseController
             'no_pengiriman' => $no_pengiriman,
             'nama_pengirim' => $this->request->getPost('nama_pengirim'),
             'alamat_pengirim' => $this->request->getPost('alamat_pengirim'),
+            'telepon_pengirim' => $this->request->getPost('telepon_pengirim'),
             'tanggal' => $this->request->getPost('tanggal'),
             'penerima' => $this->request->getPost('penerima'),
             'alamat_penerima' => $this->request->getPost('alamat_penerima'),
@@ -109,7 +112,6 @@ class PengirimanController extends BaseController
         $data = [
             'no_pengiriman' => $this->pengirimanModel->generateNoPengiriman($jenis_barang),
             'kendaraan' => $this->kendaraanModel->getKendaraanWithSupir(),
-            'pengirim' => $this->pelangganModel->asObject()->findAll(),
             'pengiriman' => $pengiriman // Ini harus objek
             
         ];
@@ -173,15 +175,12 @@ class PengirimanController extends BaseController
             return redirect()->to('pengiriman')->with('error_message', 'Data pengiriman tidak ditemukan.');
         }
     
-        // Ambil data pelanggan (pengirim)
-        $pelanggan = $this->pelangganModel->find($pengiriman['id_pelanggan']);
-    
         // Data untuk dikirim ke view (gunakan data dummy jika NULL)
         $data = [
             'no_pengiriman'   => $pengiriman['no_pengiriman'] ?? 'P00001',
-            'nama_pengirim'   => $pelanggan['nama_pelanggan'] ?? 'Nama Pengirim',
-            'alamat_pengirim' => $pelanggan['alamat'] ?? 'Alamat Pengirim',
-            'telepon_pengirim' => $pelanggan['telepon'] ?? '08xxxxxxxxxx',
+            'nama_pengirim'   => $pengiriman['nama_pengirim'] ?? 'Nama Pengirim',
+            'alamat_pengirim' => $pengiriman['alamat_pengirim'] ?? 'Alamat Pengirim',
+            'telepon_pengirim' => $pengiriman['telepon_pengirim'] ?? '08xxxxxxxxxx',
             'nama_penerima'   => $pengiriman['penerima'] ?? 'Nama Penerima',
             'alamat_penerima' => $pengiriman['alamat_penerima'] ?? 'Alamat Penerima',
             'telepon_penerima' => $pengiriman['telepon_penerima'] ?? '08xxxxxxxxxx', // Tambahkan data dummy
@@ -212,7 +211,10 @@ class PengirimanController extends BaseController
 
     public function cetakPDF()
     {
-        $pengiriman = $this->pengirimanModel->getPengirimanWithRelations();
+        $startDate = $this->request->getGet('start_date');
+        $endDate = $this->request->getGet('end_date');
+
+        $pengiriman = $this->pengirimanModel->getPengirimanWithRelations($startDate, $endDate);
 
         // Load view HTML ke variabel
         $html = view('pengiriman/pdf_pengiriman', ['pengiriman' => $pengiriman]);

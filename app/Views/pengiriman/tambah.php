@@ -27,6 +27,10 @@
                         <input type="text" name="nama_pengirim" id="nama_pengirim" class="form-control" required>
                     </div>
                     <div class="form-group mt-3 mb-3">
+                        <label>Telepon Pengirim</label>
+                        <input type="number" name="telepon_pengirim" id="telepon_pengirim" class="form-control" required>
+                    </div>
+                    <div class="form-group mt-3 mb-3">
                         <label>Alamat Pengirim</label>
                         <textarea name="alamat_pengirim" id="alamat_pengirim" class="form-control" required></textarea>
                     </div>

@@ -25,16 +25,7 @@
                 </div>
                 <div class="form-group mt-3 mb-3">
                     <label>Nama Pengirim</label>
-                    <select name="id_pelanggan" id="pelanggan" class="form-control">
-                        <option value="">-- Pilih Pengirim --</option>
-                        <?php foreach ($pengirim as $key => $pengirim) : ?>
-                            <option value="<?= $pengirim->id_pelanggan ?>" 
-                                data-alamat="<?= $pengirim->alamat ?>" 
-                                <?= ($pengirim->id_pelanggan == $pengiriman->id_pelanggan) ? 'selected' : '' ?>>
-                                <?= $pengirim->nama_pelanggan ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
+                    
                 </div>
                 <div class="form-group mt-3 mb-3">
                     <label>Alamat Pengirim</label>

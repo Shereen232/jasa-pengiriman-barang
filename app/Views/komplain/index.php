@@ -1,13 +1,44 @@
+<?php
+  $start_date = !empty($_GET['start_date']) ? $_GET['start_date'] : false;
+  $end_date = !empty($_GET['end_date']) ? $_GET['end_date'] : false;
+  $redirect = '';
+  if ($start_date && $end_date) $redirect = '?start_date='.$start_date.'&end_date='.$end_date;
+?>
 <?= $this->extend('template/admin.php') ?>
 <?= $this->section('app') ?>
 
 <section class="section">
     <div class="row">
+    <div class="col-lg">
+      <div class="card">
+        <div class="card-body pt-3 pb-3">
+            <form id="filterForm" class="row g-6 ">
+                <div class="col-md-4">
+                <label for="start_date" class="form-label">Dari:</label>
+                <input type="date" class="form-control" id="start_date" name="start_date" value="<?= $start_date ?>">
+                </div>
+                <div class="col-md-4">
+                <label for="end_date" class="form-label">Sampai:</label>
+                <input type="date" class="form-control" id="end_date" name="end_date" value="<?= $end_date ?>">
+                </div>
+
+                <div class="col-md-4 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary w-100">Filter</button>
+                </div>
+            </form>
+            </div>
+        </div>
+        </div>
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <h5 class="card-title">Data Komplain</h5>
+                    </div>
+                    <div>
+                    <a href="<?= base_url('komplain/generate-pdf').$redirect ?>" target="_blank" class="btn btn-danger">
+                        <i class="bi bi-file-earmark-pdf-fill"></i> Cetak PDF
+                    </a>
                     </div>
 
                     <!-- Menampilkan pesan sukses jika ada -->

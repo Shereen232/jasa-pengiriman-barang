@@ -23,6 +23,7 @@
         .header-container {
             display: flex;
             align-items: center;
+            text-align: center;
             margin-bottom: 10px;
         }
 
@@ -51,7 +52,7 @@
         <img src="<?=$imageBase64?>" alt="Logo">
         <div>
             <p class="header-text">LAPORAN DATA PENGIRIMAN</p>
-            <p class="header-text">PT. TAZZA PAKET EXPRESS</p>
+            <p style="line-height: 0" class="header-text">PT. TAZZA PAKET EXPRESS</p>
         </div>
     </div>
 
@@ -66,9 +67,9 @@
                 <th>Penerima</th>
                 <th>Supir</th>
                 <th>Barang</th>
+                <th>Status</th>
                 <th>Berat</th>
                 <th>Biaya Kirim</th>
-                <th>Status</th>
             </tr>
         </thead>
         <tbody>
@@ -82,17 +83,17 @@
                     <td><?= $item['penerima'] ?></td>
                     <td><?= $item['nama_supir'] ?></td>
                     <td><?= $item['nama_barang'] ?></td>
-                    <td><?= $item['berat'] ?> kg</td>
-                    <td>Rp <?= number_format($item['biaya_kirim'], 0, ',', '.') ?></td>
                     <td><?= $item['status'] ?></td>
+                    <td><?= $item['berat'] ?> kg</td>
+                    <td style="text-align:right">Rp <?= number_format($item['biaya_kirim'], 0, ',', '.') ?></td>
                 </tr>
                 <?php $totalBiaya += $item['biaya_kirim']; ?>
             <?php endforeach; ?>
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="8"><b>Jumlah</b></td>
-                <td colspan="2"><b>Rp <?= number_format($totalBiaya, 0, ',', '.') ?></b></td>
+                <td colspan="9"><b>Jumlah</b></td>
+                <td style="text-align:right"><b>Rp <?= number_format($totalBiaya, 0, ',', '.') ?></b></td>
             </tr>
         </tfoot>
     </table>
@@ -101,7 +102,6 @@
     <div class="signature">
         <p>Kota, <?= date('d-m-Y') ?></p>
         <br><br><br>
-        <p>ttd</p>
         <p><b>Nama Admin</b></p>
     </div>
 

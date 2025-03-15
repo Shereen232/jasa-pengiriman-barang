@@ -23,17 +23,9 @@ $routes->group('data-master', ['filter' => 'login'], function($routes) {
         $routes->get('edit/(:num)', 'SupirController::edit/$1');  // Form edit supir
         $routes->post('update/(:num)', 'SupirController::update/$1'); // Proses update supir
         $routes->get('delete/(:num)', 'SupirController::delete/$1'); // Hapus supir
-        $routes->get('check-input', 'SupirController::delete/$1');
+        $routes->get('check-ktp', 'SupirController::checkKtp');
     });
 
-    $routes->group('pelanggan', function ($routes) {
-        $routes->get('/', 'PelangganController::index');
-        $routes->get('tambah', 'PelangganController::tambah');
-        $routes->post('create', 'PelangganController::create');
-        $routes->get('edit/(:num)', 'PelangganController::edit/$1');
-        $routes->post('update/(:num)', 'PelangganController::update/$1');
-        $routes->get('delete/(:num)', 'PelangganController::delete/$1');
-    });
     $routes->group('kendaraan', ['filter' => 'login'], function($routes) {
         $routes->get('/', 'KendaraanController::index');              // Halaman daftar kendaraan
         $routes->get('tambah', 'KendaraanController::tambah');        // Form tambah kendaraan
@@ -62,6 +54,8 @@ $routes->group('komplain', ['filter' => 'login'], function($routes) {
     $routes->get('delete/(:num)', 'KomplainController::delete/$1');
     $routes->get('edit/(:num)', 'KomplainController::edit/$1');
     $routes->post('update/(:num)', 'KomplainController::update/$1');
+    $routes->get('generate-pdf', 'KomplainController::generatePdf');
+
 });
 
 $routes->group('user', ['filter' => 'login'], function($routes) {
