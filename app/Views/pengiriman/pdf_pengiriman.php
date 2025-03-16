@@ -1,4 +1,5 @@
 <?php 
+$auth = service('authentication');
     function imageToBase64($path) {
         $type = pathinfo($path, PATHINFO_EXTENSION);
         $data = file_get_contents($path);
@@ -100,9 +101,9 @@
 
     <!-- Bagian Tanda Tangan -->
     <div class="signature">
-        <p>Kota, <?= date('d-m-Y') ?></p>
+        <p>Pekalongan, <?= date('d-m-Y') ?></p>
         <br><br><br>
-        <p><b>Nama Admin</b></p>
+        <?= $auth->user()->username ?>
     </div>
 
 </body>

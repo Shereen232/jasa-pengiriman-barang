@@ -56,7 +56,8 @@ class PengirimanController extends BaseController
     // Simpan data pengiriman
     public function create()
     {
-        $this->validate([
+        $validation = \Config\Services::validation();
+        $validate = $this->validate([
             'nama_pengirim' => 'required',
             'alamat_pengirim' => 'required',
             'telepon_pengirim' => 'required',
@@ -69,7 +70,12 @@ class PengirimanController extends BaseController
             'jumlah' => 'required|integer',
             'berat' => 'required|decimal',
             'id_kendaraan' => 'required',
+            'biaya_kirim' => 'required',
         ]);
+
+        if (!$validate) {
+            return redirect()->back()->withInput()->with('errors', $validation->getErrors());
+        }
     
         $jenis_barang = $this->request->getPost('jenis_barang'); // Ambil jenis barang dari form
     
@@ -122,19 +128,26 @@ class PengirimanController extends BaseController
 
     public function update($id)
     {
-        $this->validate([
+        $validation = \Config\Services::validation();
+        $validate = $this->validate([
             'nama_pengirim' => 'required',
             'alamat_pengirim' => 'required',
+            'telepon_pengirim' => 'required',
             'tanggal' => 'required',
             'penerima' => 'required',
             'alamat_penerima' => 'required',
             'telepon_penerima' => 'required|numeric',
-            'jenis_barang' => 'required', // Tambahkan validasi jenis barang
+            'jenis_barang' => 'required', // Validasi jenis barang
             'nama_barang' => 'required',
             'jumlah' => 'required|integer',
             'berat' => 'required|decimal',
             'id_kendaraan' => 'required',
+            'biaya_kirim' => 'required',
         ]);
+        
+        if (!$validate) {
+            return redirect()->back()->withInput()->with('errors', $validation->getErrors());
+        }
 
         $data = [
             'no_pengiriman' => $this->request->getPost('no_pengiriman'),

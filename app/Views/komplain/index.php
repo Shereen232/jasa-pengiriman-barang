@@ -35,7 +35,7 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <h5 class="card-title">Data Komplain</h5>
                     </div>
-                    <div>
+                    <div class="align-items-left;">
                     <a href="<?= base_url('komplain/generate-pdf').$redirect ?>" target="_blank" class="btn btn-danger">
                         <i class="bi bi-file-earmark-pdf-fill"></i> Cetak PDF
                     </a>
