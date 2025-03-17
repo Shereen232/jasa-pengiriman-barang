@@ -112,11 +112,5 @@ class KendaraanController extends BaseController
         return redirect()->to(base_url('data-master/kendaraan'))->with('success_message', 'Data kendaraan berhasil diperbarui.');
     }
 
-    public function delete($id)
-    {
-        $kendaraanModel = new KendaraanModel();
-        $kendaraanModel->delete($id);
 
-        return redirect()->to('data-master/kendaraan')->with('success_message', 'Data Kendaraan berhasil dihapus');
-    }
 }

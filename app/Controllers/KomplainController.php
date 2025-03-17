@@ -21,12 +21,23 @@ class KomplainController extends Controller
     // Menampilkan daftar komplain
     public function index()
     {
-        $startDate = $this->request->getGet('start_date');
-        $endDate = $this->request->getGet('end_date');
-
-        $data['komplain'] = $this->komplainModel->filterDate($startDate, $endDate);
+        // Ambil status dari query string (GET)
+        $status = $this->request->getGet('status');
+    
+        if (!empty($status)) {
+            // Jika ada filter status, ambil data berdasarkan status
+            $data['komplain'] = $this->komplainModel->where('status', $status)->findAll();
+        } else {
+            // Jika tidak ada filter, ambil semua data
+            $data['komplain'] = $this->komplainModel->findAll();
+        }
+    
+        // Kirim juga status untuk tetap mengisi dropdown filter di view
+        $data['status_filter'] = $status;
+    
         return view('komplain/index', $data);
     }
+    
 
     // Menampilkan form tambah komplain
     public function tambah()
@@ -106,11 +117,15 @@ class KomplainController extends Controller
         
     public function generatePdf()
     {
-        $startDate = $this->request->getGet('start_date');
-        $endDate = $this->request->getGet('end_date');
+        // Ambil parameter status dari URL
+        $status = $this->request->getGet('status');
 
-        $data['komplain'] = $this->komplainModel->filterDate($startDate, $endDate);
-
+        // Ambil data sesuai status (jika ada), jika tidak tampilkan semua
+        if (!empty($status)) {
+            $data['komplain'] = $this->komplainModel->where('status', $status)->findAll();
+        } else {
+            $data['komplain'] = $this->komplainModel->findAll();
+        }
         // Load view dengan data yang sudah difilter
         $html = view('komplain/pdf_komplain', $data);
 

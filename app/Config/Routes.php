@@ -22,7 +22,6 @@ $routes->group('data-master', ['filter' => 'login'], function($routes) {
         $routes->post('create', 'SupirController::create');       // Proses tambah supir
         $routes->get('edit/(:num)', 'SupirController::edit/$1');  // Form edit supir
         $routes->post('update/(:num)', 'SupirController::update/$1'); // Proses update supir
-        $routes->get('delete/(:num)', 'SupirController::delete/$1'); // Hapus supir
         $routes->get('check-ktp', 'SupirController::checkKtp');
     });
 
@@ -31,8 +30,7 @@ $routes->group('data-master', ['filter' => 'login'], function($routes) {
         $routes->get('tambah', 'KendaraanController::tambah');        // Form tambah kendaraan
         $routes->post('create', 'KendaraanController::create');       // Proses tambah kendaraan
         $routes->get('edit/(:num)', 'KendaraanController::edit/$1');  // Form edit kendaraan
-        $routes->post('update/(:num)', 'KendaraanController::update/$1'); // Proses update kendaraan
-        $routes->get('delete/(:num)', 'KendaraanController::delete/$1'); // Hapus kendaraan
+        $routes->post('update/(:num)', 'KendaraanController::update/$1'); // Proses update kendaraan    
     });
 });
 

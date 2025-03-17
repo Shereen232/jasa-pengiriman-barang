@@ -9,12 +9,6 @@
                 <form id="pengirimanForm" method="post" action="<?= base_url('pengiriman/create') ?>">
                     <?= csrf_field() ?>
                     <div class="row mt-3 mb-3">
-                        <!-- <div class="col">
-                            <div class="form-group">
-                                <label>No Pengiriman</label>
-                                <input type="text" name="no_pengiriman" class="form-control" value="<?= $no_pengiriman ?>" readonly>
-                            </div>
-                        </div> -->
                         <div class="col">
                             <div class="form-group">
                                 <label>Tanggal</label>
@@ -164,14 +158,6 @@
 </section>
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<!-- <script>
-    document.getElementById('berat').addEventListener('input', function () {
-        const berat = parseFloat(this.value) || 0;
-        const biayaPerKg = 10000; // Rp 10.000 per kg
-        const biayaKirim = berat * biayaPerKg;
-        document.getElementById('biaya_kirim').value = biayaKirim.toLocaleString('id-ID');
-    });
-</script> -->
 
 <script>
     document.getElementById('biaya_kirim_display').addEventListener('input', function () {

@@ -17,7 +17,8 @@ $auth = service('authentication');
     <style>
         body { font-family: Arial, sans-serif; font-size: 12px; }
         table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { border: 1px solid black; padding: 8px; text-align: center; }
+        th { border: 1px solid black; padding: 8px; text-align: center; }
+        td { border: 1px solid black; padding: 8px; text-align: left; }
         th { background-color: #f2f2f2; }
         h2 { text-align: center; }
 
@@ -54,6 +55,12 @@ $auth = service('authentication');
         <div>
             <p class="header-text">LAPORAN DATA PENGIRIMAN</p>
             <p style="line-height: 0" class="header-text">PT. TAZZA PAKET EXPRESS</p>
+            <?php if (!empty($startDate) && !empty($endDate)) : ?>
+                <p>Periode: <?= date('d-m-Y', strtotime($startDate)) ?> s/d <?= date('d-m-Y', strtotime($endDate)) ?></p>
+            <?php else : ?>
+                <p>Periode: Semua Data</p>
+            <?php endif; ?>
+
         </div>
     </div>
 
@@ -93,7 +100,7 @@ $auth = service('authentication');
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="9"><b>Jumlah</b></td>
+                <td colspan="9" style="text-align: center;"><b>Jumlah</b></td>
                 <td style="text-align:right"><b>Rp <?= number_format($totalBiaya, 0, ',', '.') ?></b></td>
             </tr>
         </tfoot>
@@ -103,7 +110,10 @@ $auth = service('authentication');
     <div class="signature">
         <p>Pekalongan, <?= date('d-m-Y') ?></p>
         <br><br><br>
+        <div style="margin-right: 40px;">
         <?= $auth->user()->username ?>
+        </div>
+
     </div>
 
 </body>

@@ -48,9 +48,6 @@
                       <a href="<?= base_url('data-master/supir/edit/' . $row['id']) ?>" class="btn btn-info">
                         <i class="bi bi-pencil-square"></i>
                       </a>
-                      <button class="btn btn-danger delete-btn" data-id="<?= $row['id'] ?>">
-                        <i class="bi bi-trash"></i>
-                      </button>
                     </td>
                   </tr>
                 <?php endforeach; ?>

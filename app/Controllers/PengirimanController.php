@@ -106,25 +106,21 @@ class PengirimanController extends BaseController
         return redirect()->to(base_url('pengiriman'))->with('success_message', 'Data pengiriman berhasil ditambahkan.');
     }
         
-    public function edit($id) 
+    public function edit($id)
     {
-        $jenis_barang = $this->request->getPost('jenis_barang') ?? 'benda mati';
-        $pengiriman = $this->pengirimanModel->getPengirimanById($id);
+        $pengiriman = $this->pengirimanModel->find($id);
     
         if (!$pengiriman) {
-            return redirect()->back()->with('error', 'Data tidak ditemukan');
+            throw new \CodeIgniter\Exceptions\PageNotFoundException("Data pengiriman dengan ID $id tidak ditemukan.");
         }
     
         $data = [
-            'no_pengiriman' => $this->pengirimanModel->generateNoPengiriman($jenis_barang),
-            'kendaraan' => $this->kendaraanModel->getKendaraanWithSupir(),
-            'pengiriman' => $pengiriman // Ini harus objek
-            
+            'pengiriman' => $pengiriman,
+            'kendaraan' => $this->kendaraanModel->getKendaraanWithSupir()
         ];
     
         return view('pengiriman/edit', $data);
-    }
-    
+    }  
 
     public function update($id)
     {
@@ -137,39 +133,41 @@ class PengirimanController extends BaseController
             'penerima' => 'required',
             'alamat_penerima' => 'required',
             'telepon_penerima' => 'required|numeric',
-            'jenis_barang' => 'required', // Validasi jenis barang
+            'jenis_barang' => 'required',
             'nama_barang' => 'required',
             'jumlah' => 'required|integer',
             'berat' => 'required|decimal',
             'id_kendaraan' => 'required',
             'biaya_kirim' => 'required',
+            'status' => 'required|in_list[Menunggu Pengiriman,Dalam Perjalanan,Terkirim,Gagal Terkirim,Dibatalkan]',
         ]);
-        
+
         if (!$validate) {
             return redirect()->back()->withInput()->with('errors', $validation->getErrors());
         }
 
         $data = [
-            'no_pengiriman' => $this->request->getPost('no_pengiriman'),
             'nama_pengirim' => $this->request->getPost('nama_pengirim'),
             'alamat_pengirim' => $this->request->getPost('alamat_pengirim'),
+            'telepon_pengirim' => $this->request->getPost('telepon_pengirim'),
             'tanggal' => $this->request->getPost('tanggal'),
             'penerima' => $this->request->getPost('penerima'),
             'alamat_penerima' => $this->request->getPost('alamat_penerima'),
             'telepon_penerima' => $this->request->getPost('telepon_penerima'),
-            'jenis_barang' => $this->request->getPost('jenis_barang'), // Simpan jenis barang
+            'jenis_barang' => $this->request->getPost('jenis_barang'),
             'nama_barang' => $this->request->getPost('nama_barang'),
             'jumlah' => $this->request->getPost('jumlah'),
             'berat' => $this->request->getPost('berat'),
             'biaya_kirim' => $this->request->getPost('biaya_kirim'),
             'id_kendaraan' => $this->request->getPost('id_kendaraan'),
-            'status' => 'Menunggu Pengiriman'
+            'status' => $this->request->getPost('status'),
         ];
 
         $this->pengirimanModel->update($id, $data);
 
         return redirect()->to(base_url('pengiriman'))->with('success_message', 'Data pengiriman berhasil diperbarui.');
     }
+
 
     public function delete($id)
     {
@@ -220,17 +218,27 @@ class PengirimanController extends BaseController
         $dompdf->stream('resi_pengiriman_' . $data['no_pengiriman'] . '.pdf', ['Attachment' => false]);
     }
     
-
-
     public function cetakPDF()
     {
         $startDate = $this->request->getGet('start_date');
         $endDate = $this->request->getGet('end_date');
 
-        $pengiriman = $this->pengirimanModel->getPengirimanWithRelations($startDate, $endDate);
+        // Ambil data pengiriman berdasarkan tanggal jika tersedia
+        if (!empty($startDate) && !empty($endDate)) {
+            $pengiriman = $this->pengirimanModel->getPengirimanWithRelations($startDate, $endDate);
+        } else {
+            $pengiriman = $this->pengirimanModel->getPengirimanWithRelations(); // ambil semua data
+        }
 
-        // Load view HTML ke variabel
-        $html = view('pengiriman/pdf_pengiriman', ['pengiriman' => $pengiriman]);
+        // Kirim juga startDate dan endDate ke view
+        $data = [
+            'pengiriman' => $pengiriman,
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+        ];
+
+        // Load view sebagai HTML
+        $html = view('pengiriman/pdf_pengiriman', $data);
 
         // Konfigurasi Dompdf
         $options = new Options();
@@ -241,7 +249,7 @@ class PengirimanController extends BaseController
         $dompdf->setPaper('A4', 'landscape');
         $dompdf->render();
 
-        // Download file PDF
+        // Output PDF
         $dompdf->stream('Data_Pengiriman.pdf', ['Attachment' => false]);
     }
 
