@@ -12,18 +12,41 @@
     <div class="col-lg">
       <div class="card">
         <div class="card-body pt-3 pb-3">
-        <form id="filterForm" class="row g-6 ">
+          <form id="filterForm" class="row g-6">
             <div class="col-md-4">
               <label for="start_date" class="form-label">Dari:</label>
-              <input type="date" class="form-control" id="start_date" name="start_date" value="<?= $start_date ?>">
-            </div>
-            <div class="col-md-4">
-              <label for="end_date" class="form-label">Sampai:</label>
-              <input type="date" class="form-control" id="end_date" name="end_date" value="<?= $end_date ?>">
+              <input type="date" class="form-control" id="start_date" name="start_date" 
+                    value="<?= old('start_date', $start_date) ?>">
             </div>
 
-            <div class="col-md-4 d-flex align-items-end">
-              <button type="submit" class="btn btn-primary w-100">Filter</button>
+            <div class="col-md-4">
+              <label for="end_date" class="form-label">Sampai:</label>
+              <input type="date" class="form-control" id="end_date" name="end_date" 
+                    value="<?= old('end_date', $end_date) ?>">
+            </div>
+
+            <div class="col-md-4">
+              <label for="status" class="form-label">Status:</label>
+              <select class="form-select" id="status" name="status">
+                <option value="">-- Semua --</option>
+                <?php
+                  $statuses = [
+                    'Menunggu Pengiriman',
+                    'Dalam Perjalanan',
+                    'Terkirim',
+                    'Gagal Terkirim',
+                    'Dibatalkan'
+                  ];
+                  foreach ($statuses as $item) {
+                    $selected = old('status') == $item ? 'selected' : '';
+                    echo "<option value=\"$item\" $selected>$item</option>";
+                  }
+                ?>
+              </select>
+            </div>
+
+            <div class="col-md-12 d-flex justify-content-end mt-3">
+              <button type="submit" class="btn btn-primary">Filter</button>
             </div>
           </form>
         </div>
@@ -54,10 +77,12 @@
                 <th>Tanggal</th>
                 <th>Pengirim</th>
                 <th>Penerima</th>
-                <th>Supir</th>
+                <th>Supir 1</th>
+                <th>Supir 2</th>
                 <th>Barang</th>
                 <th>Berat</th>
                 <th>Biaya Kirim</th>
+                <th>Estimasi Pengiriman</th>
                 <th>Status</th>
                 <th>Aksi</th>
               </tr>
@@ -71,10 +96,12 @@
                   <td><?= esc($item['tanggal']) ?></td>
                   <td><?= esc($item['nama_pengirim']) ?></td>
                   <td><?= esc($item['penerima']) ?></td>
-                  <td><?= esc($item['nama_supir']) ?></td>
+                  <td><?= esc($item['nama_supir1']) ?></td>
+                  <td><?= esc($item['nama_supir2']) ?></td>
                   <td><?= esc($item['nama_barang']) ?></td>
                   <td><?= esc($item['berat']) ?> kg</td>
                   <td>Rp <?= number_format($item['biaya_kirim'], 0, ',', '.') ?></td>
+                  <td><?= esc($item['estimasi_pengiriman']) ?></td>
                   <td><?= esc($item['status']) ?></td>
                   <td>
                     <a href="<?= base_url('pengiriman/edit/' . $item['id']) ?>" class="btn btn-info">

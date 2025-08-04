@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\KomplainModel;
+use App\Models\PengirimanModel;
 use CodeIgniter\Controller;
 use Dompdf\Dompdf;
 use Dompdf\Options;
@@ -10,34 +11,32 @@ use Dompdf\Options;
 
 class KomplainController extends Controller
 {
-    protected $komplainModel;
+    protected $komplainModel, $resiModel;
 
 
     public function __construct()
     {
         $this->komplainModel = new KomplainModel();
+        $this->resiModel = new PengirimanModel();
     }
 
     // Menampilkan daftar komplain
     public function index()
     {
-        // Ambil status dari query string (GET)
-        $status = $this->request->getGet('status');
+        $startDate = $this->request->getGet('start_date');
+        $endDate = $this->request->getGet('end_date');
     
-        if (!empty($status)) {
-            // Jika ada filter status, ambil data berdasarkan status
-            $data['komplain'] = $this->komplainModel->where('status', $status)->findAll();
-        } else {
-            // Jika tidak ada filter, ambil semua data
-            $data['komplain'] = $this->komplainModel->findAll();
-        }
+        $komplainModel = new \App\Models\KomplainModel();
     
-        // Kirim juga status untuk tetap mengisi dropdown filter di view
-        $data['status_filter'] = $status;
+        $komplain = $komplainModel->filterDate($startDate, $endDate);
     
-        return view('komplain/index', $data);
-    }
-    
+        return view('komplain/index', [
+            'komplain' => $komplain,
+            'start_date' => $startDate,
+            'end_date' => $endDate
+        ]);
+    }   
+   
 
     // Menampilkan form tambah komplain
     public function tambah()
@@ -60,6 +59,10 @@ class KomplainController extends Controller
         if (!$this->validate($rules)) {
             return redirect()->back()->withInput()->with('validation', $this->validator->getErrors());
         }
+
+        $isExist = $this->resiModel->where('no_pengiriman', $this->request->getPost('no_resi'))->first();
+
+        if (!$isExist) return redirect()->back()->withInput()->with('error_message', 'No Resi tidak ditemukan');
 
         // Simpan ke database
         $data = [
@@ -115,34 +118,53 @@ class KomplainController extends Controller
     }
 
         
+    
+
     public function generatePdf()
     {
-        // Ambil parameter status dari URL
-        $status = $this->request->getGet('status');
+        $startDate = $this->request->getGet('start_date');
+        $endDate = $this->request->getGet('end_date');
 
-        // Ambil data sesuai status (jika ada), jika tidak tampilkan semua
-        if (!empty($status)) {
-            $data['komplain'] = $this->komplainModel->where('status', $status)->findAll();
+        // Load model
+        $komplainModel = new \App\Models\KomplainModel();
+
+        // Filter data berdasarkan tanggal jika tersedia
+        if (!empty($startDate) && !empty($endDate)) {
+            $data['komplain'] = $komplainModel->filterDate($startDate, $endDate);
         } else {
-            $data['komplain'] = $this->komplainModel->findAll();
+            $data['komplain'] = $komplainModel->findAll();
         }
-        // Load view dengan data yang sudah difilter
+
+        // Kirim data tanggal ke view
+        $data['startDate'] = $startDate;
+        $data['endDate']   = $endDate;
+
+        // Jika kamu punya logo dan ingin base64 encode
+        $imagePath = FCPATH . 'assets/img/logo.png'; // ganti path sesuai logo kamu
+        if (file_exists($imagePath)) {
+            $imageData = base64_encode(file_get_contents($imagePath));
+            $data['imageBase64'] = 'data:image/png;base64,' . $imageData;
+        } else {
+            $data['imageBase64'] = '';
+        }
+
+        // Load view
         $html = view('komplain/pdf_komplain', $data);
 
         // Konfigurasi Dompdf
         $options = new Options();
         $options->set('defaultFont', 'Arial');
         $dompdf = new Dompdf($options);
-        
-        // Load HTML ke Dompdf
+
         $dompdf->loadHtml($html);
         $dompdf->setPaper('A4', 'portrait');
         $dompdf->render();
 
-        // Output PDF (bisa langsung didownload atau ditampilkan)
-        $dompdf->stream("Laporan_Komplain.pdf", ["Attachment" => 0]); // Set Attachment => 1 untuk langsung mengunduh
+        // Tampilkan atau unduh file
+        $dompdf->stream("Laporan_Komplain.pdf", ["Attachment" => 0]);
     }
 
+    
     
 
 }

@@ -19,6 +19,22 @@
                 <?php endif; ?>
               </div>
             </div>
+            
+            <div class="row mb-3">
+              <label class="col-sm-2 col-form-label">Jenis SIM</label>
+              <div class="col-sm-10">
+                <select class="form-select" name="sim" required>
+                  <option value="">-- Pilih Jenis SIM --</option>
+                  <option value="SIM B1" <?= old('sim', $supir['sim']) == 'SIM B1' ? 'selected' : '' ?>>SIM B1</option>
+                  <option value="SIM B1 Umum" <?= old('sim', $supir['sim']) == 'SIM B1 Umum' ? 'selected' : '' ?>>SIM B1 Umum</option>
+                  <option value="SIM B2" <?= old('sim', $supir['sim']) == 'SIM B2' ? 'selected' : '' ?>>SIM B2</option>
+                  <option value="SIM B2 Umum" <?= old('sim', $supir['sim']) == 'SIM B2 Umum' ? 'selected' : '' ?>>SIM B2 Umum</option>
+                </select>
+                <?php if (session()->getFlashdata('errors')['sim'] ?? false) : ?>
+                    <small class="text-danger"><?= session()->getFlashdata('errors')['sim']; ?></small>
+                <?php endif; ?>
+              </div>
+            </div>
 
             <div class="row mb-3">
               <label class="col-sm-2 col-form-label">Nama Supir</label>

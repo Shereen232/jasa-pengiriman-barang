@@ -6,7 +6,7 @@ $auth = service('authentication');
         return 'data:image/' . $type . ';base64,' . base64_encode($data);
     }
 
-    $imageBase64 = imageToBase64('images/logo.png');
+    $imageBase64 = imageToBase64('logo_cutout.png');
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -33,6 +33,11 @@ $auth = service('authentication');
         <div>
             <p class="header-text">LAPORAN KOMPLAIN</p>
             <p style="line-height: 0" class="header-text">PT. TAZZA PAKET EXPRESS</p>
+            <?php if (!empty($startDate) && !empty($endDate)) : ?>
+                <p>Periode: <?= date('d-m-Y', strtotime($startDate)) ?> s/d <?= date('d-m-Y', strtotime($endDate)) ?></p>
+            <?php else : ?>
+                <p>Periode: Semua Data</p>
+            <?php endif; ?>
         </div>
     </div>
 
@@ -41,6 +46,7 @@ $auth = service('authentication');
         <thead>
             <tr>
                 <th>No</th>
+                <th>Tanggal</th>
                 <th>Nama</th>
                 <th>Email</th>
                 <th>No. Telp</th>
@@ -54,6 +60,7 @@ $auth = service('authentication');
             <?php foreach ($komplain as $item): ?>
                 <tr>
                     <td><?= $no++ ?></td>
+                    <td><?= date('d-m-Y', strtotime($item['created_at'])) ?></td>
                     <td><?= $item['nama'] ?></td>
                     <td><?= $item['email'] ?></td>
                     <td><?= $item['no_telp'] ?></td>

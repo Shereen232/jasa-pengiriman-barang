@@ -8,5 +8,5 @@ class SupirModel extends Model
 {
     protected $table = 'supir';
     protected $primaryKey = 'id';
-    protected $allowedFields = ['no_ktp', 'nama_supir', 'alamat', 'telepon','status'];
+    protected $allowedFields = ['no_ktp','sim', 'nama_supir', 'alamat', 'telepon','status'];
 }

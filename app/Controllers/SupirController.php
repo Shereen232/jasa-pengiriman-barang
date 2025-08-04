@@ -36,6 +36,8 @@ class SupirController extends BaseController
 
         $rules = [
             'no_ktp' => 'required|numeric|min_length[16]|max_length[16]|is_unique[supir.no_ktp]',
+            'sim' => 'required',
+            'status' => 'required',
             'nama_supir' => 'required',
             'alamat' => 'required',
             'telepon' => 'required|numeric|min_length[10]'
@@ -56,6 +58,7 @@ class SupirController extends BaseController
         // Jika lolos validasi, simpan data supir
         $data = [
             'no_ktp' => $this->request->getPost('no_ktp'),
+            'sim' => $this->request->getPost('sim'),
             'nama_supir' => $this->request->getPost('nama_supir'),
             'alamat' => $this->request->getPost('alamat'),
             'telepon' => $this->request->getPost('telepon'),
@@ -117,31 +120,33 @@ class SupirController extends BaseController
 
 
     public function update($id)
-{
-    $validation = \Config\Services::validation();
+    {
+        $validation = \Config\Services::validation();
 
-    $rules = [
-        'no_ktp' => "required|numeric|min_length[16]|max_length[16]|is_unique[supir.no_ktp,id,$id]",
-        'nama_supir' => 'required',
-        'alamat' => 'required',
-        'telepon' => 'required|numeric|min_length[10]'
-    ];
+        $rules = [
+            'no_ktp' => "required|numeric|min_length[16]|max_length[16]|is_unique[supir.no_ktp,id,$id]",
+            'sim' => 'required',
+            'nama_supir' => 'required',
+            'alamat' => 'required',
+            'telepon' => 'required|numeric|min_length[10]'
+        ];
 
-    if (!$this->validate($rules)) {
-        return redirect()->back()->withInput()->with('errors', $validation->getErrors());
+        if (!$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('errors', $validation->getErrors());
+        }
+
+        $data = [
+            'no_ktp' => $this->request->getPost('no_ktp'),
+            'sim' => $this->request->getPost('sim'),
+            'nama_supir' => $this->request->getPost('nama_supir'),
+            'alamat' => $this->request->getPost('alamat'),
+            'telepon' => $this->request->getPost('telepon'),
+            'status' => $this->request->getPost('status')
+        ];
+
+        $this->supirModel->update($id, $data);
+
+        return redirect()->to(base_url('data-master/supir'))->with('success_message', 'Data supir berhasil diperbarui.');
     }
-
-    $data = [
-        'no_ktp' => $this->request->getPost('no_ktp'),
-        'nama_supir' => $this->request->getPost('nama_supir'),
-        'alamat' => $this->request->getPost('alamat'),
-        'telepon' => $this->request->getPost('telepon'),
-        'status' => $this->request->getPost('status')
-    ];
-
-    $this->supirModel->update($id, $data);
-
-    return redirect()->to(base_url('data-master/supir'))->with('success_message', 'Data supir berhasil diperbarui.');
-}
 
 }

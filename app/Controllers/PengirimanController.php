@@ -29,9 +29,10 @@ class PengirimanController extends BaseController
     {
         $startDate = $this->request->getGet('start_date');
         $endDate = $this->request->getGet('end_date');
+        $status = $this->request->getGet('status');
 
         $data = [
-            'pengiriman' => $this->pengirimanModel->getPengirimanWithRelations($startDate, $endDate),
+            'pengiriman' => $this->pengirimanModel->getPengirimanWithRelations($startDate, $endDate, $status),
         ];
 
         return view('pengiriman/index', $data);
@@ -42,11 +43,13 @@ class PengirimanController extends BaseController
     {
         // Ambil jenis barang dari request (default: 'benda mati')
         $jenis_barang = $this->request->getPost('jenis_barang') ?? 'benda mati';
+        
 
         $data = [
             'no_pengiriman' => $this->pengirimanModel->generateNoPengiriman($jenis_barang),
             'kendaraan' => $this->kendaraanModel->getKendaraanWithSupir(),
-            'jenis_barang' => $jenis_barang // Kirim ke view
+            'jenis_barang' => $jenis_barang, // Kirim ke view
+            'supir' => $this->supirModel->findAll()      
         ];
 
         return view('pengiriman/tambah', $data);
@@ -65,44 +68,49 @@ class PengirimanController extends BaseController
             'penerima' => 'required',
             'alamat_penerima' => 'required',
             'telepon_penerima' => 'required|numeric',
-            'jenis_barang' => 'required', // Validasi jenis barang
+            'jenis_barang' => 'required',
             'nama_barang' => 'required',
             'jumlah' => 'required|integer',
             'berat' => 'required|decimal',
-            'id_kendaraan' => 'required',
             'biaya_kirim' => 'required',
+            'id_kendaraan' => 'required',
+            'id_supir1' => 'required',
+            'id_supir2' => 'permit_empty',
         ]);
 
         if (!$validate) {
             return redirect()->back()->withInput()->with('errors', $validation->getErrors());
         }
-    
-        $jenis_barang = $this->request->getPost('jenis_barang'); // Ambil jenis barang dari form
-    
-        // Generate nomor pengiriman berdasarkan jenis barang
-        $no_pengiriman = $this->pengirimanModel->generateNoPengiriman($jenis_barang);
-    
+
+        // Hitung estimasi pengiriman +3 hari dari tanggal
+        $eTgl = $this->request->getPost('tanggal');
+        $estimasi_pengiriman = date('Y-m-d', strtotime($eTgl . ' +3 days'));
+
+        $no_pengiriman = $this->pengirimanModel->generateNoPengiriman($this->request->getPost('jenis_barang'));
+
         $data = [
             'no_pengiriman' => $no_pengiriman,
+            'tanggal' => $this->request->getPost('tanggal'),
             'nama_pengirim' => $this->request->getPost('nama_pengirim'),
             'alamat_pengirim' => $this->request->getPost('alamat_pengirim'),
             'telepon_pengirim' => $this->request->getPost('telepon_pengirim'),
-            'tanggal' => $this->request->getPost('tanggal'),
             'penerima' => $this->request->getPost('penerima'),
             'alamat_penerima' => $this->request->getPost('alamat_penerima'),
             'telepon_penerima' => $this->request->getPost('telepon_penerima'),
-            'jenis_barang' => $jenis_barang, // Simpan jenis barang
+            'jenis_barang' => $this->request->getPost('jenis_barang'),
             'nama_barang' => $this->request->getPost('nama_barang'),
             'jumlah' => $this->request->getPost('jumlah'),
             'berat' => $this->request->getPost('berat'),
             'biaya_kirim' => $this->request->getPost('biaya_kirim'),
             'id_kendaraan' => $this->request->getPost('id_kendaraan'),
+            'id_supir1' => $this->request->getPost('id_supir1'),
+            'is_supir2' => $this->request->getPost('id_supir2'),
+            'estimasi_pengiriman' => $estimasi_pengiriman,
             'status' => 'Menunggu Pengiriman'
         ];
-    
-        // Simpan ke database
+
         $this->pengirimanModel->insert($data);
-    
+
         return redirect()->to(base_url('pengiriman'))->with('success_message', 'Data pengiriman berhasil ditambahkan.');
     }
         
@@ -116,7 +124,8 @@ class PengirimanController extends BaseController
     
         $data = [
             'pengiriman' => $pengiriman,
-            'kendaraan' => $this->kendaraanModel->getKendaraanWithSupir()
+            'kendaraan' => $this->kendaraanModel->getKendaraanWithSupir(),
+            'supir' => $this->supirModel->findAll()
         ];
     
         return view('pengiriman/edit', $data);
@@ -124,50 +133,65 @@ class PengirimanController extends BaseController
 
     public function update($id)
     {
-        $validation = \Config\Services::validation();
-        $validate = $this->validate([
-            'nama_pengirim' => 'required',
-            'alamat_pengirim' => 'required',
-            'telepon_pengirim' => 'required',
-            'tanggal' => 'required',
-            'penerima' => 'required',
-            'alamat_penerima' => 'required',
-            'telepon_penerima' => 'required|numeric',
-            'jenis_barang' => 'required',
-            'nama_barang' => 'required',
-            'jumlah' => 'required|integer',
-            'berat' => 'required|decimal',
-            'id_kendaraan' => 'required',
-            'biaya_kirim' => 'required',
-            'status' => 'required|in_list[Menunggu Pengiriman,Dalam Perjalanan,Terkirim,Gagal Terkirim,Dibatalkan]',
-        ]);
+        try {
+            $validation = \Config\Services::validation();
+            $validate = $this->validate([
+                'nama_pengirim' => 'required',
+                'alamat_pengirim' => 'required',
+                'telepon_pengirim' => 'required',
+                'tanggal' => 'required',
+                'penerima' => 'required',
+                'alamat_penerima' => 'required',
+                'telepon_penerima' => 'required|numeric',
+                'jenis_barang' => 'required',
+                'nama_barang' => 'required',
+                'jumlah' => 'required|integer',
+                'berat' => 'required|decimal',
+                'id_kendaraan' => 'required',
+                'biaya_kirim' => 'required',
+                'id_supir1' => 'required',
+                'id_supir2' => 'permit_empty',
+                'status' => 'required|in_list[Menunggu Pengiriman,Dalam Perjalanan,Terkirim,Gagal Terkirim,Dibatalkan]',
+            ]);
 
-        if (!$validate) {
-            return redirect()->back()->withInput()->with('errors', $validation->getErrors());
+            if (!$validate) {
+                return redirect()->back()->withInput()->with('errors', $validation->getErrors());
+            }
+
+            // Hitung estimasi pengiriman +3 hari dari tanggal
+            $eTgl = $this->request->getPost('tanggal');
+            $estimasi_pengiriman = date('Y-m-d', strtotime($eTgl . ' +3 days'));
+
+            $data = [
+                'nama_pengirim' => $this->request->getPost('nama_pengirim'),
+                'alamat_pengirim' => $this->request->getPost('alamat_pengirim'),
+                'telepon_pengirim' => $this->request->getPost('telepon_pengirim'),
+                'tanggal' => $this->request->getPost('tanggal'),
+                'penerima' => $this->request->getPost('penerima'),
+                'alamat_penerima' => $this->request->getPost('alamat_penerima'),
+                'telepon_penerima' => $this->request->getPost('telepon_penerima'),
+                'jenis_barang' => $this->request->getPost('jenis_barang'),
+                'nama_barang' => $this->request->getPost('nama_barang'),
+                'jumlah' => $this->request->getPost('jumlah'),
+                'berat' => $this->request->getPost('berat'),
+                'biaya_kirim' => $this->request->getPost('biaya_kirim'),
+                'estimasi_pengiriman' => $estimasi_pengiriman,
+                'id_supir1' => $this->request->getPost('id_supir1'),
+                'id_supir2' => $this->request->getPost('id_supir2'),
+                'id_kendaraan' => $this->request->getPost('id_kendaraan'),
+                'status' => $this->request->getPost('status'),
+            ];
+
+            $this->pengirimanModel->update($id, $data);
+
+            return redirect()->to(base_url('pengiriman'))->with('success_message', 'Data pengiriman berhasil diperbarui.');
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+            return redirect()->back()
+                            ->withInput()
+                            ->with('error_message', 'Terjadi kesalahan: ' . $e->getMessage());
         }
-
-        $data = [
-            'nama_pengirim' => $this->request->getPost('nama_pengirim'),
-            'alamat_pengirim' => $this->request->getPost('alamat_pengirim'),
-            'telepon_pengirim' => $this->request->getPost('telepon_pengirim'),
-            'tanggal' => $this->request->getPost('tanggal'),
-            'penerima' => $this->request->getPost('penerima'),
-            'alamat_penerima' => $this->request->getPost('alamat_penerima'),
-            'telepon_penerima' => $this->request->getPost('telepon_penerima'),
-            'jenis_barang' => $this->request->getPost('jenis_barang'),
-            'nama_barang' => $this->request->getPost('nama_barang'),
-            'jumlah' => $this->request->getPost('jumlah'),
-            'berat' => $this->request->getPost('berat'),
-            'biaya_kirim' => $this->request->getPost('biaya_kirim'),
-            'id_kendaraan' => $this->request->getPost('id_kendaraan'),
-            'status' => $this->request->getPost('status'),
-        ];
-
-        $this->pengirimanModel->update($id, $data);
-
-        return redirect()->to(base_url('pengiriman'))->with('success_message', 'Data pengiriman berhasil diperbarui.');
     }
-
 
     public function delete($id)
     {
@@ -222,10 +246,11 @@ class PengirimanController extends BaseController
     {
         $startDate = $this->request->getGet('start_date');
         $endDate = $this->request->getGet('end_date');
+        $status = $this->request->getGet('status');
 
         // Ambil data pengiriman berdasarkan tanggal jika tersedia
         if (!empty($startDate) && !empty($endDate)) {
-            $pengiriman = $this->pengirimanModel->getPengirimanWithRelations($startDate, $endDate);
+            $pengiriman = $this->pengirimanModel->getPengirimanWithRelations($startDate, $endDate, $status);
         } else {
             $pengiriman = $this->pengirimanModel->getPengirimanWithRelations(); // ambil semua data
         }

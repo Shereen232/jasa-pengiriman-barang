@@ -137,15 +137,34 @@
                             <option value="">-- Pilih Kendaraan --</option>
                             <?php foreach ($kendaraan as $item): ?>
                                 <?php if ($item['id'] == old('id_kendaraan')) : ?>
-                                    <option value="<?= $item['id'] ?>" selected><?= $item['merk'] ?> | No. Polisi : <?= $item['no_polisi'] ?> | Supir : <?= $item['supir'] ?></option>
+                                    <option value="<?= $item['id'] ?>" selected><?= $item['merk'] ?> | No. Polisi : <?= $item['no_polisi'] ?> </option>
                                 <?php else: ?>
-                                    <option value="<?= $item['id'] ?>"><?= $item['merk'] ?> | No. Polisi : <?= $item['no_polisi'] ?> | Supir : <?= $item['supir'] ?></option>
+                                    <option value="<?= $item['id'] ?>"><?= $item['merk'] ?> | No. Polisi : <?= $item['no_polisi'] ?> </option>
                                 <?php endif; ?>
                             <?php endforeach ?>
                         </select>
                         <?php if (session()->getFlashdata('errors')['id_kendaraan'] ?? false) : ?>
                             <small class="text-danger"><?= session()->getFlashdata('errors')['id_kendaraan']; ?></small>
                         <?php endif; ?>
+                    </div>
+                    <div class="form-group mt-3 mb-3">
+                        <label>Supir 1</label>
+                        <select name="id_supir1" class="form-control">
+                            <option value="">-- Pilih Supir 1 --</option>
+                            <?php foreach ($supir as $s): ?>
+                                <option value="<?= $s['id'] ?>" <?= old('id_supir1') == $s['id'] ? 'selected' : '' ?>><?= $s['nama_supir'] ?></option>
+                            <?php endforeach ?>
+                        </select>
+                    </div>
+
+                    <div class="form-group mt-3 mb-3">
+                        <label>Supir 2</label>
+                        <select name="id_supir2" class="form-control">
+                            <option value="">-- Pilih Supir 2 --</option>
+                            <?php foreach ($supir as $s): ?>
+                                <option value="<?= $s['id'] ?>" <?= old('id_supir2') == $s['id'] ? 'selected' : '' ?>><?= $s['nama_supir'] ?></option>
+                            <?php endforeach ?>
+                        </select>
                     </div>
                     <div class="text-center">
                         <button type="submit" class="btn btn-primary">Submit</button>

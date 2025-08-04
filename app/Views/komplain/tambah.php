@@ -118,5 +118,41 @@
             });
         <?php endif; ?>
     </script>
+
+    <script>
+    var Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000
+    });
+
+    const succesSessionFlashMsg = '<?= session()->getFlashdata('success_message') ?>';
+    const errorSessionFlashMsg = '<?= session()->getFlashdata('error_message') ?>';
+    const trxResiFlashMsg = '<?= session()->getFlashdata('tracking_resi') ?>';
+    window.onload = function () {
+      if (trxResiFlashMsg !== '') {
+        const target = document.getElementById("trxResi");
+        target.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    };
+
+    if (succesSessionFlashMsg !== '') {
+        Toast.fire({
+            icon: 'success',
+            title: succesSessionFlashMsg
+        })
+    }
+
+    if (errorSessionFlashMsg !== '') {
+      console.log('ok');
+      
+        Toast.fire({
+            icon: 'warning',
+            title: errorSessionFlashMsg
+        })
+    }
+
+  </script>
 </body>
 </html>

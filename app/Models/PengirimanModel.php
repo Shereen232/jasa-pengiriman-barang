@@ -22,13 +22,20 @@ class PengirimanModel extends Model
         'jumlah',
         'berat',
         'biaya_kirim',
+        'estimasi_pengiriman',
         'id_kendaraan',
+        'id_supir1',
+        'id_supir2',
         'status'
     ];
+
     public function getPengiriman($id = null)
     {
-        $this->select('pengiriman.*, supir.nama_supir as nama_supir');
-        $this->join('supir', 'supir.id = pengiriman.id', 'left');
+        $this->select('pengiriman.*, 
+                       s1.nama_supir as nama_supir1, 
+                       s2.nama_supir as nama_supir2');
+        $this->join('supir as s1', 's1.id = pengiriman.id_supir1', 'left');
+        $this->join('supir as s2', 's2.id = pengiriman.id_supir2', 'left');
 
         if ($id) {
             return $this->where('pengiriman.id', $id)->first();
@@ -38,46 +45,63 @@ class PengirimanModel extends Model
     }
 
     public function getPengirimanById($id)
-{
-    return $this->select('pengiriman.*')
-                ->where('pengiriman.id', $id)
-                ->get()
-                ->getRow();
-}
-
-
-    public function getPengirimanWithRelations($startDate = null, $endDate = null)
     {
-        $builder = $this->select('pengiriman.*, kendaraan.no_polisi, kendaraan.merk, supir.nama_supir AS nama_supir')
+        return $this->select('pengiriman.*, 
+                              s1.nama_supir as nama_supir1, 
+                              s2.nama_supir as nama_supir2')
+                    ->join('supir as s1', 's1.id = pengiriman.id_supir1', 'left')
+                    ->join('supir as s2', 's2.id = pengiriman.id_supir2', 'left')
+                    ->where('pengiriman.id', $id)
+                    ->get()
+                    ->getRow();
+    }
+
+    public function getPengirimanWithRelations($startDate = null, $endDate = null, $status = null)
+    {
+        $builder = $this->select('pengiriman.*, 
+                                  kendaraan.no_polisi, 
+                                  kendaraan.merk, 
+                                  s1.nama_supir AS nama_supir1,
+                                  s2.nama_supir AS nama_supir2')
                         ->join('kendaraan', 'kendaraan.id = pengiriman.id_kendaraan')
-                        ->join('supir', 'kendaraan.id_supir = supir.id');
+                        ->join('supir as s1', 's1.id = pengiriman.id_supir1', 'left')
+                        ->join('supir as s2', 's2.id = pengiriman.id_supir2', 'left');
 
         if ($startDate && $endDate) {
             $builder->where('pengiriman.tanggal >=', $startDate)
                     ->where('pengiriman.tanggal <=', $endDate);
         }
 
+        if ($status) {
+            $builder->like('pengiriman.status', $status);
+        }
+
         return $builder->findAll();
     }
 
-
     public function getPengirimanByResi($resi)
     {
-        return $this->select('pengiriman.*, kendaraan.no_polisi, kendaraan.merk, supir.nama_supir AS nama_supir')
+        return $this->select('pengiriman.*, 
+                              kendaraan.no_polisi, 
+                              kendaraan.merk,
+                              s1.nama_supir as nama_supir1,
+                              s2.nama_supir as nama_supir2')
                     ->join('kendaraan', 'kendaraan.id = pengiriman.id_kendaraan')
-                    ->join('supir', 'kendaraan.id_supir = supir.id')
+                    ->join('supir as s1', 's1.id = pengiriman.id_supir1', 'left')
+                    ->join('supir as s2', 's2.id = pengiriman.id_supir2', 'left')
                     ->where('pengiriman.no_pengiriman', $resi)
                     ->asObject()
                     ->findAll();
     }
-    
+
     public function generateNoPengiriman($jenis_barang)
     {
-        $kode = ($jenis_barang == 'Makhluk Hidup') ? 'PH' : 'PM'; // PH = Makhluk Hidup, PM = Benda Mati
-        $bulan = date('m'); // Ambil bulan saat ini
+        $kode = ($jenis_barang == 'Makhluk Hidup') ? 'PH' : 'PM';
+        $bulan = date('m');
 
-        // Ambil nomor terakhir dengan prefix yang sesuai
-        $lastRecord = $this->orderBy('no_pengiriman', 'DESC')->like('no_pengiriman', "$kode-$bulan", 'after')->first();
+        $lastRecord = $this->orderBy('no_pengiriman', 'DESC')
+                           ->like('no_pengiriman', "$kode-$bulan", 'after')
+                           ->first();
 
         if ($lastRecord) {
             $lastNumber = (int) substr($lastRecord['no_pengiriman'], -5);
@@ -88,5 +112,4 @@ class PengirimanModel extends Model
 
         return $kode . '-' . $bulan . str_pad($newNumber, 5, '0', STR_PAD_LEFT);
     }
-  
 }

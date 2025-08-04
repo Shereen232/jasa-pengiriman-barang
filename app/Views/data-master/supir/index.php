@@ -21,6 +21,7 @@
               <tr>
                 <th>No</th>
                 <th>No. KTP</th>
+                <th>SIM</th>
                 <th>Nama</th>
                 <th>Alamat</th>
                 <th>Telepon</th>
@@ -34,6 +35,7 @@
                   <tr>
                     <td><?= $no++; ?></td>
                     <td><?= esc($row['no_ktp']); ?></td>
+                    <td><?= esc($row['sim']); ?></td>
                     <td><?= esc($row['nama_supir']); ?></td>
                     <td><?= esc($row['alamat']); ?></td>
                     <td><?= esc($row['telepon']); ?></td>

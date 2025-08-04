@@ -50,7 +50,7 @@
                         </div>
                     </div>
 
-                    <div class="row mb-3">
+                    <!-- <div class="row mb-3">
                         <label class="col-sm-2 col-form-label">Supir</label>
                         <div class="col-sm-10">
                             <select name="id_supir" class="form-control" required>
@@ -65,7 +65,7 @@
                                 <small class="text-danger"><?= $errors['id_supir']; ?></small>
                             <?php endif; ?>
                         </div>
-                    </div>
+                    </div> -->
 
                     <div class="text-center">
                         <button type="submit" class="btn btn-primary">Submit</button>
