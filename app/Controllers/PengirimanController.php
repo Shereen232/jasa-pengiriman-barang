@@ -33,6 +33,9 @@ class PengirimanController extends BaseController
 
         $data = [
             'pengiriman' => $this->pengirimanModel->getPengirimanWithRelations($startDate, $endDate, $status),
+            'start_date' => $startDate,
+            'end_date' => $endDate,
+            'status' => $status,
         ];
 
         return view('pengiriman/index', $data);
@@ -66,13 +69,13 @@ class PengirimanController extends BaseController
             'telepon_pengirim' => 'required',
             'tanggal' => 'required',
             'penerima' => 'required',
-            'alamat_penerima' => 'required',
             'telepon_penerima' => 'required|numeric',
             'jenis_barang' => 'required',
             'nama_barang' => 'required',
             'jumlah' => 'required|integer',
             'berat' => 'required|decimal',
             'biaya_kirim' => 'required',
+            'estimasi_pengiriman' => 'required',
             'id_kendaraan' => 'required',
             'id_supir1' => 'required',
             'id_supir2' => 'permit_empty',
@@ -81,10 +84,6 @@ class PengirimanController extends BaseController
         if (!$validate) {
             return redirect()->back()->withInput()->with('errors', $validation->getErrors());
         }
-
-        // Hitung estimasi pengiriman +3 hari dari tanggal
-        $eTgl = $this->request->getPost('tanggal');
-        $estimasi_pengiriman = date('Y-m-d', strtotime($eTgl . ' +3 days'));
 
         $no_pengiriman = $this->pengirimanModel->generateNoPengiriman($this->request->getPost('jenis_barang'));
 
@@ -105,7 +104,7 @@ class PengirimanController extends BaseController
             'id_kendaraan' => $this->request->getPost('id_kendaraan'),
             'id_supir1' => $this->request->getPost('id_supir1'),
             'is_supir2' => $this->request->getPost('id_supir2'),
-            'estimasi_pengiriman' => $estimasi_pengiriman,
+            'estimasi_pengiriman' => $this->request->getPost('estimasi_pengiriman'),
             'status' => 'Menunggu Pengiriman'
         ];
 
@@ -141,7 +140,6 @@ class PengirimanController extends BaseController
                 'telepon_pengirim' => 'required',
                 'tanggal' => 'required',
                 'penerima' => 'required',
-                'alamat_penerima' => 'required',
                 'telepon_penerima' => 'required|numeric',
                 'jenis_barang' => 'required',
                 'nama_barang' => 'required',
@@ -149,6 +147,7 @@ class PengirimanController extends BaseController
                 'berat' => 'required|decimal',
                 'id_kendaraan' => 'required',
                 'biaya_kirim' => 'required',
+                'estimasi_pengiriman' => 'required',
                 'id_supir1' => 'required',
                 'id_supir2' => 'permit_empty',
                 'status' => 'required|in_list[Menunggu Pengiriman,Dalam Perjalanan,Terkirim,Gagal Terkirim,Dibatalkan]',
@@ -157,10 +156,6 @@ class PengirimanController extends BaseController
             if (!$validate) {
                 return redirect()->back()->withInput()->with('errors', $validation->getErrors());
             }
-
-            // Hitung estimasi pengiriman +3 hari dari tanggal
-            $eTgl = $this->request->getPost('tanggal');
-            $estimasi_pengiriman = date('Y-m-d', strtotime($eTgl ));
 
             $data = [
                 'nama_pengirim' => $this->request->getPost('nama_pengirim'),
@@ -175,7 +170,7 @@ class PengirimanController extends BaseController
                 'jumlah' => $this->request->getPost('jumlah'),
                 'berat' => $this->request->getPost('berat'),
                 'biaya_kirim' => $this->request->getPost('biaya_kirim'),
-                'estimasi_pengiriman' => $estimasi_pengiriman,
+                'estimasi_pengiriman' => $this->request->getPost('estimasi_pengiriman'),
                 'id_supir1' => $this->request->getPost('id_supir1'),
                 'id_supir2' => $this->request->getPost('id_supir2'),
                 'id_kendaraan' => $this->request->getPost('id_kendaraan'),

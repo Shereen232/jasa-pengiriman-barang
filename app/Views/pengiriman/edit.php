@@ -136,6 +136,15 @@
                     </div>
 
                     <div class="form-group mt-3 mb-3">
+                        <label>Estimasi Pengiriman</label>
+                        <input type="date" name="estimasi_pengiriman" class="form-control" value="<?= old('estimasi_pengiriman', $pengiriman['estimasi_pengiriman']) ?>">
+                        <?php if (session()->getFlashdata('errors')['estimasi_pengiriman'] ?? false) : ?>
+                            <small class="text-danger"><?= session()->getFlashdata('errors')['estimasi_pengiriman']; ?></small>
+                        <?php endif; ?>
+                    </div>
+
+
+                    <div class="form-group mt-3 mb-3">
                         <label>Status</label>
                         <select name="status" class="form-control">
                             <option value="Menunggu Pengiriman" <?= old('status', $pengiriman['status']) == 'Menunggu Pengiriman' ? 'selected' : '' ?>>Menunggu Pengiriman</option>

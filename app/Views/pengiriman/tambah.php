@@ -131,6 +131,15 @@
                         <?php endif; ?>
                         <input type="hidden" name="biaya_kirim" id="biaya_kirim"> <!-- Hidden input -->
                     </div>
+
+                    <div class="form-group mt-3 mb-3">
+                        <label>Estimasi Pengiriman</label>
+                        <input type="date" name="estimasi_pengiriman" class="form-control" value="<?= old('estimasi_pengiriman') ?>" placeholder="dd-mm-yyyy">
+                        <?php if (session()->getFlashdata('errors')['estimasi_pengiriman'] ?? false) : ?>
+                            <small class="text-danger"><?= session()->getFlashdata('errors')['estimasi_pengiriman']; ?></small>
+                        <?php endif; ?>
+                    </div>
+                    
                     <div class="form-group mt-3 mb-3">
                         <label>Kendaraan</label>
                         <select name="id_kendaraan" class="form-control">
@@ -167,7 +176,7 @@
                         </select>
                     </div>
                     <div class="text-center">
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="button" class="btn btn-primary" id="submitBtn">Submit</button>
                         <button type="reset" class="btn btn-secondary">Reset</button>
                     </div>
                 </form>
@@ -273,5 +282,25 @@
 
     });
 </script>
+
+<!-- Tambahkan SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+    document.getElementById('submitBtn').addEventListener('click', function() {
+        Swal.fire({
+            title: 'Konfirmasi',
+            text: "Apakah Anda yakin ingin menyimpan data ini?",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, simpan!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('pengirimanForm').submit();
+            }
+        });
+    });
+
+    </script>
 
 <?= $this->endSection() ?>

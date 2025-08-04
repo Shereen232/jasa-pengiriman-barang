@@ -121,7 +121,7 @@
     <?php if ($pengiriman) : ?>
       <?php foreach ($pengiriman as $key => $row) : ?>
         <div id="trxResi" class="container mt-5 mb-5">
-          <h3 class="fw-bold text-center">Hasil Pencarian: #P0001</h3>
+          <h3 class="fw-bold text-center">Hasil Pencarian: <?= $row->no_pengiriman ?></h3>
           <div class="table-wrap">
             <table class="table table-responsive-xl">
               <thead>
@@ -130,6 +130,7 @@
                   <th>Tanggal</th>
                   <th>Paket</th>
                   <th>Checkpoint</th>
+                  <th>Estimasi Pengiriman</th>
                   <th>Status</th>
                   
                 </tr>
@@ -142,7 +143,7 @@
                   <td><?= $row->tanggal ?></td>
                   <td><?= $row->nama_barang ?></td>
                   <td><?= $row->alamat_penerima ?></td>
-                  <!-- <td class="status"><span class="active">Active</span></td> -->
+                  <td><?= date('d-m-Y', strtotime($row->estimasi_pengiriman)) ?></td>
                   <td class="status"><span class="waiting"><?= $row->status ?></span></td>
                  
                 </tr>
