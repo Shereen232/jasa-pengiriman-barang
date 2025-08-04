@@ -160,7 +160,7 @@ class PengirimanController extends BaseController
 
             // Hitung estimasi pengiriman +3 hari dari tanggal
             $eTgl = $this->request->getPost('tanggal');
-            $estimasi_pengiriman = date('Y-m-d', strtotime($eTgl . ' +3 days'));
+            $estimasi_pengiriman = date('Y-m-d', strtotime($eTgl ));
 
             $data = [
                 'nama_pengirim' => $this->request->getPost('nama_pengirim'),
@@ -248,14 +248,10 @@ class PengirimanController extends BaseController
         $endDate = $this->request->getGet('end_date');
         $status = $this->request->getGet('status');
 
-        // Ambil data pengiriman berdasarkan tanggal jika tersedia
-        if (!empty($startDate) && !empty($endDate)) {
-            $pengiriman = $this->pengirimanModel->getPengirimanWithRelations($startDate, $endDate, $status);
-        } else {
-            $pengiriman = $this->pengirimanModel->getPengirimanWithRelations(); // ambil semua data
-        }
+        // Ambil data pengiriman berdasarkan filter
+        $pengiriman = $this->pengirimanModel->getPengirimanWithRelations($startDate, $endDate, $status);
 
-        // Kirim juga startDate dan endDate ke view
+        // Kirim semua filter ke view
         $data = [
             'pengiriman' => $pengiriman,
             'startDate' => $startDate,

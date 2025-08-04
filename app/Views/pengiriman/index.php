@@ -12,7 +12,7 @@
     <div class="col-lg">
       <div class="card">
         <div class="card-body pt-3 pb-3">
-          <form id="filterForm" class="row g-6">
+          <form id="filterForm" class="row g-6" method="get">
             <div class="col-md-4">
               <label for="start_date" class="form-label">Dari:</label>
               <input type="date" class="form-control" id="start_date" name="start_date" 
