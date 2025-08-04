@@ -21,7 +21,6 @@
                                 <th>Merk</th>
                                 <th>No. Mesin</th>
                                 <th>Warna</th>
-                                <!-- <th>Supir</th> -->
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -35,7 +34,6 @@
                                         <td><?= esc($k['merk']) ?></td>
                                         <td><?= esc($k['no_mesin']) ?></td>
                                         <td><?= esc($k['warna']) ?></td>
-                                        <!-- <td><?= esc($k['supir']) ?></td> -->
                                         <td>
                                             <a href="<?= base_url('data-master/kendaraan/edit/' . $k['id']) ?>" class="btn btn-info">
                                                 <i class="bi bi-pencil-square"></i>

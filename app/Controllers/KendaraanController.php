@@ -19,7 +19,7 @@ class KendaraanController extends BaseController
     public function index()
     {
         $kendaraanModel = new KendaraanModel();
-        $data['kendaraan'] = $kendaraanModel->getKendaraanWithSupir();
+        $data['kendaraan'] = $kendaraanModel->findAll();
 
         return view('data-master/kendaraan/index', $data);
     }
@@ -43,7 +43,6 @@ class KendaraanController extends BaseController
             'merk' => 'required',
             'no_mesin' => 'required|is_unique[kendaraan.no_mesin]',
             'warna' => 'required',
-            'id_supir' => 'required'
         ];
 
         if (!$this->validate($rules)) {
@@ -55,7 +54,6 @@ class KendaraanController extends BaseController
             'merk' => $this->request->getPost('merk'),
             'no_mesin' => $this->request->getPost('no_mesin'),
             'warna' => $this->request->getPost('warna'),
-            'id_supir' => $this->request->getPost('id_supir')
         ];
 
         $kendaraanModel->insert($data);
@@ -92,7 +90,6 @@ class KendaraanController extends BaseController
             'merk' => 'required',
             'no_mesin' => "required|is_unique[kendaraan.no_mesin,id,$id]",
             'warna' => 'required',
-            'id_supir' => 'required'
         ];
 
         if (!$this->validate($rules)) {
@@ -104,7 +101,6 @@ class KendaraanController extends BaseController
             'merk' => $this->request->getPost('merk'),
             'no_mesin' => $this->request->getPost('no_mesin'),
             'warna' => $this->request->getPost('warna'),
-            'id_supir' => $this->request->getPost('id_supir')
         ];
 
         $this->kendaraanModel->update($id, $data);

@@ -78,7 +78,7 @@ class PengirimanController extends BaseController
             'estimasi_pengiriman' => 'required',
             'id_kendaraan' => 'required',
             'id_supir1' => 'required',
-            'id_supir2' => 'permit_empty',
+            'id_supir2' => 'required',
         ]);
 
         if (!$validate) {
@@ -103,7 +103,7 @@ class PengirimanController extends BaseController
             'biaya_kirim' => $this->request->getPost('biaya_kirim'),
             'id_kendaraan' => $this->request->getPost('id_kendaraan'),
             'id_supir1' => $this->request->getPost('id_supir1'),
-            'is_supir2' => $this->request->getPost('id_supir2'),
+            'id_supir2' => $this->request->getPost('id_supir2'),
             'estimasi_pengiriman' => $this->request->getPost('estimasi_pengiriman'),
             'status' => 'Menunggu Pengiriman'
         ];
@@ -149,7 +149,7 @@ class PengirimanController extends BaseController
                 'biaya_kirim' => 'required',
                 'estimasi_pengiriman' => 'required',
                 'id_supir1' => 'required',
-                'id_supir2' => 'permit_empty',
+                'id_supir2' => 'required',
                 'status' => 'required|in_list[Menunggu Pengiriman,Dalam Perjalanan,Terkirim,Gagal Terkirim,Dibatalkan]',
             ]);
 

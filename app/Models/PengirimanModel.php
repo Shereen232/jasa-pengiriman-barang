@@ -76,6 +76,8 @@ class PengirimanModel extends Model
             $builder->like('pengiriman.status', $status);
         }
 
+        $builder->orderBy('pengiriman.id', 'DESC'); 
+
         return $builder->findAll();
     }
 
