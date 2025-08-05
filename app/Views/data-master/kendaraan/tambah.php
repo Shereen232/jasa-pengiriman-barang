@@ -21,6 +21,16 @@
                     </div>
 
                     <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label">Nama Kendaraan</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="nama_kendaraan" class="form-control" value="<?= old('nama_kendaraan'); ?>" required>
+                            <?php if (!empty($errors['nama_kendaraan'])) : ?>
+                                <small class="text-danger"><?= $errors['nama_kendaraan']; ?></small>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
                         <label class="col-sm-2 col-form-label">Merk</label>
                         <div class="col-sm-10">
                             <input type="text" name="merk" class="form-control" value="<?= old('merk'); ?>" required>

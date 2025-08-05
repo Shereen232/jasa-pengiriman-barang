@@ -30,7 +30,8 @@ $routes->group('data-master', ['filter' => 'login'], function($routes) {
         $routes->get('tambah', 'KendaraanController::tambah');        // Form tambah kendaraan
         $routes->post('create', 'KendaraanController::create');       // Proses tambah kendaraan
         $routes->get('edit/(:num)', 'KendaraanController::edit/$1');  // Form edit kendaraan
-        $routes->post('update/(:num)', 'KendaraanController::update/$1'); // Proses update kendaraan    
+        $routes->post('update/(:num)', 'KendaraanController::update/$1'); // Proses update kendaraan  
+        $routes->get('status/(:num)/(:num)', 'KendaraanController::ubahStatus/$1/$2');
     });
 });
 

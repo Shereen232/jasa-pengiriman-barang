@@ -17,10 +17,12 @@
                         <thead>
                             <tr>
                                 <th>No</th>
+                                <th>Nama Kendaraan</th> <!-- Tambah kolom -->
                                 <th>No. Polisi</th>
                                 <th>Merk</th>
                                 <th>No. Mesin</th>
                                 <th>Warna</th>
+                                <th>Status</th> <!-- Kolom status aktif/nonaktif -->
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -30,23 +32,33 @@
                                 <?php foreach ($kendaraan as $k) : ?>
                                     <tr>
                                         <td><?= $no++ ?></td>
+                                        <td><?= esc($k['nama_kendaraan']) ?></td> <!-- Tampilkan nama kendaraan -->
                                         <td><?= esc($k['no_polisi']) ?></td>
                                         <td><?= esc($k['merk']) ?></td>
                                         <td><?= esc($k['no_mesin']) ?></td>
                                         <td><?= esc($k['warna']) ?></td>
                                         <td>
+                                            <?php if (is_null($k['deleted_at'])) : ?>
+                                                <span class="badge bg-success">Aktif</span>
+                                            <?php else : ?>
+                                                <span class="badge bg-danger">Non Aktif</span>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td>
                                             <a href="<?= base_url('data-master/kendaraan/edit/' . $k['id']) ?>" class="btn btn-info">
                                                 <i class="bi bi-pencil-square"></i>
                                             </a>
-                                            <!-- <button class="btn btn-danger delete-btn" data-id="<?= $k['id'] ?>">
-                                                <i class="bi bi-trash"></i>
-                                            </button> -->
+                                            <?php if (is_null($k['deleted_at'])) : ?>
+                                                <button class="btn btn-warning btn-status" data-id="<?= $k['id'] ?>" data-status="0">Non Aktifkan</button>
+                                            <?php else : ?>
+                                                <button class="btn btn-success btn-status" data-id="<?= $k['id'] ?>" data-status="1">Aktifkan</button>
+                                            <?php endif; ?>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
                             <?php else : ?>
                                 <tr>
-                                    <td colspan="7" class="text-center">Tidak ada data kendaraan.</td>
+                                    <td colspan="8" class="text-center">Tidak ada data kendaraan.</td>
                                 </tr>
                             <?php endif; ?>
                         </tbody>
@@ -80,6 +92,29 @@ document.addEventListener("DOMContentLoaded", function() {
             }).then((result) => {
                 if (result.isConfirmed) {
                     window.location.href = "<?= base_url('data-master/kendaraan/delete/') ?>" + kendaraanId;
+                }
+            });
+        });
+    });
+
+    // Aktif/Nonaktif Kendaraan
+    const statusButtons = document.querySelectorAll(".btn-status");
+    statusButtons.forEach(button => {
+        button.addEventListener("click", function() {
+            const kendaraanId = this.getAttribute("data-id");
+            const status = this.getAttribute("data-status");
+            const text = status == "1" ? "mengaktifkan" : "menonaktifkan";
+            Swal.fire({
+                title: "Konfirmasi",
+                text: `Apakah Anda yakin ingin ${text} kendaraan ini?`,
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Ya"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "<?= base_url('data-master/kendaraan/status/') ?>" + kendaraanId + "/" + status;
                 }
             });
         });

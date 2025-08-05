@@ -19,7 +19,7 @@ class KendaraanController extends BaseController
     public function index()
     {
         $kendaraanModel = new KendaraanModel();
-        $data['kendaraan'] = $kendaraanModel->findAll();
+        $data['kendaraan'] = $kendaraanModel->withDeleted()->findAll();
 
         return view('data-master/kendaraan/index', $data);
     }
@@ -39,6 +39,7 @@ class KendaraanController extends BaseController
         $validation = \Config\Services::validation();
 
         $rules = [
+            'nama_kendaraan' => 'required',
             'no_polisi' => 'required|is_unique[kendaraan.no_polisi]',
             'merk' => 'required',
             'no_mesin' => 'required|is_unique[kendaraan.no_mesin]',
@@ -50,10 +51,12 @@ class KendaraanController extends BaseController
         }
 
         $data = [
+            'nama_kendaraan' => $this->request->getPost('nama_kendaraan'),
             'no_polisi' => $this->request->getPost('no_polisi'),
             'merk' => $this->request->getPost('merk'),
             'no_mesin' => $this->request->getPost('no_mesin'),
             'warna' => $this->request->getPost('warna'),
+            'is_active' => 1
         ];
 
         $kendaraanModel->insert($data);
@@ -86,6 +89,7 @@ class KendaraanController extends BaseController
         $validation = \Config\Services::validation();
 
         $rules = [
+            'nama_kendaraan' => 'required',
             'no_polisi' => "required|is_unique[kendaraan.no_polisi,id,$id]",
             'merk' => 'required',
             'no_mesin' => "required|is_unique[kendaraan.no_mesin,id,$id]",
@@ -97,15 +101,37 @@ class KendaraanController extends BaseController
         }
 
         $data = [
+            'nama_kendaraan' => $this->request->getPost('nama_kendaraan'),
             'no_polisi' => $this->request->getPost('no_polisi'),
             'merk' => $this->request->getPost('merk'),
             'no_mesin' => $this->request->getPost('no_mesin'),
             'warna' => $this->request->getPost('warna'),
+            'is_active' => $this->request->getPost('is_active') ? 1 : 0, // Tambahkan status aktif/nonaktif
         ];
 
         $this->kendaraanModel->update($id, $data);
 
         return redirect()->to(base_url('data-master/kendaraan'))->with('success_message', 'Data kendaraan berhasil diperbarui.');
+    }
+
+    public function ubahStatus($id, $status)
+    {
+        $kendaraanModel = new \App\Models\KendaraanModel();
+
+        if ($status == 0) {
+            // Nonaktifkan (soft delete)
+            $kendaraanModel->delete($id);
+            session()->setFlashdata('success_message', 'Kendaraan berhasil dinonaktifkan.');
+        } else {
+            // Aktifkan kembali
+            $kendaraanModel->withDeleted()
+                ->where('id', $id)
+                ->set(['deleted_at' => null])
+                ->update();
+            session()->setFlashdata('success_message', 'Kendaraan berhasil diaktifkan.');
+        }
+
+        return redirect()->to(base_url('data-master/kendaraan'));
     }
 
 

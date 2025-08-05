@@ -6,7 +6,7 @@ $auth = service('authentication');
         return 'data:image/' . $type . ';base64,' . base64_encode($data);
     }
 
-    $imageBase64 = imageToBase64('logo_cutout.png');
+    $imageBase64 = imageToBase64('images/logo.png');
 ?>
 <!DOCTYPE html>
 <html lang="id">
